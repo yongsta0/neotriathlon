@@ -44,6 +44,8 @@
   .tab.active { background: #1a3e72; color: #fff; border-color: #1a3e72; }
   .delta-up { color: #c24536; }
   .delta-down { color: #2a8a3e; }
+  .na { color: #bbb; }
+  .bad { color: #c24536; cursor: help; border-bottom: 1px dotted #c24536; }
 
   /* 모바일 */
   @media (max-width: 640px) {
@@ -104,6 +106,32 @@ function toSec(s) {
   if (parts.length === 2) return parts[0]*60 + parts[1];
   return null;
 }
+// 셀 표시: 빈 값 → "—" (na), outlier → "—" (bad, 원본 입력 오류 추정)
+// 한도: T1 30분 초과 / T2 10분 초과 → outlier
+const T1_MAX_SEC = 30 * 60;
+const T2_MAX_SEC = 10 * 60;
+function isOutlier(kind, sec) {
+  if (sec == null) return false;
+  if (kind === 't1' && sec > T1_MAX_SEC) return true;
+  if (kind === 't2' && sec > T2_MAX_SEC) return true;
+  return false;
+}
+function fmtCell(raw, kind) {
+  const sec = toSec(raw);
+  if (sec == null) return '<span class="na">—</span>';
+  if (isOutlier(kind, sec)) {
+    return `<span class="bad" title="원본 데이터 오류로 추정 (${escapeHtml(raw)})">—</span>`;
+  }
+  return escapeHtml(raw);
+}
+// 차트용 정제: t1/t2 outlier는 null로
+function cleanSec(raw, kind) {
+  const s = toSec(raw);
+  if (s == null) return null;
+  if (isOutlier(kind, s)) return null;
+  return s;
+}
+
 // seconds → HH:MM:SS
 function fmtSec(s) {
   if (s == null) return '-';
@@ -267,10 +295,10 @@ function renderCharts(filtered, div) {
   const labels = filtered.map(r => r.date.replace(/^\d{4}\./, '').replace(/\s*~.*/, '')); // "MM.DD"
   const fullLabels = filtered.map(r => r.date + ' ' + r.tour);
   const series = {
-    total: filtered.map(r => toSec(r.total)),
-    swim:  filtered.map(r => toSec(r.swim)),
-    bike:  filtered.map(r => toSec(r.bike)),
-    run:   filtered.map(r => toSec(r.run)),
+    total: filtered.map(r => cleanSec(r.total, 'total')),
+    swim:  filtered.map(r => cleanSec(r.swim, 'swim')),
+    bike:  filtered.map(r => cleanSec(r.bike, 'bike')),
+    run:   filtered.map(r => cleanSec(r.run, 'run')),
   };
   const COLORS = {
     total: '#1a3e72',
@@ -429,12 +457,12 @@ function renderTable(filtered, div) {
         '<td><span class="pill">' + escapeHtml(r.part) + '</span></td>' +
         '<td>' + escapeHtml(r.club || '-') + '</td>' +
         '<td class="r">' + rankStr + '</td>' +
-        '<td class="r">' + escapeHtml(r.swim) + '</td>' +
-        '<td class="r">' + escapeHtml(r.t1) + '</td>' +
-        '<td class="r">' + escapeHtml(r.bike) + '</td>' +
-        '<td class="r">' + escapeHtml(r.t2) + '</td>' +
-        '<td class="r">' + escapeHtml(r.run) + '</td>' +
-        '<td class="r"><b>' + escapeHtml(r.total) + '</b></td></tr>';
+        '<td class="r">' + fmtCell(r.swim, 'swim') + '</td>' +
+        '<td class="r">' + fmtCell(r.t1, 't1') + '</td>' +
+        '<td class="r">' + fmtCell(r.bike, 'bike') + '</td>' +
+        '<td class="r">' + fmtCell(r.t2, 't2') + '</td>' +
+        '<td class="r">' + fmtCell(r.run, 'run') + '</td>' +
+        '<td class="r"><b>' + fmtCell(r.total, 'total') + '</b></td></tr>';
     }).join('') +
     '</tbody></table></div>';
 }
