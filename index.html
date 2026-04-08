@@ -56,6 +56,33 @@
   .predict-link { display:inline-block; margin-left:10px; padding: 4px 12px; background:#1a3e72; color:#fff; text-decoration:none; border-radius: 14px; font-size: 12px; font-weight: 600; }
   .predict-link:hover { background:#274f8b; }
 
+  /* 프로필 분석 섹션 */
+  .profile-section { background: linear-gradient(135deg, #f4f8fd 0%, #eef3fa 100%); border: 1px solid #d4e0f0; border-radius: 12px; padding: 16px; margin: 14px 0; }
+  .profile-section h2 { font-size: 15px; margin: 0 0 12px; color: #1a3e72; display: flex; align-items: center; gap: 8px; }
+  .profile-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 800px) { .profile-grid { grid-template-columns: 1fr; } }
+  .pf-card { background:#fff; border:1px solid #d4e0f0; border-radius: 10px; padding: 12px; }
+  .pf-card h3 { font-size: 12px; margin: 0 0 8px; color: #667; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+  .strength-bar { display:flex; align-items:center; gap: 8px; margin: 6px 0; font-size: 12px; }
+  .strength-bar .sb-label { width: 42px; color: #333; font-weight: 600; }
+  .strength-bar .sb-track { flex: 1; background:#eef2f7; border-radius: 10px; height: 14px; position: relative; overflow: hidden; }
+  .strength-bar .sb-fill  { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #2a8a3e, #8cc64a, #f5c13a, #e88a3a, #c24536); }
+  .strength-bar .sb-mark  { position: absolute; top: -3px; width: 3px; height: 20px; background: #1a3e72; border-radius: 2px; }
+  .strength-bar .sb-val   { width: 54px; text-align: right; font-variant-numeric: tabular-nums; color:#555; }
+  .strength-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .tag-strong { background: #e7f5ea; color: #23602d; border: 1px solid #b9e0be; }
+  .tag-weak   { background: #fff3f3; color: #8a1a1a; border: 1px solid #f5b4b4; }
+  .tag-neutral { background: #eef; color: #446; border: 1px solid #c8d2e0; }
+  .best-row { display:flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px solid #f0f3f8; font-size: 12px; }
+  .best-row:last-child { border-bottom: none; }
+  .best-row .br-dist { font-weight: 600; color: #1a3e72; }
+  .best-row .br-time { font-variant-numeric: tabular-nums; font-weight: 700; color: #222; }
+  .best-row .br-sub  { display: block; font-size: 10px; color: #888; margin-top: 1px; }
+  .trend-line { font-size: 12px; color: #555; margin: 6px 0; }
+  .trend-line b { font-variant-numeric: tabular-nums; }
+  .trend-up   { color: #c24536; }
+  .trend-down { color: #2a8a3e; }
+
   /* 모바일 */
   @media (max-width: 640px) {
     body { margin: 14px auto; padding: 0 12px; }
@@ -95,6 +122,8 @@
 
 <div id="candidates"></div>
 <div id="summary" class="summary"></div>
+
+<div id="profile"></div>
 
 <div id="stats"></div>
 
@@ -254,8 +283,10 @@ function render() {
   const recHead = document.getElementById('record-heading');
 
   destroyCharts();
+  const profileDiv = document.getElementById('profile');
   if (!q) {
     candDiv.innerHTML = ''; sumDiv.innerHTML = '';
+    profileDiv.innerHTML = '';
     statsDiv.innerHTML = ''; chartsDiv.innerHTML = '';
     resDiv.innerHTML = ''; recHead.style.display = 'none';
     return;
@@ -265,6 +296,7 @@ function render() {
   const nameMatches = DATA.filter(r => r.name === q);
   if (nameMatches.length === 0) {
     candDiv.innerHTML = ''; sumDiv.innerHTML = '';
+    profileDiv.innerHTML = '';
     statsDiv.innerHTML = ''; chartsDiv.innerHTML = '';
     resDiv.innerHTML = '<div class="empty">해당 이름의 기록이 없습니다.</div>';
     recHead.style.display = 'none';
@@ -337,16 +369,151 @@ function render() {
     `<a class="predict-link" href="${predictUrl}">🎯 이 선수로 예상기록 계산 →</a>`;
 
   if (filtered.length === 0) {
+    profileDiv.innerHTML = '';
     statsDiv.innerHTML = ''; chartsDiv.innerHTML = '';
     resDiv.innerHTML = '<div class="empty">필터에 맞는 기록이 없습니다.</div>';
     recHead.style.display = 'none';
     return;
   }
 
+  renderProfile(q, clubF, filtered, document.getElementById('profile'));
   renderStats(filtered, statsDiv);
   renderCharts(filtered, chartsDiv);
   renderTable(filtered, resDiv);
   recHead.style.display = '';
+}
+
+function renderProfile(name, clubF, filtered, div) {
+  // 프로필 분석은 거리 필터와 무관하게 그 선수의 '전체 기록'을 분석
+  // 소속까지만 반영 (동명이인 구분용)
+  let all = DATA.filter(r => r.name === name);
+  if (clubF) all = all.filter(r => (r.club || '(소속없음)') === clubF);
+
+  // 1) 강점 구간 분석: 같은 (대회, 부문) 안에서 선수의 구간별 백분위 계산
+  //    백분위가 낮을수록 강점. 수영/사이클/런 비교 → 상대적으로 가장 강한 구간 찾기
+  const segPcts = { s: [], b: [], r: [] };
+  all.forEach(rec => {
+    const same = DATA.filter(x => x.tour === rec.tour && x.part === rec.part);
+    if (same.length < 3) return;
+    const mySwim = cleanSec(rec.swim, 'swim');
+    const myBike = cleanSec(rec.bike, 'bike');
+    const myRun  = cleanSec(rec.run, 'run');
+    const allSwim = same.map(x => cleanSec(x.swim, 'swim')).filter(v => v != null).sort((a,b) => a-b);
+    const allBike = same.map(x => cleanSec(x.bike, 'bike')).filter(v => v != null).sort((a,b) => a-b);
+    const allRun  = same.map(x => cleanSec(x.run,  'run')).filter(v => v != null).sort((a,b) => a-b);
+    const pct = (me, arr) => {
+      if (me == null || arr.length === 0) return null;
+      let rank = arr.findIndex(v => v >= me);
+      if (rank === -1) rank = arr.length;
+      return ((rank + 1) / arr.length) * 100; // 상위 X%
+    };
+    const ps = pct(mySwim, allSwim);
+    const pb = pct(myBike, allBike);
+    const pr = pct(myRun,  allRun);
+    if (ps != null) segPcts.s.push(ps);
+    if (pb != null) segPcts.b.push(pb);
+    if (pr != null) segPcts.r.push(pr);
+  });
+  const avg = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : null;
+  const segAvgPct = { s: avg(segPcts.s), b: avg(segPcts.b), r: avg(segPcts.r) };
+
+  // 강점/약점 결정
+  const valid = ['s','b','r'].filter(k => segAvgPct[k] != null);
+  let strongest = null, weakest = null;
+  if (valid.length >= 2) {
+    valid.sort((a,b) => segAvgPct[a] - segAvgPct[b]); // 낮을수록 강함
+    strongest = valid[0];
+    weakest = valid[valid.length - 1];
+  }
+  const SEG_NAME = { s: '수영', b: '사이클', r: '런' };
+
+  // 2) 거리 카테고리별 베스트
+  const byCat = {};
+  all.forEach(r => {
+    const cat = distCat(r);
+    const tot = cleanSec(r.total, 'total');
+    if (tot == null) return;
+    if (!byCat[cat] || tot < byCat[cat].tot) byCat[cat] = { tot, r };
+  });
+  const CAT_ORDER = ['sprint','short','standard','half','full','other'];
+  const bestRows = CAT_ORDER.filter(c => byCat[c]).map(c => {
+    const item = byCat[c];
+    return `<div class="best-row">
+      <div><span class="br-dist">${DIST_LABEL[c] || c}</span>
+        <span class="br-sub">${escapeHtml(item.r.tour)} · ${escapeHtml(item.r.date)}</span></div>
+      <div class="br-time">${fmtSec(item.tot)}</div>
+    </div>`;
+  }).join('');
+
+  // 3) 개선 추세 (최근 거리 카테고리 안에서만 비교 가능) — 현재 필터(filtered)의 총기록 선형 추세
+  let trendHtml = '';
+  const ft = filtered.map(r => ({ date: r.date, sec: cleanSec(r.total, 'total') })).filter(x => x.sec != null);
+  if (ft.length >= 3) {
+    ft.sort((a,b) => a.date.localeCompare(b.date));
+    // 단순 선형회귀: x = index, y = sec
+    const n = ft.length;
+    const xs = ft.map((_,i) => i);
+    const ys = ft.map(x => x.sec);
+    const mx = xs.reduce((a,b)=>a+b,0)/n;
+    const my = ys.reduce((a,b)=>a+b,0)/n;
+    let num=0, den=0;
+    for (let i=0;i<n;i++) { num += (xs[i]-mx)*(ys[i]-my); den += (xs[i]-mx)**2; }
+    const slope = den === 0 ? 0 : num/den; // 1회 출전당 변화(초)
+    const totalChange = slope * (n - 1);
+    const direction = slope < -1 ? 'down' : (slope > 1 ? 'up' : 'flat');
+    const dclass = direction === 'down' ? 'trend-down' : (direction === 'up' ? 'trend-up' : '');
+    const dword = direction === 'down' ? '개선 중 ↗' : (direction === 'up' ? '악화 ↘' : '안정');
+    const firstD = ft[0].date, lastD = ft[ft.length-1].date;
+    trendHtml = `<div class="trend-line">
+      ${firstD.slice(0,7)} → ${lastD.slice(0,7)} <b class="${dclass}">${dword}</b><br>
+      ${n}회 출전 기간 동안 총기록이 <b class="${dclass}">${slope < 0 ? '−' : '+'}${fmtSec(Math.abs(totalChange))}</b> (총 ${slope < 0 ? '단축' : '증가'})
+    </div>`;
+  } else {
+    trendHtml = '<div class="trend-line muted">추세 분석에는 3회 이상 기록이 필요합니다.</div>';
+  }
+
+  // 강점 바 렌더 (상위 % 낮을수록 왼쪽 = 강함)
+  const strengthBar = (k) => {
+    const p = segAvgPct[k];
+    if (p == null) return '';
+    const markPos = Math.max(0, Math.min(100, p));
+    return `<div class="strength-bar">
+      <div class="sb-label">${SEG_NAME[k]}</div>
+      <div class="sb-track">
+        <div class="sb-fill"></div>
+        <div class="sb-mark" style="left: ${markPos}%"></div>
+      </div>
+      <div class="sb-val">상위 ${p.toFixed(0)}%</div>
+    </div>`;
+  };
+
+  const strengthTag = strongest
+    ? `<span class="strength-tag tag-strong">강점: ${SEG_NAME[strongest]}</span>` +
+      (weakest && weakest !== strongest ? ` <span class="strength-tag tag-weak">보강: ${SEG_NAME[weakest]}</span>` : '')
+    : '<span class="strength-tag tag-neutral">분석 데이터 부족</span>';
+
+  div.innerHTML =
+    `<div class="profile-section">
+      <h2>📊 프로필 분석 <span style="font-size:11px;color:#888;font-weight:400">· ${escapeHtml(name)}${clubF?' / '+escapeHtml(clubF):''}</span></h2>
+      <div class="profile-grid">
+        <div class="pf-card">
+          <h3>강점 구간 (같은 부문 내 평균 순위)</h3>
+          ${strengthTag}
+          <div style="margin-top: 10px;">
+            ${['s','b','r'].map(strengthBar).join('')}
+          </div>
+          ${valid.length === 0 ? '<div class="muted" style="font-size:11px">비교 가능한 구간 기록 부족</div>' : ''}
+        </div>
+        <div class="pf-card">
+          <h3>거리별 베스트</h3>
+          ${bestRows || '<div class="muted" style="font-size:11px">거리 정보 있는 기록 없음</div>'}
+        </div>
+        <div class="pf-card">
+          <h3>개선 추세 (현재 필터 기준)</h3>
+          ${trendHtml}
+        </div>
+      </div>
+    </div>`;
 }
 
 function renderStats(filtered, div) {
