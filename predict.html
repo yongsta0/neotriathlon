@@ -88,6 +88,22 @@
   .empty { color: var(--subtle); padding: 40px 0; text-align: center; }
   .badge-mode { display: inline-block; padding: 3px 10px; background: var(--accent); color: #fff; font-size: 10px; border-radius: 10px; margin-left: 8px; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
 
+  /* 팀 카드 */
+  .team-card { padding: 16px 18px; }
+  .team-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; }
+  .team-head b { font-weight: 600; color: var(--text); }
+  .team-card.selected { border-color: var(--accent); }
+  .team-card.collapsed { opacity: .92; }
+  .table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .team-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .team-table th { background: var(--bg); color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+  .team-table td { padding: 9px 10px; border-bottom: 1px solid var(--border-soft); font-size: 12px; }
+  .team-table tr:last-child td { border-bottom: none; }
+  .team-table td.rank { font-weight: 700; color: var(--accent); width: 30px; }
+  .team-table td.num { font-variant-numeric: tabular-nums; text-align: right; }
+  .team-table td.small { font-size: 10px; line-height: 1.3; }
+  .team-table tbody tr:hover { background: var(--accent-soft); }
+
   @media (max-width: 700px) {
     body { padding: 20px 14px 60px; }
     h1 { font-size: 22px; }
@@ -118,18 +134,20 @@
   <div class="row3">
     <div>
       <label>이름</label>
-      <input id="name" type="text" placeholder="예: 김철수">
+      <input id="name" type="text" placeholder="예: 김철수" list="nameList">
+      <datalist id="nameList"></datalist>
     </div>
     <div>
       <label>소속</label>
-      <select id="club"><option value="">— 선택 —</option></select>
+      <input id="club" type="text" placeholder="— 선택 또는 입력 —" list="clubList">
+      <datalist id="clubList"></datalist>
     </div>
     <div>
       <label>거리</label>
       <select id="dist"></select>
     </div>
   </div>
-  <div class="hint">조건을 좁힐수록 비율 계산이 정확해집니다. 거리가 다른 대회는 비율이 달라 분리됩니다.</div>
+  <div class="hint">이름만 입력 → 개인 예상 / 이름 없이 소속만 → 팀 내 거리별 랭킹</div>
   <div class="chips" id="profileSummary"></div>
 </div>
 
@@ -159,6 +177,45 @@
 <script>
 let DATA = [];
 let DISTANCES = {};
+let POP_STATS = {};
+
+function buildPopulationStats() {
+  const buckets = {};
+  for (const rec of DATA) {
+    const cat = classifyDistance(distInfo(rec)) || 'other';
+    if (!buckets[cat]) buckets[cat] = { s:[], b:[], r:[], t:[] };
+    const s = cleanSec(rec.swim, 'swim');
+    const b = cleanSec(rec.bike, 'bike');
+    const rn = cleanSec(rec.run, 'run');
+    const tot = cleanSec(rec.total, 'total');
+    if (s != null) buckets[cat].s.push(s);
+    if (b != null) buckets[cat].b.push(b);
+    if (rn != null) buckets[cat].r.push(rn);
+    if (tot != null) buckets[cat].t.push(tot);
+  }
+  const stats = {};
+  for (const cat in buckets) {
+    const b = buckets[cat];
+    stats[cat] = {
+      n: b.t.length,
+      swim: { sorted: [...b.s].sort((a,b)=>a-b) },
+      bike: { sorted: [...b.b].sort((a,b)=>a-b) },
+      run:  { sorted: [...b.r].sort((a,b)=>a-b) },
+      total:{ sorted: [...b.t].sort((a,b)=>a-b) },
+    };
+  }
+  return stats;
+}
+function percentileRank(sorted, v) {
+  if (!sorted || sorted.length === 0 || v == null) return null;
+  let lo = 0, hi = sorted.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (sorted[mid] < v) lo = mid + 1;
+    else hi = mid;
+  }
+  return (lo / sorted.length) * 100;
+}
 
 function toSec(s) {
   if (!s || s === '-' || s === '00:00:00') return null;
@@ -219,17 +276,32 @@ async function load() {
     if (d2 && d2.ok) {
       try { DISTANCES = await d2.json(); } catch(e){}
     }
+    POP_STATS = buildPopulationStats();
   } catch (e) {
     document.getElementById('result').innerHTML = '<div class="empty">데이터를 불러올 수 없습니다.</div>';
     return;
   }
 
+  // 이름 자동완성을 위한 datalist — 출전수 많은 순 상위 2000명
+  const nameCnt = {};
+  for (const r of DATA) { nameCnt[r.name] = (nameCnt[r.name]||0) + 1; }
+  const topNames = Object.keys(nameCnt).sort((a,b) => nameCnt[b]-nameCnt[a]).slice(0, 2000);
+  document.getElementById('nameList').innerHTML =
+    topNames.map(n => `<option value="${escapeAttr(n)}">`).join('');
+
   const p = new URLSearchParams(location.search);
   if (p.get('name')) document.getElementById('name').value = p.get('name');
 
   document.getElementById('name').addEventListener('input', () => { updateClubList(); });
+  document.getElementById('club').addEventListener('input', updateDistList);
   document.getElementById('club').addEventListener('change', updateDistList);
-  document.getElementById('dist').addEventListener('change', updateSummary);
+  document.getElementById('dist').addEventListener('change', () => {
+    updateSummary();
+    // 팀 모드일 때 거리 바꾸면 자동으로 다시 그리기
+    const n = document.getElementById('name').value.trim();
+    const c = document.getElementById('club').value.trim();
+    if (!n && c) calc();
+  });
   document.getElementById('calcBtn').addEventListener('click', calc);
   document.getElementById('clearBtn').addEventListener('click', clearInputs);
   document.querySelectorAll('.seg input').forEach(i =>
@@ -245,8 +317,9 @@ async function load() {
     document.getElementById('dist').value = p.get('dist');
     updateSummary();
   }
-  // 이름이 URL로 전달된 경우, 페이지 진입 시 바로 기본 예상 보여주기
+  // 진입 시 자동 표시
   if (p.get('name') && getPlayerRecords().length > 0) calc();
+  else if (!p.get('name') && p.get('club')) calc();
 }
 
 function namedRecords() {
@@ -264,25 +337,38 @@ function getPlayerRecords() {
 }
 
 function updateClubList() {
-  const sel = document.getElementById('club');
-  const cur = sel.value;
+  const dl = document.getElementById('clubList');
   const rs = namedRecords();
-  if (rs.length === 0) {
-    sel.innerHTML = '<option value="">— 선택 —</option>';
-    updateDistList();
-    return;
+  let clubs;
+  if (rs.length > 0) {
+    // 이름이 있으면 그 이름의 소속만 후보로
+    clubs = [...new Set(rs.map(r => r.club || '(소속없음)'))].sort();
+  } else {
+    // 이름이 없으면 전체 데이터에서 소속 추출 (최대 500개까지만)
+    const counts = {};
+    for (const r of DATA) {
+      const c = r.club || '';
+      if (c) counts[c] = (counts[c]||0) + 1;
+    }
+    clubs = Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, 500);
   }
-  const clubs = [...new Set(rs.map(r => r.club || '(소속없음)'))].sort();
-  sel.innerHTML = '<option value="">전체</option>' +
-    clubs.map(c => `<option value="${escapeAttr(c)}"${c===cur?' selected':''}>${escapeHtml(c)}</option>`).join('');
+  dl.innerHTML = clubs.map(c => `<option value="${escapeAttr(c)}">`).join('');
   updateDistList();
 }
 function updateDistList() {
-  const club = document.getElementById('club').value;
+  const name = document.getElementById('name').value.trim();
+  const club = document.getElementById('club').value.trim();
   const sel = document.getElementById('dist');
   const cur = sel.value;
-  let rs = namedRecords();
-  if (club) rs = rs.filter(r => (r.club || '(소속없음)') === club);
+  let rs;
+  if (name) {
+    rs = namedRecords();
+    if (club) rs = rs.filter(r => (r.club || '(소속없음)') === club);
+  } else if (club) {
+    rs = DATA.filter(r => (r.club || '') === club);
+  } else {
+    rs = [];
+  }
   const counts = {};
   rs.forEach(r => { const c = distCat(r); counts[c] = (counts[c]||0) + 1; });
   const cats = Object.keys(counts).sort((a,b) => counts[b]-counts[a]);
@@ -298,8 +384,26 @@ function updateDistList() {
   updateSummary();
 }
 function updateSummary() {
-  const rs = getPlayerRecords();
+  const name = document.getElementById('name').value.trim();
+  const club = document.getElementById('club').value.trim();
   const div = document.getElementById('profileSummary');
+  if (!name && club) {
+    // 팀 모드: 해당 소속 전체 통계
+    const teamRows = DATA.filter(r => (r.club || '') === club);
+    if (teamRows.length === 0) {
+      div.innerHTML = '<span class="muted">해당 소속 기록이 없습니다.</span>';
+      return;
+    }
+    const members = new Set(teamRows.map(r => r.name));
+    const dist = document.getElementById('dist').value || 'standard';
+    div.innerHTML =
+      `<span class="chip" style="background:#fdf8ea;color:#7a5b00;border-color:#f0e1b8">팀 모드</span>` +
+      `<span class="chip dist-${dist}">${DIST_LABEL[dist]||dist}</span>` +
+      `<span class="chip">${members.size}명</span>` +
+      `<span class="chip">${teamRows.length}건 기록</span>`;
+    return;
+  }
+  const rs = getPlayerRecords();
   if (rs.length === 0) {
     div.innerHTML = '<span class="muted">해당 조건의 과거 기록이 없습니다.</span>';
     return;
@@ -353,12 +457,118 @@ function avgSeg(samples, key) {
 
 function clearInputs() {
   ['i_swim','i_t1','i_bike','i_t2','i_run','i_total'].forEach(id => document.getElementById(id).value = '');
-  if (getPlayerRecords().length > 0) calc(); // 개인 평균으로 자동 표시
+  const name = document.getElementById('name').value.trim();
+  const club = document.getElementById('club').value.trim();
+  if (name && getPlayerRecords().length > 0) calc();
+  else if (!name && club) calc();
   else document.getElementById('result').innerHTML = '';
+}
+
+// 팀 모드: 특정 소속의 멤버들을 거리 카테고리별로 랭킹
+function renderTeamView(club, resDiv) {
+  const teamRows = DATA.filter(r => (r.club || '') === club);
+  if (teamRows.length === 0) {
+    resDiv.innerHTML = `<div class="alert alert-yel">소속 "${escapeHtml(club)}" 에 해당하는 기록이 없습니다.</div>`;
+    return;
+  }
+  // 선택된 거리 카테고리
+  const distSel = document.getElementById('dist').value;
+
+  // 거리 카테고리별로 그룹화
+  const byCat = {}; // cat → { member → bestRecord }
+  for (const r of teamRows) {
+    const cat = distCat(r);
+    if (!byCat[cat]) byCat[cat] = {};
+    const tot = cleanSec(r.total, 'total');
+    if (tot == null) continue;
+    const prev = byCat[cat][r.name];
+    if (!prev || tot < prev.sec) {
+      byCat[cat][r.name] = { sec: tot, r };
+    }
+  }
+
+  // 현재 선택된 카테고리만 우선 표시, 그 외는 간단 요약
+  const CAT_ORDER = ['sprint','short','standard','half','full','other'];
+  const sections = [];
+  for (const cat of CAT_ORDER) {
+    if (!byCat[cat]) continue;
+    const members = Object.entries(byCat[cat])
+      .map(([name, v]) => ({ name, sec: v.sec, record: v.r }))
+      .sort((a,b) => a.sec - b.sec);
+    if (members.length === 0) continue;
+
+    // 전체 풀 통계 (해당 거리 카테고리)
+    const pop = POP_STATS[cat];
+
+    const isSelected = (cat === distSel) || !distSel;
+    const rowsHtml = members.slice(0, isSelected ? 50 : 5).map((m, i) => {
+      const pctRank = pop ? percentileRank(pop.total.sorted, m.sec) : null;
+      const pctStr = pctRank != null ? `상위 ${pctRank.toFixed(0)}%` : '-';
+      const swim = cleanSec(m.record.swim, 'swim');
+      const bike = cleanSec(m.record.bike, 'bike');
+      const run  = cleanSec(m.record.run, 'run');
+      return `<tr>
+        <td class="rank">${i+1}</td>
+        <td><b>${escapeHtml(m.name)}</b></td>
+        <td class="num">${fmtSec(m.sec)}</td>
+        <td class="num muted">${fmtSec(swim)}</td>
+        <td class="num muted">${fmtSec(bike)}</td>
+        <td class="num muted">${fmtSec(run)}</td>
+        <td class="muted">${pctStr}</td>
+        <td class="muted small">${escapeHtml(m.record.date.slice(0,10))}<br>${escapeHtml(m.record.tour.slice(0,30))}</td>
+      </tr>`;
+    }).join('');
+
+    // 팀 내 통계
+    const secs = members.map(m => m.sec);
+    const teamBest = secs[0];
+    const teamMed = secs[Math.floor(secs.length/2)];
+
+    sections.push(`
+      <div class="card team-card ${isSelected ? 'selected' : 'collapsed'}">
+        <div class="team-head">
+          <div>
+            <span class="chip dist-${cat}">${DIST_LABEL[cat] || cat}</span>
+            <b style="margin-left:8px">${members.length}명 랭킹</b>
+            <span class="muted" style="margin-left:6px">· 팀 베스트 ${fmtSec(teamBest)} · 팀 중앙값 ${fmtSec(teamMed)}</span>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="team-table">
+            <thead>
+              <tr>
+                <th>#</th><th>이름</th><th>총기록</th><th>수영</th><th>사이클</th><th>런</th><th>전체 풀</th><th>대회</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        </div>
+        ${!isSelected && members.length > 5 ? `<div class="muted" style="margin-top:8px;font-size:11px">상위 5명만 표시. 거리 선택 시 전체 랭킹 표시</div>` : ''}
+      </div>
+    `);
+  }
+
+  if (sections.length === 0) {
+    resDiv.innerHTML = '<div class="alert alert-yel">해당 소속의 기록은 있지만 총기록을 파악할 수 있는 정상 데이터가 없습니다.</div>';
+    return;
+  }
+
+  resDiv.innerHTML =
+    `<div class="alert alert-grn"><b>팀 모드</b> — "${escapeHtml(club)}" 소속 멤버들의 거리별 베스트 기록과 랭킹입니다. 거리 드롭다운을 바꾸면 해당 거리의 전체 랭킹이 확장됩니다.</div>` +
+    sections.join('');
 }
 
 function calc() {
   const resDiv = document.getElementById('result');
+  const name = document.getElementById('name').value.trim();
+  const club = document.getElementById('club').value.trim();
+
+  // 팀 모드: 이름 없이 소속만 입력된 경우
+  if (!name && club) {
+    renderTeamView(club, resDiv);
+    return;
+  }
+
   const rs = getPlayerRecords();
   if (rs.length === 0) {
     resDiv.innerHTML = '<div class="alert alert-yel">해당 조건의 과거 기록이 없습니다.</div>';
