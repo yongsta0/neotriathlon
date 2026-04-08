@@ -4,84 +4,150 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1a3e72">
-<title>철인3종 기록 검색</title>
+<title>TRI · Performance Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-  :root { font-family: -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif; }
-  body { max-width: 1200px; margin: 30px auto; padding: 0 20px; color: #222; -webkit-text-size-adjust: 100%; }
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #ececec;
+    --border-soft: #f3f3f1;
+    --text: #0f0f0f;
+    --muted: #6b6b6b;
+    --subtle: #a0a0a0;
+    --accent: #0a2540;
+    --accent-hover: #163a5f;
+    --accent-soft: #eef2f7;
+    --success: #1f6b3a;
+    --warning: #b7790e;
+    --danger: #a8362a;
+    --radius: 10px;
+    --radius-lg: 14px;
+    font-family: 'Inter', -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif;
+  }
   * { box-sizing: border-box; }
-  h1 { font-size: 22px; margin: 0 0 4px; }
-  h2 { font-size: 16px; margin: 24px 0 8px; color: #333; }
-  .sub { color: #666; font-size: 13px; margin-bottom: 20px; }
-  .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-  input, select { font-size: 15px; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; }
-  input[type=text] { flex: 1 1 220px; }
-  .table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  html, body { background: var(--bg); }
+  body { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; color: var(--text); -webkit-text-size-adjust: 100%; font-size: 14px; line-height: 1.5; }
+
+  /* 헤더 */
+  .brand { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  .brand .logo { font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--accent); }
+  .brand .logo .dot { color: var(--danger); }
+  .brand .tag { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 6px; color: var(--text); }
+  h2 { font-size: 14px; font-weight: 600; margin: 28px 0 12px; color: var(--text); letter-spacing: -0.005em; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+
+  /* 검색바 */
+  .controls { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+  @media (max-width: 720px) { .controls { grid-template-columns: 1fr 1fr; } .controls input[type=text] { grid-column: 1 / -1; } }
+  input, select { font-family: inherit; font-size: 14px; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); outline: none; transition: border-color .15s; width: 100%; }
+  input::placeholder { color: var(--subtle); }
+  input:focus, select:focus { border-color: var(--accent); }
+  select { cursor: pointer; }
+
+  /* 카드 기본 */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; margin: 10px 0; }
+  .card > h3 { font-size: 11px; margin: 0 0 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+
+  /* 테이블 */
+  .table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td { padding: 6px 8px; border-bottom: 1px solid #eee; text-align: left; white-space: nowrap; }
-  th { background: #f5f5f5; position: sticky; top: 0; }
+  th, td { padding: 11px 14px; border-bottom: 1px solid var(--border-soft); text-align: left; white-space: nowrap; }
+  thead th { background: var(--bg); color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; position: sticky; top: 0; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--accent-soft); }
   td.r { text-align: right; font-variant-numeric: tabular-nums; }
-  .pill { display:inline-block; background:#eef; color:#446; padding:2px 8px; border-radius:10px; font-size:12px; margin-right:4px; }
-  .empty { color:#999; padding: 30px 0; text-align: center; }
-  .candidates { margin: 14px 0; padding: 10px 12px; background: #fffbe6; border: 1px solid #f5e7a3; border-radius: 6px; font-size: 13px; }
-  .candidates b { color: #7a5b00; }
-  .cand-btn { display:inline-block; margin: 4px 6px 0 0; padding: 4px 10px; background:#fff; border:1px solid #d4b94a; border-radius: 14px; cursor: pointer; font-size: 12px; }
-  .cand-btn.active { background:#f5d76e; }
-  .summary { margin: 8px 0 14px; font-size: 13px; color: #555; }
-  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 12px 0; }
-  .stat-card { background:#f7f9fc; border:1px solid #e3e8ef; border-radius: 8px; padding: 12px; }
-  .stat-label { font-size: 11px; color:#667; text-transform: uppercase; letter-spacing: .04em; }
-  .stat-value { font-size: 22px; font-weight: 700; margin-top: 2px; color:#1a3e72; font-variant-numeric: tabular-nums; }
-  .stat-sub { font-size: 11px; color:#888; margin-top: 2px; }
-  .chart-box { background:#fff; border:1px solid #e3e8ef; border-radius: 8px; padding: 12px; margin: 10px 0; }
+  .pill { display:inline-block; background: var(--accent-soft); color: var(--accent); padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 500; margin-right: 4px; }
+  .empty { color: var(--subtle); padding: 40px 0; text-align: center; font-size: 13px; }
+
+  /* 동명이인 후보 */
+  .candidates { margin: 14px 0; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); font-size: 13px; color: var(--muted); }
+  .candidates b { color: var(--text); font-weight: 600; }
+  .cand-btn { display:inline-block; margin: 8px 6px 0 0; padding: 6px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 500; color: var(--text); transition: all .15s; }
+  .cand-btn:hover { border-color: var(--accent); }
+  .cand-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .summary { margin: 16px 0 12px; font-size: 13px; color: var(--muted); display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .summary b { color: var(--text); font-weight: 600; }
+
+  /* 통계 카드 */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 14px 0; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; }
+  .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+  .stat-value { font-size: 24px; font-weight: 700; margin-top: 6px; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .stat-sub { font-size: 11px; color: var(--subtle); margin-top: 4px; }
+
+  /* 차트 */
+  .chart-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; margin: 10px 0; }
+  .chart-box h2 { margin-top: 0 !important; }
   .chart-box canvas { max-height: 280px; }
-  .two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
-  .race-pick { font-size: 12px; color: #666; margin: 4px 0 8px; }
-  .race-pick select { font-size: 13px; padding: 4px 8px; }
-  .tabs { display: flex; gap: 4px; margin: 4px 0 10px; flex-wrap: wrap; }
-  .tab { font-size: 12px; padding: 4px 12px; border: 1px solid #c8d2e0; background: #fff; border-radius: 14px; cursor: pointer; color: #446; }
-  .tab.active { background: #1a3e72; color: #fff; border-color: #1a3e72; }
-  .delta-up { color: #c24536; }
-  .delta-down { color: #2a8a3e; }
-  .na { color: #bbb; }
-  .bad { color: #c24536; cursor: help; border-bottom: 1px dotted #c24536; }
-  .dist-pill { display:inline-block; font-size:11px; padding:1px 7px; border-radius:10px; margin-right:4px; font-weight:600; cursor: help; }
-  .dist-sprint { background:#fff0e6; color:#8a4a1a; border:1px solid #f5cca3; }
-  .dist-short  { background:#fffbe6; color:#7a5b00; border:1px solid #f5e7a3; }
-  .dist-std    { background:#e6f0ff; color:#1a3e72; border:1px solid #b8ccee; }
-  .dist-half   { background:#ffe2e2; color:#8a1a1a; border:1px solid #f5b4b4; }
-  .dist-full   { background:#f0e6ff; color:#4a1a8a; border:1px solid #cbb4f5; }
-  .dist-other  { background:#eee; color:#666; border:1px solid #ccc; }
-  .predict-link { display:inline-block; margin-left:10px; padding: 4px 12px; background:#1a3e72; color:#fff; text-decoration:none; border-radius: 14px; font-size: 12px; font-weight: 600; }
-  .predict-link:hover { background:#274f8b; }
+  .two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+  .race-pick { font-size: 12px; color: var(--muted); margin: 4px 0 12px; }
+  .race-pick select { font-size: 13px; padding: 6px 10px; }
+  .tabs { display: flex; gap: 6px; margin: 0 0 14px; flex-wrap: wrap; }
+  .tab { font-size: 12px; padding: 6px 14px; border: 1px solid var(--border); background: var(--surface); border-radius: 20px; cursor: pointer; color: var(--muted); font-weight: 500; transition: all .15s; }
+  .tab:hover { border-color: var(--accent); color: var(--accent); }
+  .tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* 상태 색상 */
+  .delta-up   { color: var(--danger); }
+  .delta-down { color: var(--success); }
+  .na { color: var(--subtle); }
+  .bad { color: var(--danger); cursor: help; border-bottom: 1px dotted var(--danger); }
+
+  /* 거리 배지 */
+  .dist-pill { display:inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-right: 5px; font-weight: 600; cursor: help; letter-spacing: 0.02em; }
+  .dist-sprint { background: #fff4e6; color: #8a4a1a; }
+  .dist-short  { background: #fffaeb; color: #7a5b00; }
+  .dist-std    { background: #eef2f7; color: var(--accent); }
+  .dist-half   { background: #fff0ef; color: var(--danger); }
+  .dist-full   { background: #f3eef7; color: #4a1a8a; }
+  .dist-other  { background: #f2f2f2; color: #666; }
+
+  .predict-link { display:inline-block; padding: 8px 16px; background: var(--accent); color: #fff; text-decoration: none; border-radius: 20px; font-size: 12px; font-weight: 600; transition: background .15s; letter-spacing: 0.01em; }
+  .predict-link:hover { background: var(--accent-hover); }
 
   /* 프로필 분석 섹션 */
-  .profile-section { background: linear-gradient(135deg, #f4f8fd 0%, #eef3fa 100%); border: 1px solid #d4e0f0; border-radius: 12px; padding: 16px; margin: 14px 0; }
-  .profile-section h2 { font-size: 15px; margin: 0 0 12px; color: #1a3e72; display: flex; align-items: center; gap: 8px; }
-  .profile-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 12px; }
-  @media (max-width: 800px) { .profile-grid { grid-template-columns: 1fr; } }
-  .pf-card { background:#fff; border:1px solid #d4e0f0; border-radius: 10px; padding: 12px; }
-  .pf-card h3 { font-size: 12px; margin: 0 0 8px; color: #667; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
-  .strength-bar { display:flex; align-items:center; gap: 8px; margin: 6px 0; font-size: 12px; }
-  .strength-bar .sb-label { width: 42px; color: #333; font-weight: 600; }
-  .strength-bar .sb-track { flex: 1; background:#eef2f7; border-radius: 10px; height: 14px; position: relative; overflow: hidden; }
-  .strength-bar .sb-fill  { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #2a8a3e, #8cc64a, #f5c13a, #e88a3a, #c24536); }
-  .strength-bar .sb-mark  { position: absolute; top: -3px; width: 3px; height: 20px; background: #1a3e72; border-radius: 2px; }
-  .strength-bar .sb-val   { width: 54px; text-align: right; font-variant-numeric: tabular-nums; color:#555; }
-  .strength-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
-  .tag-strong { background: #e7f5ea; color: #23602d; border: 1px solid #b9e0be; }
-  .tag-weak   { background: #fff3f3; color: #8a1a1a; border: 1px solid #f5b4b4; }
-  .tag-neutral { background: #eef; color: #446; border: 1px solid #c8d2e0; }
-  .best-row { display:flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px solid #f0f3f8; font-size: 12px; }
+  .profile-section { margin: 18px 0 24px; }
+  .profile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 1080px) { .profile-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 640px) { .profile-grid { grid-template-columns: 1fr; } }
+  .pf-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; }
+  .pf-card h3 { font-size: 10px; margin: 0 0 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+  .strength-bar { display:flex; align-items:center; gap: 10px; margin: 9px 0; font-size: 12px; }
+  .strength-bar .sb-label { width: 42px; color: var(--text); font-weight: 600; }
+  .strength-bar .sb-track { flex: 1; background: var(--border-soft); border-radius: 10px; height: 6px; position: relative; }
+  .strength-bar .sb-fill  { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--success), #8cc64a, #f5c13a, #e88a3a, var(--danger)); }
+  .strength-bar .sb-mark  { position: absolute; top: -4px; width: 2px; height: 14px; background: var(--text); border-radius: 1px; }
+  .strength-bar .sb-val   { width: 52px; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 11px; }
+  .strength-tag { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .tag-strong { background: #e9f4ed; color: var(--success); }
+  .tag-weak   { background: #fdeceb; color: var(--danger); }
+  .tag-neutral { background: var(--bg); color: var(--muted); }
+  .best-row { display:flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--border-soft); font-size: 12px; }
   .best-row:last-child { border-bottom: none; }
-  .best-row .br-dist { font-weight: 600; color: #1a3e72; }
-  .best-row .br-time { font-variant-numeric: tabular-nums; font-weight: 700; color: #222; }
-  .best-row .br-sub  { display: block; font-size: 10px; color: #888; margin-top: 1px; }
-  .trend-line { font-size: 12px; color: #555; margin: 6px 0; }
-  .trend-line b { font-variant-numeric: tabular-nums; }
-  .trend-up   { color: #c24536; }
-  .trend-down { color: #2a8a3e; }
+  .best-row .br-dist { font-weight: 600; color: var(--text); font-size: 12px; }
+  .best-row .br-time { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--text); }
+  .best-row .br-sub  { display: block; font-size: 10px; color: var(--subtle); margin-top: 2px; font-weight: 400; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .trend-line { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .trend-line b { font-variant-numeric: tabular-nums; color: var(--text); }
+  .trend-up   { color: var(--danger) !important; }
+  .trend-down { color: var(--success) !important; }
+  .muted { color: var(--subtle); font-size: 11px; }
+
+  /* 풀 대비 분석 */
+  .pop-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-soft); font-size: 12px; }
+  .pop-row:last-child { border-bottom: none; }
+  .pop-row .p-label { color: var(--muted); font-weight: 500; width: 60px; }
+  .pop-row .p-val { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--text); }
+  .pop-row .p-bar { flex: 1; margin: 0 10px; height: 4px; background: var(--border-soft); border-radius: 2px; position: relative; }
+  .pop-row .p-bar-fill { position: absolute; height: 100%; background: var(--accent); border-radius: 2px; }
+  .pop-row .p-pct { width: 40px; text-align: right; font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
   /* 모바일 */
   @media (max-width: 640px) {
@@ -110,8 +176,12 @@
 </style>
 </head>
 <body>
-<h1>철인3종 기록 검색</h1>
-<div class="sub" id="datasub">대한철인3종협회 공개 기록 · 동명이인은 소속/부문으로 구분</div>
+<div class="brand">
+  <div class="logo">TRI<span class="dot">·</span>PE</div>
+  <div class="tag">Performance Explorer</div>
+</div>
+<h1>철인3종 기록 탐색</h1>
+<div class="sub" id="datasub">대한철인3종협회 공개 기록을 분석하고 개인 기록 추이·예상기록을 계산합니다.</div>
 
 <div class="controls">
   <input id="q" type="text" placeholder="이름을 입력하세요 (예: 김철수)" autofocus>
@@ -135,7 +205,84 @@
 <script>
 let DATA = [];
 let DISTANCES = {}; // 'tour||part' → {swim_km, bike_km, run_km}
+let POP_STATS = {}; // dist_cat → {swim:{arr,sorted}, bike, run, total, ratios}
 let charts = {};
+let lastAutoDistKey = ''; // 'name||club' 조합이 바뀔 때만 auto-select 재적용
+
+// 전체 풀 기반 거리 카테고리별 통계 빌드
+function buildPopulationStats() {
+  const buckets = {}; // cat → {s:[], b:[], r:[], t:[], rows:[]}
+  for (const rec of DATA) {
+    const cat = classifyDistance(distInfo(rec)) || 'other';
+    if (!buckets[cat]) buckets[cat] = { s:[], b:[], r:[], t:[], t1:[], t2:[] };
+    const s = cleanSec(rec.swim, 'swim');
+    const b = cleanSec(rec.bike, 'bike');
+    const rn = cleanSec(rec.run, 'run');
+    const tot = cleanSec(rec.total, 'total');
+    const t1 = cleanSec(rec.t1, 't1');
+    const t2 = cleanSec(rec.t2, 't2');
+    if (s != null) buckets[cat].s.push(s);
+    if (b != null) buckets[cat].b.push(b);
+    if (rn != null) buckets[cat].r.push(rn);
+    if (tot != null) buckets[cat].t.push(tot);
+    if (t1 != null) buckets[cat].t1.push(t1);
+    if (t2 != null) buckets[cat].t2.push(t2);
+  }
+  const stats = {};
+  for (const cat in buckets) {
+    const b = buckets[cat];
+    const pctl = (arr, p) => {
+      if (arr.length === 0) return null;
+      const sorted = [...arr].sort((a,b) => a-b);
+      const idx = Math.floor((p/100) * (sorted.length - 1));
+      return sorted[idx];
+    };
+    const mean = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : null;
+    // 정렬된 배열도 저장 (percentile rank 계산용)
+    stats[cat] = {
+      n: b.t.length,
+      swim: { arr: b.s, sorted: [...b.s].sort((a,b)=>a-b), mean: mean(b.s), p10: pctl(b.s,10), p25: pctl(b.s,25), p50: pctl(b.s,50), p75: pctl(b.s,75), p90: pctl(b.s,90) },
+      bike: { arr: b.b, sorted: [...b.b].sort((a,b)=>a-b), mean: mean(b.b), p10: pctl(b.b,10), p25: pctl(b.b,25), p50: pctl(b.b,50), p75: pctl(b.b,75), p90: pctl(b.b,90) },
+      run:  { arr: b.r, sorted: [...b.r].sort((a,b)=>a-b), mean: mean(b.r), p10: pctl(b.r,10), p25: pctl(b.r,25), p50: pctl(b.r,50), p75: pctl(b.r,75), p90: pctl(b.r,90) },
+      total:{ arr: b.t, sorted: [...b.t].sort((a,b)=>a-b), mean: mean(b.t), p10: pctl(b.t,10), p25: pctl(b.t,25), p50: pctl(b.t,50), p75: pctl(b.t,75), p90: pctl(b.t,90) },
+      t1:   { mean: mean(b.t1) },
+      t2:   { mean: mean(b.t2) },
+    };
+    // 총기록 대비 구간 평균 비율
+    const n = Math.min(b.s.length, b.b.length, b.r.length, b.t.length);
+    if (n > 0) {
+      let ss=0, bs=0, rs=0;
+      // 부분적으로 같은 순서를 알 수 없어 개별 평균 사용
+      const avgS = stats[cat].swim.mean || 0;
+      const avgB = stats[cat].bike.mean || 0;
+      const avgR = stats[cat].run.mean  || 0;
+      const avgT1 = stats[cat].t1.mean || 0;
+      const avgT2 = stats[cat].t2.mean || 0;
+      const avgTotal = stats[cat].total.mean || 1;
+      stats[cat].ratios = {
+        s: avgS / avgTotal,
+        b: avgB / avgTotal,
+        r: avgR / avgTotal,
+        t1: avgT1 / avgTotal,
+        t2: avgT2 / avgTotal,
+      };
+    }
+  }
+  return stats;
+}
+
+// 정렬된 배열에서 값의 percentile rank 계산 (값이 낮을수록 상위, 작은 값 → 상위 %)
+function percentileRank(sorted, v) {
+  if (!sorted || sorted.length === 0 || v == null) return null;
+  let lo = 0, hi = sorted.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (sorted[mid] < v) lo = mid + 1;
+    else hi = mid;
+  }
+  // lo = 본인 이상인 첫 인덱스. 상위 % = lo/n * 100
+  return (lo / sorted.length) * 100;
+}
 
 // 거리 정보 → 표준 카테고리로 분류
 // (수영 km, 자전거 km, 달리기 km) → 카테고리명
@@ -173,16 +320,26 @@ function distInfo(r) {
 function distCat(r) {
   return classifyDistance(distInfo(r)) || 'other';
 }
+function fmtKm(v) {
+  if (v == null) return '?';
+  // 1.5 → "1.5", 40 → "40", 0.75 → "0.75"
+  return v % 1 === 0 ? String(v) : String(v);
+}
 function distBadge(r) {
   const d = distInfo(r);
   const cat = classifyDistance(d) || 'other';
   const cls = DIST_BADGE_CLS[cat] || 'dist-other';
-  let label = DIST_LABEL[cat] || '기타';
+  const label = DIST_LABEL[cat] || '기타';
   let title = '';
+  let extra = '';
   if (d) {
-    title = `수영 ${d.swim_km ?? '?'}km · 사이클 ${d.bike_km ?? '?'}km · 런 ${d.run_km ?? '?'}km`;
+    title = `수영 ${fmtKm(d.swim_km)}km · 사이클 ${fmtKm(d.bike_km)}km · 런 ${fmtKm(d.run_km)}km`;
+    // 표준이 아닌 경우 실제 거리를 배지에 함께 표기
+    if (cat !== 'standard') {
+      extra = ` · ${fmtKm(d.swim_km)}/${fmtKm(d.bike_km)}/${fmtKm(d.run_km)}`;
+    }
   }
-  return `<span class="dist-pill ${cls}" title="${escapeAttr(title)}">${label}</span>`;
+  return `<span class="dist-pill ${cls}" title="${escapeAttr(title)}">${label}${extra}</span>`;
 }
 function distSummary(r) {
   const d = distInfo(r);
@@ -252,11 +409,10 @@ async function load() {
     if (distRes && distRes.ok) {
       try { DISTANCES = await distRes.json(); } catch (e) { DISTANCES = {}; }
     }
+    POP_STATS = buildPopulationStats();
     const distCnt = Object.keys(DISTANCES).length;
     document.getElementById('datasub').textContent =
-      `대한철인3종협회 공개 기록 · 총 ${DATA.length.toLocaleString()}건` +
-      (distCnt ? ` · 거리 정보 ${distCnt}개 부문 매핑` : '') +
-      ` · 동명이인은 소속/부문으로 구분`;
+      `${DATA.length.toLocaleString()}개 기록 · ${distCnt}개 부문 · ${Object.keys(POP_STATS).length}개 거리 카테고리`;
   } catch (e) {
     document.getElementById('result').innerHTML =
       '<div class="empty">data.json 을 불러올 수 없습니다.<br>먼저 <code>python3 scraper.py</code> 를 실행하세요.</div>';
@@ -317,12 +473,20 @@ function render() {
     distCounts[c] = (distCounts[c] || 0) + 1;
   });
   const distCats = Object.keys(distCounts).sort((a,b) => distCounts[b] - distCounts[a]);
-  // 자동 기본값: 사용자가 선택 안 했고 거리 종류가 2개 이상이면 가장 흔한 거리 자동 선택
+
+  // 거리 자동 선택: 이름/소속이 '새로 바뀐' 경우에만 가장 흔한 거리 자동 선택
+  // 사용자가 '거리 전체'를 명시적으로 고르면 그대로 둔다
+  const key = q + '||' + clubF;
   let effectiveDistF = distF;
-  if (!distF && distCats.length > 1) {
-    effectiveDistF = distCats[0];
-    document.getElementById('dist').value = effectiveDistF;
+  if (key !== lastAutoDistKey) {
+    // 새 검색 컨텍스트: 거리 종류가 2개 이상이면 가장 흔한 것으로 자동 선택
+    if (distCats.length > 1) {
+      effectiveDistF = distCats[0];
+      document.getElementById('dist').value = effectiveDistF;
+    }
+    lastAutoDistKey = key;
   } else if (distF && !distCats.includes(distF)) {
+    // 기존 선택이 유효하지 않으면 초기화
     effectiveDistF = '';
     document.getElementById('dist').value = '';
   }
@@ -492,26 +656,63 @@ function renderProfile(name, clubF, filtered, div) {
       (weakest && weakest !== strongest ? ` <span class="strength-tag tag-weak">보강: ${SEG_NAME[weakest]}</span>` : '')
     : '<span class="strength-tag tag-neutral">분석 데이터 부족</span>';
 
+  // 4) 전체 풀 기반 분석: 필터된 기록(같은 거리 카테고리로 제한됨) 안에서
+  //    본인 베스트 구간 시간과 전체 풀(같은 거리 카테고리) 분포 비교
+  let popHtml = '';
+  if (filtered.length > 0) {
+    const primaryCat = distCat(filtered[0]);
+    const pop = POP_STATS[primaryCat];
+    if (pop && pop.n > 0) {
+      const myBest = {
+        swim: Math.min(...filtered.map(r => cleanSec(r.swim,'swim')).filter(v => v != null), Infinity),
+        bike: Math.min(...filtered.map(r => cleanSec(r.bike,'bike')).filter(v => v != null), Infinity),
+        run:  Math.min(...filtered.map(r => cleanSec(r.run, 'run')).filter(v => v != null), Infinity),
+        total:Math.min(...filtered.map(r => cleanSec(r.total,'total')).filter(v => v != null), Infinity),
+      };
+      const popRow = (key, label) => {
+        const myVal = myBest[key];
+        const pctRank = percentileRank(pop[key].sorted, myVal);
+        if (myVal === Infinity || pctRank == null) {
+          return `<div class="pop-row"><span class="p-label">${label}</span><span class="p-val muted">—</span></div>`;
+        }
+        return `<div class="pop-row">
+          <span class="p-label">${label}</span>
+          <span class="p-val">${fmtSec(myVal)}</span>
+          <div class="p-bar"><div class="p-bar-fill" style="width:${Math.max(2, pctRank)}%"></div></div>
+          <span class="p-pct">상위 ${pctRank.toFixed(0)}%</span>
+        </div>`;
+      };
+      popHtml = `<div class="pf-card">
+        <h3>전체 풀 대비 (${DIST_LABEL[primaryCat] || primaryCat} · n=${pop.n.toLocaleString()})</h3>
+        ${popRow('swim','수영')}
+        ${popRow('bike','사이클')}
+        ${popRow('run','런')}
+        ${popRow('total','총기록')}
+      </div>`;
+    }
+  }
+
   div.innerHTML =
     `<div class="profile-section">
-      <h2>📊 프로필 분석 <span style="font-size:11px;color:#888;font-weight:400">· ${escapeHtml(name)}${clubF?' / '+escapeHtml(clubF):''}</span></h2>
+      <h2>프로필 분석 <span style="font-size:11px;color:var(--muted);font-weight:500;margin-left:6px">${escapeHtml(name)}${clubF?' · '+escapeHtml(clubF):''}</span></h2>
       <div class="profile-grid">
         <div class="pf-card">
-          <h3>강점 구간 (같은 부문 내 평균 순위)</h3>
+          <h3>강점 구간 · 같은 부문 내 평균 순위</h3>
           ${strengthTag}
-          <div style="margin-top: 10px;">
+          <div style="margin-top: 12px;">
             ${['s','b','r'].map(strengthBar).join('')}
           </div>
-          ${valid.length === 0 ? '<div class="muted" style="font-size:11px">비교 가능한 구간 기록 부족</div>' : ''}
+          ${valid.length === 0 ? '<div class="muted" style="margin-top:8px">비교 가능한 구간 기록 부족</div>' : ''}
         </div>
         <div class="pf-card">
           <h3>거리별 베스트</h3>
-          ${bestRows || '<div class="muted" style="font-size:11px">거리 정보 있는 기록 없음</div>'}
+          ${bestRows || '<div class="muted">거리 정보 있는 기록 없음</div>'}
         </div>
         <div class="pf-card">
-          <h3>개선 추세 (현재 필터 기준)</h3>
+          <h3>개선 추세 · 현재 필터 기준</h3>
           ${trendHtml}
         </div>
+        ${popHtml}
       </div>
     </div>`;
 }

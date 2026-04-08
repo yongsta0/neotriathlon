@@ -4,62 +4,98 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1a3e72">
-<title>철인3종 예상기록 계산</title>
+<title>TRI · Predictor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { font-family: -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif; }
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #ececec;
+    --border-soft: #f3f3f1;
+    --text: #0f0f0f;
+    --muted: #6b6b6b;
+    --subtle: #a0a0a0;
+    --accent: #0a2540;
+    --accent-hover: #163a5f;
+    --accent-soft: #eef2f7;
+    --success: #1f6b3a;
+    --warning: #b7790e;
+    --danger: #a8362a;
+    --radius: 10px;
+    --radius-lg: 14px;
+    font-family: 'Inter', -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif;
+  }
   * { box-sizing: border-box; }
-  body { max-width: 980px; margin: 24px auto; padding: 0 16px; color: #222; -webkit-text-size-adjust: 100%; }
-  a { color: #1a3e72; }
-  h1 { font-size: 22px; margin: 0 0 4px; }
-  h2 { font-size: 15px; margin: 0 0 10px; color: #1a3e72; }
-  .sub { color: #666; font-size: 13px; margin-bottom: 16px; }
-  .nav { font-size: 13px; margin-bottom: 18px; }
-  .card { background: #f7f9fc; border:1px solid #e3e8ef; border-radius: 10px; padding: 16px; margin-bottom: 14px; }
-  label { display:block; font-size: 12px; color:#555; margin-bottom: 4px; }
-  input, select { font-size: 16px; padding: 9px 10px; border: 1px solid #ccc; border-radius: 6px; width: 100%; background:#fff; }
-  input::placeholder { color: #bbb; }
-  .row3 { display: grid; grid-template-columns: 2fr 1.5fr 1fr; gap: 10px; }
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .seg-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 8px; }
-  .seg-grid .seg { background:#fff; border:1px solid #d4dbe6; border-radius: 8px; padding: 8px; }
-  .seg-grid .seg input { padding: 7px 6px; font-size: 14px; text-align: center; font-variant-numeric: tabular-nums; }
-  .seg-grid .seg label { text-align: center; font-weight: 600; color: #1a3e72; }
-  .btn { background:#1a3e72; color:#fff; border:none; padding: 11px 16px; border-radius: 6px; font-size: 15px; cursor: pointer; width: 100%; font-weight: 600; }
-  .btn:hover { background:#274f8b; }
-  .btn-row { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; margin-top: 12px; }
-  .btn.btn-ghost { background:#fff; color:#1a3e72; border: 1px solid #b8ccee; }
-  .alert { padding: 12px 14px; border-radius: 8px; margin: 10px 0; font-size: 14px; line-height: 1.5; }
-  .alert-red { background:#fff3f3; border:1px solid #f5b4b4; color:#8a1a1a; }
-  .alert-yel { background:#fffbe6; border:1px solid #f5e7a3; color:#6e5700; }
-  .alert-grn { background:#f1fbf2; border:1px solid #b9e0be; color:#23602d; }
-  .result-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin: 10px 0; }
-  .rcard { background:#fff; border:1px solid #e3e8ef; border-radius: 8px; padding: 10px; text-align: center; }
-  .rcard.user { background:#fffbe6; border-color:#f5e7a3; }
-  .rcard.total { background:#1a3e72; color:#fff; border-color:#1a3e72; }
-  .rcard .label { font-size: 11px; opacity:.85; text-transform: uppercase; letter-spacing: .04em; }
-  .rcard .val { font-size: 18px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
-  .rcard .sub { font-size: 10px; opacity: .75; margin-top: 2px; }
-  .rcard.bad { background: #fff3f3; border-color: #f5b4b4; color: #8a1a1a; }
-  .compare { font-size: 12px; color:#666; margin-top: 8px; }
-  .hint { font-size: 12px; color:#888; margin-top: 4px; }
-  .muted { color:#999; }
-  .chips { display:flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
-  .chip { font-size: 11px; padding: 3px 9px; background:#eef; color:#446; border-radius: 10px; }
-  .chip.dist-sprint { background:#fff0e6; color:#8a4a1a; }
-  .chip.dist-short  { background:#fffbe6; color:#7a5b00; }
-  .chip.dist-standard { background:#e6f0ff; color:#1a3e72; }
-  .chip.dist-half { background:#ffe2e2; color:#8a1a1a; }
-  .chip.dist-full { background:#f0e6ff; color:#4a1a8a; }
-  .empty { color:#999; padding: 30px 0; text-align: center; }
-  .badge-mode { display: inline-block; padding: 2px 8px; background:#1a3e72; color:#fff; font-size: 11px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+  html, body { background: var(--bg); }
+  body { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; color: var(--text); -webkit-text-size-adjust: 100%; font-size: 14px; line-height: 1.5; }
+  a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  a:hover { text-decoration: underline; }
+
+  .brand { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  .brand .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--accent); }
+  .brand .logo .dot { color: var(--danger); }
+  .brand .tag { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 6px; }
+  h2 { font-size: 13px; font-weight: 600; margin: 0 0 14px; color: var(--text); text-transform: uppercase; letter-spacing: 0.06em; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+  .nav { font-size: 13px; margin-bottom: 24px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; margin-bottom: 14px; }
+  label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+  input, select { font-family: inherit; font-size: 14px; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius); width: 100%; background: var(--surface); color: var(--text); outline: none; transition: border-color .15s; }
+  input::placeholder { color: var(--subtle); }
+  input:focus, select:focus { border-color: var(--accent); }
+
+  .row3 { display: grid; grid-template-columns: 2fr 1.5fr 1fr; gap: 12px; }
+  .seg-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 12px; }
+  .seg-grid .seg label { text-align: center; font-weight: 600; color: var(--text); font-size: 10px; margin-bottom: 6px; }
+  .seg-grid .seg input { padding: 11px 6px; font-size: 15px; text-align: center; font-variant-numeric: tabular-nums; }
+
+  .btn { background: var(--accent); color: #fff; border: none; padding: 12px 20px; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; transition: background .15s; font-family: inherit; letter-spacing: 0.01em; }
+  .btn:hover { background: var(--accent-hover); }
+  .btn.btn-ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .btn.btn-ghost:hover { background: var(--bg); }
+  .btn-row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-top: 16px; }
+
+  .alert { padding: 14px 16px; border-radius: var(--radius); margin: 14px 0; font-size: 13px; line-height: 1.6; border: 1px solid; }
+  .alert-red { background: #fdf2f0; border-color: #f5d5d0; color: var(--danger); }
+  .alert-yel { background: #fdf8ea; border-color: #f0e1b8; color: var(--warning); }
+  .alert-grn { background: #f0f7f1; border-color: #c9e3cd; color: var(--success); }
+  .alert b { font-weight: 600; }
+
+  .result-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 12px 0; }
+  .rcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 12px; text-align: center; }
+  .rcard.user { background: #fdf8ea; border-color: #f0e1b8; }
+  .rcard.total { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .rcard.bad { background: #fdf2f0; border-color: #f5d5d0; color: var(--danger); }
+  .rcard .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; opacity: .7; }
+  .rcard.total .label { opacity: .85; }
+  .rcard .val { font-size: 20px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .rcard .sub { font-size: 10px; margin-top: 3px; opacity: .7; }
+
+  .compare { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+  .hint { font-size: 12px; color: var(--subtle); margin-top: 6px; line-height: 1.5; }
+  .muted { color: var(--subtle); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .chip { font-size: 11px; padding: 4px 10px; background: var(--bg); color: var(--muted); border: 1px solid var(--border); border-radius: 10px; font-weight: 500; }
+  .chip.dist-sprint   { background: #fff4e6; color: #8a4a1a; border-color: #f5d9b8; }
+  .chip.dist-short    { background: #fffaeb; color: #7a5b00; border-color: #f0e1b8; }
+  .chip.dist-standard { background: var(--accent-soft); color: var(--accent); border-color: #d9e0e9; }
+  .chip.dist-half     { background: #fdf2f0; color: var(--danger); border-color: #f5d5d0; }
+  .chip.dist-full     { background: #f3eef7; color: #4a1a8a; border-color: #e0d0ef; }
+  .empty { color: var(--subtle); padding: 40px 0; text-align: center; }
+  .badge-mode { display: inline-block; padding: 3px 10px; background: var(--accent); color: #fff; font-size: 10px; border-radius: 10px; margin-left: 8px; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
 
   @media (max-width: 700px) {
-    body { margin: 14px auto; padding: 0 12px; }
-    h1 { font-size: 19px; }
+    body { padding: 20px 14px 60px; }
+    h1 { font-size: 22px; }
+    .card { padding: 16px 18px; }
     .row3 { grid-template-columns: 1fr; }
     .seg-grid { grid-template-columns: repeat(3, 1fr); }
     .result-grid { grid-template-columns: repeat(3, 1fr); }
-    .rcard .val { font-size: 16px; }
+    .rcard .val { font-size: 17px; }
     .btn-row { grid-template-columns: 1fr; }
     input, select { font-size: 16px; }
   }
@@ -69,9 +105,13 @@
 </style>
 </head>
 <body>
-<h1>철인3종 예상기록 계산</h1>
-<div class="sub">기존 기록 기반 · 한 종목만 입력해도 나머지를 비율로 시뮬레이션</div>
-<div class="nav">← <a href="./">기록 검색으로 돌아가기</a></div>
+<div class="brand">
+  <div class="logo">TRI<span class="dot">·</span>PE</div>
+  <div class="tag">Predictor</div>
+</div>
+<h1>예상기록 시뮬레이션</h1>
+<div class="sub">개인 과거 기록 기반으로 목표·구간별 예상치를 계산합니다.</div>
+<div class="nav">← <a href="./">기록 탐색으로 돌아가기</a></div>
 
 <div class="card">
   <h2>1단계 · 선수 선택</h2>
@@ -205,6 +245,8 @@ async function load() {
     document.getElementById('dist').value = p.get('dist');
     updateSummary();
   }
+  // 이름이 URL로 전달된 경우, 페이지 진입 시 바로 기본 예상 보여주기
+  if (p.get('name') && getPlayerRecords().length > 0) calc();
 }
 
 function namedRecords() {
@@ -311,7 +353,8 @@ function avgSeg(samples, key) {
 
 function clearInputs() {
   ['i_swim','i_t1','i_bike','i_t2','i_run','i_total'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('result').innerHTML = '';
+  if (getPlayerRecords().length > 0) calc(); // 개인 평균으로 자동 표시
+  else document.getElementById('result').innerHTML = '';
 }
 
 function calc() {
@@ -323,10 +366,27 @@ function calc() {
   }
   const samples = buildSamples(rs);
   if (samples.length === 0) {
-    resDiv.innerHTML = '<div class="alert alert-yel">과거 기록 중 구간 정보가 완전한 것이 없어 비율 계산이 불가합니다. (다른 거리 카테고리를 시도해보세요)</div>';
+    resDiv.innerHTML = '<div class="alert alert-yel">과거 기록 중 구간 정보가 완전한 것이 없어 계산이 불가합니다. (다른 거리 카테고리를 시도해보세요)</div>';
     return;
   }
-  const ratios = buildRatios(samples);
+
+  // 개인 평균 (절대 시간) — 모든 계산의 기준
+  const mean = (key) => {
+    const vs = samples.map(x => x[key]).filter(v => v != null);
+    return vs.length ? vs.reduce((a,b)=>a+b,0)/vs.length : null;
+  };
+  const personalAvg = {
+    s: mean('s'), t1: mean('t1'), b: mean('b'), t2: mean('t2'), rn: mean('rn'),
+  };
+  // T1/T2가 결측인 경우 0 취급
+  const pa = {
+    s:  personalAvg.s  ?? 0,
+    t1: personalAvg.t1 ?? 0,
+    b:  personalAvg.b  ?? 0,
+    t2: personalAvg.t2 ?? 0,
+    rn: personalAvg.rn ?? 0,
+  };
+  const avgTotal = pa.s + pa.t1 + pa.b + pa.t2 + pa.rn;
 
   // 입력 파싱
   const userIn = {
@@ -340,40 +400,40 @@ function calc() {
   const givenSegs = ['s','t1','b','t2','rn'].filter(k => userIn[k] != null);
   const givenSegSum = givenSegs.reduce((a,k) => a + userIn[k], 0);
 
-  // 시뮬레이션 결과 그릇
   const out = { s: null, t1: null, b: null, t2: null, rn: null, tot: null };
   let mode = '';
 
   if (userIn.tot == null && givenSegs.length === 0) {
-    resDiv.innerHTML = '<div class="alert alert-yel">하나 이상의 값을 입력해주세요. 총기록만 입력해도 됩니다.</div>';
-    return;
-  }
-
-  if (userIn.tot != null && givenSegs.length === 0) {
-    // === 모드 1: 총기록 → 비율 분배
-    mode = '총기록 분배';
+    // === 모드 0: 아무것도 입력 안 함 → 개인 평균을 그대로 예상으로 제시
+    mode = '개인 평균 기반';
+    for (const k of ['s','t1','b','t2','rn']) out[k] = pa[k];
+    out.tot = avgTotal;
+  } else if (userIn.tot != null && givenSegs.length === 0) {
+    // === 모드 1: 총기록만 입력 → 개인 평균 비율을 유지한 채 총기록에 맞춰 스케일
+    mode = '총기록 스케일';
+    const scale = avgTotal > 0 ? (userIn.tot / avgTotal) : 1;
+    for (const k of ['s','t1','b','t2','rn']) out[k] = pa[k] * scale;
     out.tot = userIn.tot;
-    for (const k of ['s','t1','b','t2','rn']) out[k] = userIn.tot * ratios[k];
   } else if (userIn.tot == null && givenSegs.length > 0) {
-    // === 모드 2: 일부 종목 → 같은 비율 가정으로 총기록 추정
-    mode = '구간 → 총기록 추정';
-    // total estimates (각 입력값을 그 종목의 비율로 역산해서 평균)
-    const ests = givenSegs.map(k => userIn[k] / ratios[k]).filter(v => isFinite(v) && v > 0);
-    out.tot = ests.reduce((a,b)=>a+b,0)/ests.length;
+    // === 모드 2: 일부 종목 입력 → 그 구간은 그대로, 나머지는 개인 평균 그대로 사용
+    // 총기록 = 사용자 입력 + 개인 평균(미입력 구간)
+    mode = '구간 고정 + 개인 평균';
     for (const k of ['s','t1','b','t2','rn']) {
-      out[k] = (k in userIn && userIn[k] != null) ? userIn[k] : (out.tot * ratios[k]);
+      out[k] = (userIn[k] != null) ? userIn[k] : pa[k];
     }
+    out.tot = ['s','t1','b','t2','rn'].reduce((a,k) => a + out[k], 0);
   } else {
-    // === 모드 3: 총기록 + 일부 구간 → 나머지를 비율로 분배
+    // === 모드 3: 총기록 + 일부 구간 입력 → 남은 시간을 미입력 구간의 개인 평균 비율대로 배분
     mode = '총기록 맞추기';
     out.tot = userIn.tot;
-    const remaining = userIn.tot - givenSegSum;
-    const otherKeys = ['s','t1','b','t2','rn'].filter(k => userIn[k] == null);
-    const otherRatioSum = otherKeys.reduce((a,k) => a + ratios[k], 0);
     for (const k of givenSegs) out[k] = userIn[k];
-    if (otherRatioSum > 0) {
-      for (const k of otherKeys) out[k] = remaining * (ratios[k] / otherRatioSum);
+    const otherKeys = ['s','t1','b','t2','rn'].filter(k => userIn[k] == null);
+    const remaining = userIn.tot - givenSegSum;
+    const otherAvgSum = otherKeys.reduce((a,k) => a + pa[k], 0);
+    if (otherAvgSum > 0 && remaining > 0) {
+      for (const k of otherKeys) out[k] = remaining * (pa[k] / otherAvgSum);
     } else {
+      // remaining <= 0 이면 나머지는 0으로 (입력 구간 합이 총기록 초과)
       for (const k of otherKeys) out[k] = 0;
     }
   }
@@ -418,7 +478,7 @@ function calc() {
   const isUser = (k) => userIn[k] != null;
   const segCard = (k, label) => {
     const v = out[k];
-    if (v == null || (k === 't1' && ratios.t1 === 0) || (k === 't2' && ratios.t2 === 0)) {
+    if (v == null || v === 0) {
       return `<div class="rcard"><div class="label">${label}</div><div class="val muted">—</div></div>`;
     }
     const a = segAvg[k];
@@ -457,8 +517,8 @@ function calc() {
         ${totCard}
       </div>
       <div class="compare">
-        과거 ${samples.length}개 기록 기반 비율: 수영 ${(ratios.s*100).toFixed(1)}% · T1 ${(ratios.t1*100).toFixed(1)}% · 사이클 ${(ratios.b*100).toFixed(1)}% · T2 ${(ratios.t2*100).toFixed(1)}% · 런 ${(ratios.rn*100).toFixed(1)}%
-        <br><span class="muted">● 표시 = 사용자 입력값 / 노란 배경 = 입력값 / 빨간 배경 = 베스트보다 5%+ 빠름</span>
+        과거 ${samples.length}개 기록 평균: 수영 ${fmtSec(pa.s)} · T1 ${fmtSec(pa.t1)} · 사이클 ${fmtSec(pa.b)} · T2 ${fmtSec(pa.t2)} · 런 ${fmtSec(pa.rn)} → 총 ${fmtSec(avgTotal)}
+        <br><span class="muted">● 표시 = 사용자 입력값 · 노란 배경 = 입력값 · 빨간 배경 = 베스트보다 5%+ 빠름</span>
       </div>
     </div>`;
 }
