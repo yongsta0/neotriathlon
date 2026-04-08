@@ -2,17 +2,21 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a3e72">
 <title>철인3종 기록 검색</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root { font-family: -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif; }
-  body { max-width: 1200px; margin: 30px auto; padding: 0 20px; color: #222; }
+  body { max-width: 1200px; margin: 30px auto; padding: 0 20px; color: #222; -webkit-text-size-adjust: 100%; }
+  * { box-sizing: border-box; }
   h1 { font-size: 22px; margin: 0 0 4px; }
   h2 { font-size: 16px; margin: 24px 0 8px; color: #333; }
   .sub { color: #666; font-size: 13px; margin-bottom: 20px; }
   .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
   input, select { font-size: 15px; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; }
   input[type=text] { flex: 1 1 220px; }
+  .table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { padding: 6px 8px; border-bottom: 1px solid #eee; text-align: left; white-space: nowrap; }
   th { background: #f5f5f5; position: sticky; top: 0; }
@@ -40,6 +44,31 @@
   .tab.active { background: #1a3e72; color: #fff; border-color: #1a3e72; }
   .delta-up { color: #c24536; }
   .delta-down { color: #2a8a3e; }
+
+  /* 모바일 */
+  @media (max-width: 640px) {
+    body { margin: 14px auto; padding: 0 12px; }
+    h1 { font-size: 19px; }
+    h2 { font-size: 14px; margin: 18px 0 6px; }
+    .sub { font-size: 12px; margin-bottom: 14px; }
+    input, select { font-size: 16px; padding: 10px 10px; } /* 16px → iOS 자동 확대 방지 */
+    .controls { gap: 6px; }
+    .controls input[type=text] { flex: 1 1 100%; }
+    .controls select { flex: 1 1 calc(50% - 3px); }
+    table { font-size: 12px; }
+    th, td { padding: 5px 6px; }
+    .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-card { padding: 10px; }
+    .stat-value { font-size: 18px; }
+    .chart-box { padding: 10px; }
+    .chart-box canvas { max-height: 240px; }
+    .pill { font-size: 11px; padding: 1px 6px; }
+    .tab { padding: 6px 10px; font-size: 12px; }
+    .candidates { font-size: 12px; padding: 8px 10px; }
+  }
+  @media (max-width: 380px) {
+    .stat-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -386,7 +415,7 @@ function renderCharts(filtered, div) {
 
 function renderTable(filtered, div) {
   div.innerHTML =
-    '<table><thead><tr>' +
+    '<div class="table-wrap"><table><thead><tr>' +
     '<th>날짜</th><th>대회</th><th>부문</th><th>소속</th>' +
     '<th class="r">순위</th><th class="r">수영</th><th class="r">T1</th>' +
     '<th class="r">사이클</th><th class="r">T2</th><th class="r">런</th><th class="r">총기록</th>' +
@@ -407,7 +436,7 @@ function renderTable(filtered, div) {
         '<td class="r">' + escapeHtml(r.run) + '</td>' +
         '<td class="r"><b>' + escapeHtml(r.total) + '</b></td></tr>';
     }).join('') +
-    '</tbody></table>';
+    '</tbody></table></div>';
 }
 
 function destroyCharts() {
