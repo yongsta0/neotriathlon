@@ -162,8 +162,13 @@
   .insight-para .ins-strong { color: var(--success); }
   .insight-para .ins-weak   { color: var(--danger); }
   .insight-para .ins-gain   { color: var(--accent); }
-  .insight-basis { font-size: 11px; color: var(--muted); background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; line-height: 1.55; }
+  .insight-basis { font-size: 11px; color: var(--muted); background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; line-height: 1.55; }
+  .insight-basis .basis-title { font-weight: 600; color: var(--text); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
   .insight-basis b { color: var(--text); font-weight: 600; }
+  .insight-basis .basis-parts { margin: 0; padding-left: 16px; font-size: 12px; color: var(--text); }
+  .insight-basis .basis-parts li { margin: 2px 0; }
+  .insight-basis .basis-warn { margin-top: 8px; padding: 8px 10px; background: #fdf8ea; border: 1px solid #f0e1b8; border-radius: 6px; color: var(--warning); font-size: 11px; line-height: 1.5; }
+  .insight-basis .basis-warn b { color: var(--warning); }
   .insight-tip { margin-top: 12px; padding: 12px 14px; background: var(--accent-soft); border-radius: var(--radius); font-size: 12px; line-height: 1.6; color: var(--text); border-left: 3px solid var(--accent); }
   .insight-tip b { color: var(--accent); font-weight: 700; display: inline-block; margin-bottom: 3px; }
   .rivals-card { grid-column: 1 / -1; }
@@ -939,10 +944,16 @@ function renderProfile(name, clubF, filtered, div) {
     const sp = segAvgPct[strongest], wp = segAvgPct[weakest];
     const gapPp = Math.round(wp - sp);
 
-    // 부문 표기: 1개면 이름 그대로, 여러 개면 '○○외 N개 부문'
+    // 부문 표기: 모든 부문을 명시적으로 나열 (데이터 해석 오류 방지)
+    const partsChipHtml = myParts
+      .map(p => `<span class="part-chip">${escapeHtml(p)}</span>`).join(' ');
     const partsLabel = myParts.length === 1
       ? escapeHtml(myParts[0])
-      : (escapeHtml(myParts[0]) + ' 외 ' + (myParts.length - 1) + '개 부문');
+      : `${myParts.length}개 부문`;
+
+    // 부문별 출전 횟수 상세
+    const partCount = {};
+    filtered.forEach(r => { partCount[r.part] = (partCount[r.part] || 0) + 1; });
 
     let para1 = `<b>${distLabel} · ${partsLabel}</b>에 <b>${n}회</b> 출전한 기록을 기준으로 분석했습니다. `;
     para1 += `<b>${name}</b>님은 <b class="ins-strong">${SEG_NAME[strongest]}</b>에서 가장 뛰어난 경쟁력(같은 부문 평균 <b>상위 ${sp.toFixed(0)}%</b>)을 보이고, `;
@@ -964,8 +975,17 @@ function renderProfile(name, clubF, filtered, div) {
       para3 = `만약 <b>${SEG_NAME[weakest]}</b>을(를) <b>${SEG_NAME[strongest]}</b>과 같은 상위 ${sp.toFixed(0)}% 수준(${partsLabel} 내 목표 시간 ${fmtSec(savingsTarget)})으로 끌어올리면, 총기록이 약 <b class="ins-gain">${fmtSec(savings)}</b> 단축될 것으로 기대됩니다.`;
     }
 
-    // 분석 기준 명시 배너
-    const basisNote = `<div class="insight-basis">※ 부문별 기록 수준이 다르므로, 위 분석은 본인이 출전한 <b>${partsLabel}</b> 안에서만 비교한 결과입니다${partPoolN ? ` (표본 n=${partPoolN.toLocaleString()})` : ''}.</div>`;
+    // 분석 기준 명시 배너 — 정확한 부문명을 모두 나열
+    const partsDetailList = myParts
+      .map(p => `<li><b>${escapeHtml(p)}</b> · ${partCount[p]}회</li>`).join('');
+    const multiWarn = myParts.length > 1
+      ? `<div class="basis-warn">⚠ 여러 부문이 섞여 있습니다. 부문별 경쟁 수준(엘리트/동호인/연령대)이 달라 해석에 주의가 필요합니다. 정확한 분석을 원하시면 <b>부문</b> 필터에서 하나만 선택해주세요.</div>`
+      : '';
+    const basisNote = `<div class="insight-basis">
+      <div class="basis-title">※ 분석 기준 부문 ${partPoolN ? `(같은 부문 내 표본 n=${partPoolN.toLocaleString()})` : ''}</div>
+      <ul class="basis-parts">${partsDetailList}</ul>
+      ${multiWarn}
+    </div>`;
 
     // 훈련 팁 (약점과 가장 큰 격차 구간 중 우선순위)
     const target = biggestGap && biggestGap[1] > 30 ? biggestGap[0] : weakest;
