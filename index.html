@@ -33,13 +33,31 @@
   body { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; color: var(--text); -webkit-text-size-adjust: 100%; font-size: 14px; line-height: 1.5; }
 
   /* 헤더 */
-  .brand { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
-  .brand .logo { font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--accent); }
+  .hero { padding: 20px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 32px; position: relative; }
+  .brand { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+  .brand .logo { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: var(--accent); }
   .brand .logo .dot { color: var(--danger); }
-  .brand .tag { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
-  h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 6px; color: var(--text); }
-  h2 { font-size: 14px; font-weight: 600; margin: 28px 0 12px; color: var(--text); letter-spacing: -0.005em; }
-  .sub { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+  .brand .tag { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; }
+  .hero-title { font-size: 44px; font-weight: 800; letter-spacing: -0.035em; margin: 22px 0 12px; line-height: 1.05; color: var(--text); background: linear-gradient(135deg, var(--text) 0%, var(--accent) 80%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { color: var(--muted); font-size: 15px; margin: 0 0 24px; max-width: 620px; line-height: 1.5; }
+  .hero-sub b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* 내비게이션 탭 */
+  .nav-tabs { display: flex; gap: 2px; margin: 4px 0 0; }
+  .nav-tabs a { padding: 10px 18px; font-size: 13px; color: var(--muted); border-bottom: 2px solid transparent; transition: all .15s; font-weight: 500; text-decoration: none; letter-spacing: 0.01em; }
+  .nav-tabs a:hover { color: var(--text); }
+  .nav-tabs a.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0; color: var(--text); }
+  h2 { font-size: 13px; font-weight: 600; margin: 28px 0 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+
+  @media (max-width: 640px) {
+    .hero-title { font-size: 32px; }
+    .hero-sub { font-size: 14px; }
+    .hero { padding-bottom: 28px; margin-bottom: 22px; }
+    .nav-tabs a { padding: 9px 12px; font-size: 12px; }
+  }
 
   /* 검색바 */
   .controls { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 8px; }
@@ -176,12 +194,19 @@
 </style>
 </head>
 <body>
-<div class="brand">
-  <div class="logo">TRI<span class="dot">·</span>PE</div>
-  <div class="tag">Performance Explorer</div>
-</div>
-<h1>철인3종 기록 탐색</h1>
-<div class="sub" id="datasub">대한철인3종협회 공개 기록을 분석하고 개인 기록 추이·예상기록을 계산합니다.</div>
+<header class="hero">
+  <div class="brand">
+    <div class="logo">TRI<span class="dot">·</span>PE</div>
+    <div class="tag">Korean Triathlon Analytics</div>
+  </div>
+  <nav class="nav-tabs">
+    <a href="./" class="active">Explore</a>
+    <a href="predict.html">Predictor</a>
+    <a href="team.html">Club Rankings</a>
+  </nav>
+  <h1 class="hero-title">Find your edge.<br>Measure every split.</h1>
+  <p class="hero-sub" id="datasub">대한철인3종협회 공개 기록을 기반으로 개인 추이, 전체 풀 대비 위치, 예상기록을 분석합니다.</p>
+</header>
 
 <div class="controls">
   <input id="q" type="text" placeholder="이름을 입력하세요 (예: 김철수)" autofocus>
@@ -284,36 +309,50 @@ function percentileRank(sorted, v) {
   return (lo / sorted.length) * 100;
 }
 
-// 거리 정보 → 표준 카테고리로 분류
-// (수영 km, 자전거 km, 달리기 km) → 카테고리명
+// 거리 정보 → 표준 카테고리 (정확한 매치만)
+// 표준 거리와 다르면 custom 카테고리로 분리 (예상기록 계산 시 섞이지 않도록)
 function classifyDistance(d) {
   if (!d || d.swim_km == null || d.bike_km == null || d.run_km == null) return null;
   const s = d.swim_km, b = d.bike_km, r = d.run_km;
-  // 잘 알려진 종목 거리
-  if (s <= 0.5 && b <= 25 && r <= 5.5) return 'sprint';     // 슈퍼스프린트/스프린트
-  if (s <= 0.85 && b <= 25 && r <= 6) return 'sprint';
-  if (s <= 0.85 && b <= 45 && r <= 11) return 'short';      // 단거리 변형
-  if (s <= 1.6 && b <= 45 && r <= 11) return 'standard';    // 표준(올림픽)
-  if (s <= 2.2 && b <= 95 && r <= 22) return 'half';        // 하프 70.3
-  if (s <= 4.0 && b <= 190 && r <= 43) return 'full';       // 풀
-  return 'other';
+  const near = (a, x) => Math.abs(a - x) < 0.06;
+  // 정확 매치 (공식 ITU 거리)
+  if (near(s, 0.3)  && near(b, 8)   && near(r, 2))                         return 'super_sprint';
+  if (near(s, 0.3)  && near(b, 10)  && near(r, 2.5))                       return 'super_sprint';
+  if (near(s, 0.75) && near(b, 20)  && near(r, 5))                         return 'sprint';
+  if (near(s, 1.5)  && near(b, 40)  && near(r, 10))                        return 'standard';
+  if ((near(s, 1.9) || near(s, 2.0)) && (near(b, 85) || near(b, 90))
+      && (near(r, 20) || near(r, 21) || near(r, 21.1)))                    return 'half';
+  if (near(s, 3.8)  && near(b, 180) && (near(r, 42) || near(r, 42.2)))     return 'full';
+  // 비정형 — 고유 key 로 분리하여 표준과 섞이지 않게
+  const fmt = v => (v % 1 === 0 ? String(v) : String(+v.toFixed(2)));
+  return 'custom:' + fmt(s) + '/' + fmt(b) + '/' + fmt(r);
 }
 const DIST_LABEL = {
+  super_sprint: '슈퍼스프린트',
   sprint: '스프린트',
-  short: '단거리',
   standard: '표준',
   half: '하프',
   full: '풀',
   other: '기타',
 };
+function labelOfCat(cat) {
+  if (!cat) return '기타';
+  if (cat.startsWith('custom:')) return cat.slice(7) + 'km';
+  return DIST_LABEL[cat] || '기타';
+}
 const DIST_BADGE_CLS = {
+  super_sprint: 'dist-sprint',
   sprint:   'dist-sprint',
-  short:    'dist-short',
   standard: 'dist-std',
   half:     'dist-half',
   full:     'dist-full',
   other:    'dist-other',
 };
+function clsOfCat(cat) {
+  if (!cat) return 'dist-other';
+  if (cat.startsWith('custom:')) return 'dist-other';
+  return DIST_BADGE_CLS[cat] || 'dist-other';
+}
 function distInfo(r) {
   return DISTANCES[r.tour + '||' + r.part] || null;
 }
@@ -328,14 +367,16 @@ function fmtKm(v) {
 function distBadge(r) {
   const d = distInfo(r);
   const cat = classifyDistance(d) || 'other';
-  const cls = DIST_BADGE_CLS[cat] || 'dist-other';
-  const label = DIST_LABEL[cat] || '기타';
+  const cls = clsOfCat(cat);
+  const label = labelOfCat(cat);
   let title = '';
   let extra = '';
   if (d) {
     title = `수영 ${fmtKm(d.swim_km)}km · 사이클 ${fmtKm(d.bike_km)}km · 런 ${fmtKm(d.run_km)}km`;
-    // 표준이 아닌 경우 실제 거리를 배지에 함께 표기
-    if (cat !== 'standard') {
+    // 표준 ITU 거리면 라벨만, 그 외엔 실제 km 병기
+    if (['standard','sprint','half','full','super_sprint'].indexOf(cat) === -1) {
+      // custom: 이미 label에 km이 들어있음
+    } else if (cat !== 'standard') {
       extra = ` · ${fmtKm(d.swim_km)}/${fmtKm(d.bike_km)}/${fmtKm(d.run_km)}`;
     }
   }

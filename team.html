@@ -176,15 +176,28 @@ function cleanSec(raw, kind) {
 function classifyDistance(d) {
   if (!d || d.swim_km == null || d.bike_km == null || d.run_km == null) return null;
   const s = d.swim_km, b = d.bike_km, r = d.run_km;
-  if (s <= 0.5 && b <= 25 && r <= 5.5) return 'sprint';
-  if (s <= 0.85 && b <= 25 && r <= 6) return 'sprint';
-  if (s <= 0.85 && b <= 45 && r <= 11) return 'short';
-  if (s <= 1.6 && b <= 45 && r <= 11) return 'standard';
-  if (s <= 2.2 && b <= 95 && r <= 22) return 'half';
-  if (s <= 4.0 && b <= 190 && r <= 43) return 'full';
-  return 'other';
+  const near = (a, x) => Math.abs(a - x) < 0.06;
+  if (near(s, 0.3)  && near(b, 8)   && near(r, 2))                         return 'super_sprint';
+  if (near(s, 0.3)  && near(b, 10)  && near(r, 2.5))                       return 'super_sprint';
+  if (near(s, 0.75) && near(b, 20)  && near(r, 5))                         return 'sprint';
+  if (near(s, 1.5)  && near(b, 40)  && near(r, 10))                        return 'standard';
+  if ((near(s, 1.9) || near(s, 2.0)) && (near(b, 85) || near(b, 90))
+      && (near(r, 20) || near(r, 21) || near(r, 21.1)))                    return 'half';
+  if (near(s, 3.8)  && near(b, 180) && (near(r, 42) || near(r, 42.2)))     return 'full';
+  const fmt = v => (v % 1 === 0 ? String(v) : String(+v.toFixed(2)));
+  return 'custom:' + fmt(s) + '/' + fmt(b) + '/' + fmt(r);
 }
-const DIST_LABEL = { sprint:'스프린트', short:'단거리', standard:'표준', half:'하프', full:'풀', other:'기타' };
+const DIST_LABEL = { super_sprint:'슈퍼스프린트', sprint:'스프린트', standard:'표준', half:'하프', full:'풀', other:'기타' };
+function labelOfCat(cat) {
+  if (!cat) return '기타';
+  if (cat.startsWith('custom:')) return cat.slice(7) + 'km';
+  return DIST_LABEL[cat] || '기타';
+}
+function distChipCls(cat) {
+  if (!cat) return 'chip';
+  if (cat.startsWith('custom:')) return 'chip';
+  return 'chip dist-' + cat.replace('super_sprint','sprint');
+}
 function distInfo(r) { return DISTANCES[r.tour + '||' + r.part] || null; }
 function distCat(r) { return classifyDistance(distInfo(r)) || 'other'; }
 function distSummary(r) {
@@ -286,7 +299,7 @@ function onClubChange() {
   const cats = Object.keys(catCounts).sort((a,b) => catCounts[b] - catCounts[a]);
 
   distSel.innerHTML = cats.map(c => {
-    const lbl = (DIST_LABEL[c] || c) + ' · ' + catCounts[c] + '건';
+    const lbl = labelOfCat(c) + ' · ' + catCounts[c] + '건';
     return `<option value="${escapeAttr(c)}"${c===curDist?' selected':''}>${escapeHtml(lbl)}</option>`;
   }).join('');
   if (!cats.includes(curDist)) distSel.value = cats[0];
@@ -294,7 +307,7 @@ function onClubChange() {
   summary.innerHTML =
     `<span class="chip">${members.size}명</span>` +
     `<span class="chip">${teamRows.length}건 기록</span>` +
-    cats.slice(0, 3).map(c => `<span class="chip dist-${c}">${DIST_LABEL[c]||c} ${catCounts[c]}</span>`).join('');
+    cats.slice(0, 3).map(c => `<span class="${distChipCls(c)}">${escapeHtml(labelOfCat(c))} ${catCounts[c]}</span>`).join('');
 
   render();
 }
@@ -311,11 +324,14 @@ function render() {
     return;
   }
 
-  // 멤버별 베스트
+  // 멤버별 베스트 — 수영/사이클/런/총기록이 모두 있는 완전한 기록만 대상
   const byName = {};
   for (const r of teamRows) {
-    const tot = cleanSec(r.total, 'total');
-    if (tot == null) continue;
+    const tot  = cleanSec(r.total, 'total');
+    const swim = cleanSec(r.swim, 'swim');
+    const bike = cleanSec(r.bike, 'bike');
+    const run  = cleanSec(r.run, 'run');
+    if (tot == null || swim == null || bike == null || run == null) continue; // 불완전 기록 제외
     if (!byName[r.name] || tot < byName[r.name].sec) {
       byName[r.name] = { sec: tot, record: r };
     }
@@ -360,7 +376,7 @@ function render() {
     `<div class="card">
       <div class="team-head">
         <div>
-          <span class="chip dist-${selCat}">${DIST_LABEL[selCat]||selCat}</span>
+          <span class="${distChipCls(selCat)}">${escapeHtml(labelOfCat(selCat))}</span>
           <b style="margin-left:6px">${escapeHtml(club)}</b>
           <span class="muted" style="margin-left:6px">· ${members.length}명 랭킹</span>
         </div>

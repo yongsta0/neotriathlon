@@ -34,10 +34,14 @@
   a:hover { text-decoration: underline; }
 
   .brand { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
-  .brand .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--accent); }
+  .brand .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: var(--accent); }
   .brand .logo .dot { color: var(--danger); }
-  .brand .tag { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
-  h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 6px; }
+  .brand .tag { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; }
+  .nav-tabs { display: flex; gap: 2px; margin: 14px 0 24px; border-bottom: 1px solid var(--border); }
+  .nav-tabs a { padding: 10px 18px; font-size: 13px; color: var(--muted); border-bottom: 2px solid transparent; transition: all .15s; font-weight: 500; text-decoration: none; }
+  .nav-tabs a:hover { color: var(--text); text-decoration: none; }
+  .nav-tabs a.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin: 8px 0 6px; }
   h2 { font-size: 13px; font-weight: 600; margin: 0 0 14px; color: var(--text); text-transform: uppercase; letter-spacing: 0.06em; }
   .sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
   .nav { font-size: 13px; margin-bottom: 24px; }
@@ -125,9 +129,13 @@
   <div class="logo">TRI<span class="dot">·</span>PE</div>
   <div class="tag">Predictor</div>
 </div>
+<nav class="nav-tabs">
+  <a href="./">Explore</a>
+  <a href="predict.html" class="active">Predictor</a>
+  <a href="team.html">Club Rankings</a>
+</nav>
 <h1>예상기록 시뮬레이션</h1>
-<div class="sub">개인 과거 기록 기반으로 목표·구간별 예상치를 계산합니다.</div>
-<div class="nav">← <a href="./">기록 탐색으로 돌아가기</a></div>
+<div class="sub">개인 과거 기록을 기반으로 목표·구간별 예상치를 계산합니다.</div>
 
 <div class="card">
   <h2>1단계 · 선수 선택</h2>
@@ -253,15 +261,28 @@ function cleanSec(raw, kind) {
 function classifyDistance(d) {
   if (!d || d.swim_km == null || d.bike_km == null || d.run_km == null) return null;
   const s = d.swim_km, b = d.bike_km, r = d.run_km;
-  if (s <= 0.5 && b <= 25 && r <= 5.5) return 'sprint';
-  if (s <= 0.85 && b <= 25 && r <= 6) return 'sprint';
-  if (s <= 0.85 && b <= 45 && r <= 11) return 'short';
-  if (s <= 1.6 && b <= 45 && r <= 11) return 'standard';
-  if (s <= 2.2 && b <= 95 && r <= 22) return 'half';
-  if (s <= 4.0 && b <= 190 && r <= 43) return 'full';
-  return 'other';
+  const near = (a, x) => Math.abs(a - x) < 0.06;
+  if (near(s, 0.3)  && near(b, 8)   && near(r, 2))                         return 'super_sprint';
+  if (near(s, 0.3)  && near(b, 10)  && near(r, 2.5))                       return 'super_sprint';
+  if (near(s, 0.75) && near(b, 20)  && near(r, 5))                         return 'sprint';
+  if (near(s, 1.5)  && near(b, 40)  && near(r, 10))                        return 'standard';
+  if ((near(s, 1.9) || near(s, 2.0)) && (near(b, 85) || near(b, 90))
+      && (near(r, 20) || near(r, 21) || near(r, 21.1)))                    return 'half';
+  if (near(s, 3.8)  && near(b, 180) && (near(r, 42) || near(r, 42.2)))     return 'full';
+  const fmt = v => (v % 1 === 0 ? String(v) : String(+v.toFixed(2)));
+  return 'custom:' + fmt(s) + '/' + fmt(b) + '/' + fmt(r);
 }
-const DIST_LABEL = { sprint:'스프린트', short:'단거리', standard:'표준', half:'하프', full:'풀', other:'기타' };
+const DIST_LABEL = { super_sprint:'슈퍼스프린트', sprint:'스프린트', standard:'표준', half:'하프', full:'풀', other:'기타' };
+function labelOfCat(cat) {
+  if (!cat) return '기타';
+  if (cat.startsWith('custom:')) return cat.slice(7) + 'km';
+  return DIST_LABEL[cat] || '기타';
+}
+function distChipCls(cat) {
+  if (!cat) return '';
+  if (cat.startsWith('custom:')) return 'chip';
+  return 'dist-' + cat.replace('super_sprint','sprint');
+}
 function distInfo(r) { return DISTANCES[r.tour + '||' + r.part] || null; }
 function distCat(r) { return classifyDistance(distInfo(r)) || 'other'; }
 
@@ -376,7 +397,7 @@ function updateDistList() {
     sel.innerHTML = '<option value="">— 없음 —</option>';
   } else {
     sel.innerHTML = cats.map(c => {
-      const lbl = (DIST_LABEL[c] || c) + ' (' + counts[c] + ')';
+      const lbl = labelOfCat(c) + ' (' + counts[c] + ')';
       return `<option value="${escapeAttr(c)}"${c===cur?' selected':''}>${escapeHtml(lbl)}</option>`;
     }).join('');
     if (!cats.includes(cur)) sel.value = cats[0];
@@ -398,7 +419,7 @@ function updateSummary() {
     const dist = document.getElementById('dist').value || 'standard';
     div.innerHTML =
       `<span class="chip" style="background:#fdf8ea;color:#7a5b00;border-color:#f0e1b8">팀 모드</span>` +
-      `<span class="chip dist-${dist}">${DIST_LABEL[dist]||dist}</span>` +
+      `<span class="chip ${distChipCls(dist)}">${escapeHtml(labelOfCat(dist))}</span>` +
       `<span class="chip">${members.size}명</span>` +
       `<span class="chip">${teamRows.length}건 기록</span>`;
     return;
@@ -528,7 +549,7 @@ function renderTeamView(club, resDiv) {
       <div class="card team-card ${isSelected ? 'selected' : 'collapsed'}">
         <div class="team-head">
           <div>
-            <span class="chip dist-${cat}">${DIST_LABEL[cat] || cat}</span>
+            <span class="chip ${distChipCls(cat)}">${escapeHtml(labelOfCat(cat))}</span>
             <b style="margin-left:8px">${members.length}명 랭킹</b>
             <span class="muted" style="margin-left:6px">· 팀 베스트 ${fmtSec(teamBest)} · 팀 중앙값 ${fmtSec(teamMed)}</span>
           </div>
@@ -563,15 +584,15 @@ function calc() {
   const name = document.getElementById('name').value.trim();
   const club = document.getElementById('club').value.trim();
 
-  // 팀 모드: 이름 없이 소속만 입력된 경우
   if (!name && club) {
-    renderTeamView(club, resDiv);
+    resDiv.innerHTML =
+      `<div class="alert alert-yel">이 페이지는 개인 예상기록을 계산합니다. 소속만으로 팀 랭킹을 보려면 <a href="team.html?club=${encodeURIComponent(club)}">팀 랭킹 페이지</a>로 이동해주세요.</div>`;
     return;
   }
 
   const rs = getPlayerRecords();
   if (rs.length === 0) {
-    resDiv.innerHTML = '<div class="alert alert-yel">해당 조건의 과거 기록이 없습니다.</div>';
+    resDiv.innerHTML = '<div class="alert alert-yel">해당 조건의 과거 기록이 없습니다. 이름을 입력해주세요.</div>';
     return;
   }
   const samples = buildSamples(rs);
