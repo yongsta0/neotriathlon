@@ -275,7 +275,14 @@ function classifyDistance(d) {
 const DIST_LABEL = { super_sprint:'슈퍼스프린트', sprint:'스프린트', standard:'표준', half:'하프', full:'풀', other:'기타' };
 function labelOfCat(cat) {
   if (!cat) return '기타';
-  if (cat.startsWith('custom:')) return cat.slice(7) + 'km';
+  if (cat.startsWith('custom:')) {
+    const [ss, bs, rs] = cat.slice(7).split('/').map(Number);
+    if (bs === 40 && rs === 10 && ss !== 1.5) return `표준 변형 · 수영 ${ss}km`;
+    if (ss === 1.5 && rs === 10 && bs !== 40) return `표준 변형 · 사이클 ${bs}km`;
+    if (ss === 1.5 && bs === 40 && rs !== 10) return `표준 변형 · 런 ${rs}km`;
+    if ((bs === 90 || bs === 85) && (rs === 21 || rs === 21.1 || rs === 20) && Math.abs(ss - 1.9) > 0.1) return `하프 변형 · 수영 ${ss}km`;
+    return `${ss}/${bs}/${rs}km`;
+  }
   return DIST_LABEL[cat] || '기타';
 }
 function distChipCls(cat) {

@@ -337,7 +337,17 @@ const DIST_LABEL = {
 };
 function labelOfCat(cat) {
   if (!cat) return '기타';
-  if (cat.startsWith('custom:')) return cat.slice(7) + 'km';
+  if (cat.startsWith('custom:')) {
+    const parts = cat.slice(7).split('/').map(Number);
+    const [ss, bs, rs] = parts;
+    // 표준/하프와 '어떤 구간만' 다른지 확인 → 친절한 라벨
+    if (bs === 40 && rs === 10 && ss !== 1.5) return `표준 변형 · 수영 ${ss}km`;
+    if (ss === 1.5 && rs === 10 && bs !== 40) return `표준 변형 · 사이클 ${bs}km`;
+    if (ss === 1.5 && bs === 40 && rs !== 10) return `표준 변형 · 런 ${rs}km`;
+    if ((bs === 90 || bs === 85) && (rs === 21 || rs === 21.1 || rs === 20) && Math.abs(ss - 1.9) > 0.1) return `하프 변형 · 수영 ${ss}km`;
+    if (ss === 1.9 && rs >= 20 && bs !== 90 && bs !== 85) return `하프 변형 · 사이클 ${bs}km`;
+    return `${ss}/${bs}/${rs}km`;
+  }
   return DIST_LABEL[cat] || '기타';
 }
 const DIST_BADGE_CLS = {
