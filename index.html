@@ -49,6 +49,8 @@
   .dist-pill { display:inline-block; font-size:11px; padding:1px 7px; border-radius:10px; margin-right:4px; font-weight:600; }
   .dist-half { background:#ffe2e2; color:#8a1a1a; border:1px solid #f5b4b4; }
   .dist-std  { background:#e6f0ff; color:#1a3e72; border:1px solid #b8ccee; }
+  .predict-link { display:inline-block; margin-left:10px; padding: 4px 12px; background:#1a3e72; color:#fff; text-decoration:none; border-radius: 14px; font-size: 12px; font-weight: 600; }
+  .predict-link:hover { background:#274f8b; }
 
   /* 모바일 */
   @media (max-width: 640px) {
@@ -79,7 +81,6 @@
 <body>
 <h1>철인3종 기록 검색</h1>
 <div class="sub" id="datasub">대한철인3종협회 공개 기록 · 동명이인은 소속/부문으로 구분</div>
-<div style="margin-bottom:14px"><a href="predict.html" style="color:#1a3e72;font-size:13px">→ 예상기록 계산 페이지</a></div>
 
 <div class="controls">
   <input id="q" type="text" placeholder="이름을 입력하세요 (예: 김철수)" autofocus>
@@ -264,7 +265,14 @@ function render() {
   if (effectivePartF) filtered = filtered.filter(r => r.part === effectivePartF);
   filtered.sort((a, b) => (a.date > b.date ? 1 : -1));
 
-  sumDiv.innerHTML = '총 <b>' + filtered.length + '</b>건의 기록';
+  // 예상기록 링크: 현재 선택된 이름/소속/거리(가장 흔한 거리)를 파라미터로 전달
+  const halfCnt = filtered.filter(r => distOf(r) === 'half').length;
+  const mostDist = halfCnt > filtered.length/2 ? 'half' : 'std';
+  const predictUrl = 'predict.html?name=' + encodeURIComponent(q) +
+    (clubF ? '&club=' + encodeURIComponent(clubF) : '') +
+    '&dist=' + mostDist;
+  sumDiv.innerHTML = '총 <b>' + filtered.length + '</b>건의 기록' +
+    `<a class="predict-link" href="${predictUrl}">🎯 이 선수로 예상기록 계산 →</a>`;
 
   if (filtered.length === 0) {
     statsDiv.innerHTML = ''; chartsDiv.innerHTML = '';
