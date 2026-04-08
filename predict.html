@@ -8,52 +8,74 @@
 <style>
   :root { font-family: -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif; }
   * { box-sizing: border-box; }
-  body { max-width: 900px; margin: 30px auto; padding: 0 20px; color: #222; -webkit-text-size-adjust: 100%; }
+  body { max-width: 980px; margin: 24px auto; padding: 0 16px; color: #222; -webkit-text-size-adjust: 100%; }
   a { color: #1a3e72; }
   h1 { font-size: 22px; margin: 0 0 4px; }
-  .sub { color: #666; font-size: 13px; margin-bottom: 20px; }
-  .nav { font-size: 13px; margin-bottom: 20px; }
+  h2 { font-size: 15px; margin: 0 0 10px; color: #1a3e72; }
+  .sub { color: #666; font-size: 13px; margin-bottom: 16px; }
+  .nav { font-size: 13px; margin-bottom: 18px; }
   .card { background: #f7f9fc; border:1px solid #e3e8ef; border-radius: 10px; padding: 16px; margin-bottom: 14px; }
-  .card h2 { margin: 0 0 10px; font-size: 15px; color: #1a3e72; }
   label { display:block; font-size: 12px; color:#555; margin-bottom: 4px; }
-  input, select { font-size: 15px; padding: 9px 10px; border: 1px solid #ccc; border-radius: 6px; width: 100%; }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; }
-  .btn { background:#1a3e72; color:#fff; border:none; padding: 10px 16px; border-radius: 6px; font-size: 14px; cursor: pointer; }
+  input, select { font-size: 16px; padding: 9px 10px; border: 1px solid #ccc; border-radius: 6px; width: 100%; background:#fff; }
+  input::placeholder { color: #bbb; }
+  .row3 { display: grid; grid-template-columns: 2fr 1.5fr 1fr; gap: 10px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .seg-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 8px; }
+  .seg-grid .seg { background:#fff; border:1px solid #d4dbe6; border-radius: 8px; padding: 8px; }
+  .seg-grid .seg input { padding: 7px 6px; font-size: 14px; text-align: center; font-variant-numeric: tabular-nums; }
+  .seg-grid .seg label { text-align: center; font-weight: 600; color: #1a3e72; }
+  .btn { background:#1a3e72; color:#fff; border:none; padding: 11px 16px; border-radius: 6px; font-size: 15px; cursor: pointer; width: 100%; font-weight: 600; }
   .btn:hover { background:#274f8b; }
-  .result { margin-top: 14px; }
-  .split-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
-  @media (max-width: 600px) {
-    .split-grid { grid-template-columns: 1fr 1fr; }
-    .row-3 { grid-template-columns: 1fr; }
-  }
-  .split-card { background:#fff; border:1px solid #e3e8ef; border-radius: 8px; padding: 12px; text-align:center; }
-  .split-card.total { background:#1a3e72; color:#fff; border-color:#1a3e72; }
-  .split-card .label { font-size: 11px; opacity:.8; text-transform: uppercase; letter-spacing:.04em; }
-  .split-card .val { font-size: 22px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
-  .split-card .sub { font-size: 11px; opacity:.7; margin-top: 2px; }
-  .alert { padding: 12px 14px; border-radius: 8px; margin: 12px 0; font-size: 14px; line-height: 1.5; }
-  .alert-red   { background:#fff3f3; border:1px solid #f5b4b4; color:#8a1a1a; }
-  .alert-yel   { background:#fffbe6; border:1px solid #f5e7a3; color:#6e5700; }
-  .alert-grn   { background:#f1fbf2; border:1px solid #b9e0be; color:#23602d; }
-  .compare { font-size: 12px; color:#666; margin-top: 6px; }
-  .compare b { color: #222; font-variant-numeric: tabular-nums; }
+  .btn-row { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; margin-top: 12px; }
+  .btn.btn-ghost { background:#fff; color:#1a3e72; border: 1px solid #b8ccee; }
+  .alert { padding: 12px 14px; border-radius: 8px; margin: 10px 0; font-size: 14px; line-height: 1.5; }
+  .alert-red { background:#fff3f3; border:1px solid #f5b4b4; color:#8a1a1a; }
+  .alert-yel { background:#fffbe6; border:1px solid #f5e7a3; color:#6e5700; }
+  .alert-grn { background:#f1fbf2; border:1px solid #b9e0be; color:#23602d; }
+  .result-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin: 10px 0; }
+  .rcard { background:#fff; border:1px solid #e3e8ef; border-radius: 8px; padding: 10px; text-align: center; }
+  .rcard.user { background:#fffbe6; border-color:#f5e7a3; }
+  .rcard.total { background:#1a3e72; color:#fff; border-color:#1a3e72; }
+  .rcard .label { font-size: 11px; opacity:.85; text-transform: uppercase; letter-spacing: .04em; }
+  .rcard .val { font-size: 18px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .rcard .sub { font-size: 10px; opacity: .75; margin-top: 2px; }
+  .rcard.bad { background: #fff3f3; border-color: #f5b4b4; color: #8a1a1a; }
+  .compare { font-size: 12px; color:#666; margin-top: 8px; }
   .hint { font-size: 12px; color:#888; margin-top: 4px; }
   .muted { color:#999; }
   .chips { display:flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
   .chip { font-size: 11px; padding: 3px 9px; background:#eef; color:#446; border-radius: 10px; }
-  .chip-half { background:#ffe2e2; color:#8a1a1a; }
+  .chip.dist-sprint { background:#fff0e6; color:#8a4a1a; }
+  .chip.dist-short  { background:#fffbe6; color:#7a5b00; }
+  .chip.dist-standard { background:#e6f0ff; color:#1a3e72; }
+  .chip.dist-half { background:#ffe2e2; color:#8a1a1a; }
+  .chip.dist-full { background:#f0e6ff; color:#4a1a8a; }
   .empty { color:#999; padding: 30px 0; text-align: center; }
+  .badge-mode { display: inline-block; padding: 2px 8px; background:#1a3e72; color:#fff; font-size: 11px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+
+  @media (max-width: 700px) {
+    body { margin: 14px auto; padding: 0 12px; }
+    h1 { font-size: 19px; }
+    .row3 { grid-template-columns: 1fr; }
+    .seg-grid { grid-template-columns: repeat(3, 1fr); }
+    .result-grid { grid-template-columns: repeat(3, 1fr); }
+    .rcard .val { font-size: 16px; }
+    .btn-row { grid-template-columns: 1fr; }
+    input, select { font-size: 16px; }
+  }
+  @media (max-width: 380px) {
+    .seg-grid, .result-grid { grid-template-columns: repeat(2, 1fr); }
+  }
 </style>
 </head>
 <body>
 <h1>철인3종 예상기록 계산</h1>
-<div class="sub" id="datasub">과거 기록을 기반으로 목표 시간을 수영/사이클/런에 비율로 배분합니다.</div>
+<div class="sub">기존 기록 기반 · 한 종목만 입력해도 나머지를 비율로 시뮬레이션</div>
 <div class="nav">← <a href="./">기록 검색으로 돌아가기</a></div>
 
 <div class="card">
   <h2>1단계 · 선수 선택</h2>
-  <div class="row-3">
+  <div class="row3">
     <div>
       <label>이름</label>
       <input id="name" type="text" placeholder="예: 김철수">
@@ -64,36 +86,39 @@
     </div>
     <div>
       <label>거리</label>
-      <select id="dist">
-        <option value="std">표준(올림픽)</option>
-        <option value="half">하프(70.3)</option>
-      </select>
+      <select id="dist"></select>
     </div>
   </div>
-  <div class="hint">이름 입력 후 소속을 선택하면, 해당 선수의 과거 기록 중 선택한 거리에 해당하는 것만으로 평균 비율을 계산합니다.</div>
+  <div class="hint">조건을 좁힐수록 비율 계산이 정확해집니다. 거리가 다른 대회는 비율이 달라 분리됩니다.</div>
   <div class="chips" id="profileSummary"></div>
 </div>
 
 <div class="card">
-  <h2>2단계 · 목표 총기록 입력</h2>
-  <div class="row">
-    <div>
-      <label>목표 총기록</label>
-      <input id="goal" type="text" placeholder="예: 2:30:00" pattern="[0-9:]*">
-    </div>
-    <div style="align-self:end">
-      <button class="btn" id="calcBtn">계산하기</button>
-    </div>
+  <h2>2단계 · 목표 입력</h2>
+  <div class="hint" style="margin-bottom:8px">
+    원하는 칸만 채우세요. 비워둔 구간은 과거 기록 비율로 자동 계산합니다.<br>
+    예) <b>총기록만</b> 입력 → 모든 구간 비율 분배 / <b>런만</b> 입력 → 그 런 페이스로 갈 때 다른 구간/총기록 추정 / <b>총기록 + 수영</b> → 총기록을 맞추기 위해 나머지 구간이 어떻게 가야 하는지
   </div>
-  <div class="hint">HH:MM:SS 또는 H:MM:SS 형식</div>
+  <div class="seg-grid">
+    <div class="seg"><label>수영</label><input id="i_swim" type="text" placeholder="—"></div>
+    <div class="seg"><label>T1</label><input id="i_t1" type="text" placeholder="—"></div>
+    <div class="seg"><label>사이클</label><input id="i_bike" type="text" placeholder="—"></div>
+    <div class="seg"><label>T2</label><input id="i_t2" type="text" placeholder="—"></div>
+    <div class="seg"><label>런</label><input id="i_run" type="text" placeholder="—"></div>
+    <div class="seg"><label>총기록</label><input id="i_total" type="text" placeholder="—"></div>
+  </div>
+  <div class="hint">형식: <code>HH:MM:SS</code> 또는 <code>MM:SS</code> (예: <code>2:30:00</code>, <code>45:30</code>)</div>
+  <div class="btn-row">
+    <button class="btn" id="calcBtn">계산하기</button>
+    <button class="btn btn-ghost" id="clearBtn">초기화</button>
+  </div>
 </div>
 
-<div id="result" class="result"></div>
+<div id="result"></div>
 
 <script>
 let DATA = [];
-let DIST_MAP = {};
-const HALF_THRESHOLD_SEC = 5 * 3600;
+let DISTANCES = {};
 
 function toSec(s) {
   if (!s || s === '-' || s === '00:00:00') return null;
@@ -102,6 +127,7 @@ function toSec(s) {
   if (p.length === 4) return p[0]*3600 + p[1]*60 + p[2] + p[3]/1000;
   if (p.length === 3) return p[0]*3600 + p[1]*60 + p[2];
   if (p.length === 2) return p[0]*60 + p[1];
+  if (p.length === 1) return p[0];
   return null;
 }
 function fmtSec(s) {
@@ -109,9 +135,10 @@ function fmtSec(s) {
   s = Math.round(s);
   const sign = s < 0 ? '-' : ''; s = Math.abs(s);
   const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
-  return sign + (h>0 ? String(h).padStart(2,'0')+':' : '') +
+  return sign + (h > 0 ? String(h).padStart(2,'0')+':' : '') +
          String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
 }
+
 const T1_MAX = 1800, T2_MAX = 600;
 function isOutlier(kind, sec) {
   if (sec == null) return false;
@@ -119,218 +146,330 @@ function isOutlier(kind, sec) {
   if (kind === 't2' && sec > T2_MAX) return true;
   return false;
 }
-
-function buildDistMap(data) {
-  const groups = {};
-  for (const r of data) {
-    const key = r.tour + '||' + r.part;
-    const sec = toSec(r.total);
-    if (sec == null) continue;
-    (groups[key] ||= []).push(sec);
-  }
-  const map = {};
-  for (const k in groups) {
-    const arr = groups[k].sort((a,b) => a-b);
-    map[k] = arr[Math.floor(arr.length/2)] > HALF_THRESHOLD_SEC ? 'half' : 'std';
-  }
-  return map;
+function cleanSec(raw, kind) {
+  const s = toSec(raw);
+  if (s == null) return null;
+  if (isOutlier(kind, s)) return null;
+  return s;
 }
-function distOf(r) { return DIST_MAP[r.tour + '||' + r.part] || 'std'; }
+
+function classifyDistance(d) {
+  if (!d || d.swim_km == null || d.bike_km == null || d.run_km == null) return null;
+  const s = d.swim_km, b = d.bike_km, r = d.run_km;
+  if (s <= 0.5 && b <= 25 && r <= 5.5) return 'sprint';
+  if (s <= 0.85 && b <= 25 && r <= 6) return 'sprint';
+  if (s <= 0.85 && b <= 45 && r <= 11) return 'short';
+  if (s <= 1.6 && b <= 45 && r <= 11) return 'standard';
+  if (s <= 2.2 && b <= 95 && r <= 22) return 'half';
+  if (s <= 4.0 && b <= 190 && r <= 43) return 'full';
+  return 'other';
+}
+const DIST_LABEL = { sprint:'스프린트', short:'단거리', standard:'표준', half:'하프', full:'풀', other:'기타' };
+function distInfo(r) { return DISTANCES[r.tour + '||' + r.part] || null; }
+function distCat(r) { return classifyDistance(distInfo(r)) || 'other'; }
 
 async function load() {
   try {
-    const res = await fetch('data.json?ts=' + Date.now());
-    DATA = await res.json();
-    DIST_MAP = buildDistMap(DATA);
+    const ts = Date.now();
+    const [d1, d2] = await Promise.all([
+      fetch('data.json?ts=' + ts),
+      fetch('distances.json?ts=' + ts).catch(() => null),
+    ]);
+    DATA = await d1.json();
+    if (d2 && d2.ok) {
+      try { DISTANCES = await d2.json(); } catch(e){}
+    }
   } catch (e) {
-    document.getElementById('result').innerHTML = '<div class="empty">data.json 을 불러올 수 없습니다.</div>';
+    document.getElementById('result').innerHTML = '<div class="empty">데이터를 불러올 수 없습니다.</div>';
     return;
   }
-  // URL 파라미터 자동 채우기
+
   const p = new URLSearchParams(location.search);
   if (p.get('name')) document.getElementById('name').value = p.get('name');
-  if (p.get('dist')) document.getElementById('dist').value = p.get('dist');
 
-  document.getElementById('name').addEventListener('input', updateClubList);
+  document.getElementById('name').addEventListener('input', () => { updateClubList(); });
+  document.getElementById('club').addEventListener('change', updateDistList);
   document.getElementById('dist').addEventListener('change', updateSummary);
-  document.getElementById('club').addEventListener('change', updateSummary);
   document.getElementById('calcBtn').addEventListener('click', calc);
-  document.getElementById('goal').addEventListener('keypress', e => { if (e.key === 'Enter') calc(); });
+  document.getElementById('clearBtn').addEventListener('click', clearInputs);
+  document.querySelectorAll('.seg input').forEach(i =>
+    i.addEventListener('keypress', e => { if (e.key === 'Enter') calc(); })
+  );
 
   updateClubList();
   if (p.get('club')) {
     document.getElementById('club').value = p.get('club');
+    updateDistList();
+  }
+  if (p.get('dist')) {
+    document.getElementById('dist').value = p.get('dist');
     updateSummary();
   }
 }
 
-function getPlayerRecords() {
+function namedRecords() {
   const name = document.getElementById('name').value.trim();
+  if (!name) return [];
+  return DATA.filter(r => r.name === name);
+}
+function getPlayerRecords() {
   const club = document.getElementById('club').value;
   const dist = document.getElementById('dist').value;
-  if (!name) return [];
-  let rs = DATA.filter(r => r.name === name);
+  let rs = namedRecords();
   if (club) rs = rs.filter(r => (r.club || '(소속없음)') === club);
-  rs = rs.filter(r => distOf(r) === dist);
+  if (dist) rs = rs.filter(r => distCat(r) === dist);
   return rs;
 }
 
 function updateClubList() {
-  const name = document.getElementById('name').value.trim();
   const sel = document.getElementById('club');
-  const current = sel.value;
-  if (!name) { sel.innerHTML = '<option value="">— 선택 —</option>'; updateSummary(); return; }
-  const clubs = [...new Set(DATA.filter(r => r.name === name).map(r => r.club || '(소속없음)'))].sort();
+  const cur = sel.value;
+  const rs = namedRecords();
+  if (rs.length === 0) {
+    sel.innerHTML = '<option value="">— 선택 —</option>';
+    updateDistList();
+    return;
+  }
+  const clubs = [...new Set(rs.map(r => r.club || '(소속없음)'))].sort();
   sel.innerHTML = '<option value="">전체</option>' +
-    clubs.map(c => `<option value="${escapeAttr(c)}"${c===current?' selected':''}>${escapeHtml(c)}</option>`).join('');
+    clubs.map(c => `<option value="${escapeAttr(c)}"${c===cur?' selected':''}>${escapeHtml(c)}</option>`).join('');
+  updateDistList();
+}
+function updateDistList() {
+  const club = document.getElementById('club').value;
+  const sel = document.getElementById('dist');
+  const cur = sel.value;
+  let rs = namedRecords();
+  if (club) rs = rs.filter(r => (r.club || '(소속없음)') === club);
+  const counts = {};
+  rs.forEach(r => { const c = distCat(r); counts[c] = (counts[c]||0) + 1; });
+  const cats = Object.keys(counts).sort((a,b) => counts[b]-counts[a]);
+  if (cats.length === 0) {
+    sel.innerHTML = '<option value="">— 없음 —</option>';
+  } else {
+    sel.innerHTML = cats.map(c => {
+      const lbl = (DIST_LABEL[c] || c) + ' (' + counts[c] + ')';
+      return `<option value="${escapeAttr(c)}"${c===cur?' selected':''}>${escapeHtml(lbl)}</option>`;
+    }).join('');
+    if (!cats.includes(cur)) sel.value = cats[0];
+  }
   updateSummary();
 }
-
 function updateSummary() {
   const rs = getPlayerRecords();
   const div = document.getElementById('profileSummary');
-  if (rs.length === 0) { div.innerHTML = '<span class="muted">해당 조건의 과거 기록 없음</span>'; return; }
+  if (rs.length === 0) {
+    div.innerHTML = '<span class="muted">해당 조건의 과거 기록이 없습니다.</span>';
+    return;
+  }
   const totals = rs.map(r => toSec(r.total)).filter(v => v != null);
   if (totals.length === 0) { div.innerHTML = '<span class="muted">유효 총기록 없음</span>'; return; }
   const best = Math.min(...totals);
-  const avg = totals.reduce((a,b)=>a+b,0) / totals.length;
-  const dist = document.getElementById('dist').value;
+  const avg = totals.reduce((a,b)=>a+b,0)/totals.length;
+  const dist = document.getElementById('dist').value || 'standard';
   div.innerHTML =
-    `<span class="chip${dist==='half'?' chip-half':''}">${dist==='half'?'하프':'표준'}</span>` +
+    `<span class="chip dist-${dist}">${DIST_LABEL[dist]||dist}</span>` +
     `<span class="chip">${rs.length}회 출전</span>` +
     `<span class="chip">베스트 ${fmtSec(best)}</span>` +
     `<span class="chip">평균 ${fmtSec(avg)}</span>`;
 }
 
+function buildSamples(rs) {
+  const out = [];
+  rs.forEach(r => {
+    const s = cleanSec(r.swim, 'swim');
+    const t1 = cleanSec(r.t1, 't1');
+    const b = cleanSec(r.bike, 'bike');
+    const t2 = cleanSec(r.t2, 't2');
+    const rn = cleanSec(r.run, 'run');
+    const tot = cleanSec(r.total, 'total');
+    if (s == null || b == null || rn == null || tot == null) return;
+    out.push({ s, t1, b, t2, rn, tot, raw: r });
+  });
+  return out;
+}
+
+// 종목별 평균 비율 (총기록 대비)
+function buildRatios(samples) {
+  const props = (key) => {
+    const ps = samples.map(x => x[key] != null ? x[key]/x.tot : null).filter(v => v != null);
+    return ps.length ? ps.reduce((a,b)=>a+b,0)/ps.length : 0;
+  };
+  const r = { s: props('s'), t1: props('t1'), b: props('b'), t2: props('t2'), rn: props('rn') };
+  const sum = r.s + r.t1 + r.b + r.t2 + r.rn;
+  if (sum > 0) for (const k in r) r[k] /= sum; // 합 = 1로 정규화
+  return r; // 배율 합 1
+}
+function bestSeg(samples, key) {
+  const vs = samples.map(x => x[key]).filter(v => v != null);
+  return vs.length ? Math.min(...vs) : null;
+}
+function avgSeg(samples, key) {
+  const vs = samples.map(x => x[key]).filter(v => v != null);
+  return vs.length ? vs.reduce((a,b)=>a+b,0)/vs.length : null;
+}
+
+function clearInputs() {
+  ['i_swim','i_t1','i_bike','i_t2','i_run','i_total'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('result').innerHTML = '';
+}
+
 function calc() {
-  const goalStr = document.getElementById('goal').value.trim();
-  const goalSec = toSec(goalStr);
   const resDiv = document.getElementById('result');
-
-  if (!goalSec) {
-    resDiv.innerHTML = '<div class="alert alert-yel">목표 시간을 올바른 형식(예: 2:30:00)으로 입력해주세요.</div>';
-    return;
-  }
-
   const rs = getPlayerRecords();
   if (rs.length === 0) {
-    resDiv.innerHTML = '<div class="alert alert-yel">해당 선수의 과거 기록이 없습니다. 이름/소속/거리 조건을 확인해주세요.</div>';
+    resDiv.innerHTML = '<div class="alert alert-yel">해당 조건의 과거 기록이 없습니다.</div>';
     return;
   }
-
-  // 각 레코드에서 구간 비율 추출 (정상 값만)
-  const samples = [];
-  rs.forEach(r => {
-    const s = toSec(r.swim), b = toSec(r.bike), rn = toSec(r.run);
-    const t1 = toSec(r.t1), t2 = toSec(r.t2);
-    const tot = toSec(r.total);
-    if (s == null || b == null || rn == null || tot == null) return; // 아쿠아/결측 제외
-    const t1c = isOutlier('t1', t1) ? null : t1;
-    const t2c = isOutlier('t2', t2) ? null : t2;
-    samples.push({ s, t1: t1c, b, t2: t2c, rn, tot, raw: r });
-  });
-
+  const samples = buildSamples(rs);
   if (samples.length === 0) {
-    resDiv.innerHTML = '<div class="alert alert-yel">구간 기록이 완전한 과거 기록이 없어 비율을 계산할 수 없습니다.</div>';
+    resDiv.innerHTML = '<div class="alert alert-yel">과거 기록 중 구간 정보가 완전한 것이 없어 비율 계산이 불가합니다. (다른 거리 카테고리를 시도해보세요)</div>';
+    return;
+  }
+  const ratios = buildRatios(samples);
+
+  // 입력 파싱
+  const userIn = {
+    s:    toSec(document.getElementById('i_swim').value.trim()),
+    t1:   toSec(document.getElementById('i_t1').value.trim()),
+    b:    toSec(document.getElementById('i_bike').value.trim()),
+    t2:   toSec(document.getElementById('i_t2').value.trim()),
+    rn:   toSec(document.getElementById('i_run').value.trim()),
+    tot:  toSec(document.getElementById('i_total').value.trim()),
+  };
+  const givenSegs = ['s','t1','b','t2','rn'].filter(k => userIn[k] != null);
+  const givenSegSum = givenSegs.reduce((a,k) => a + userIn[k], 0);
+
+  // 시뮬레이션 결과 그릇
+  const out = { s: null, t1: null, b: null, t2: null, rn: null, tot: null };
+  let mode = '';
+
+  if (userIn.tot == null && givenSegs.length === 0) {
+    resDiv.innerHTML = '<div class="alert alert-yel">하나 이상의 값을 입력해주세요. 총기록만 입력해도 됩니다.</div>';
     return;
   }
 
-  // 비율: 총기록 대비 (T1/T2 결측은 0으로 처리하되 평균에서는 있을 때만 계산)
-  const sumProp = (key) => {
-    const ps = samples.map(x => x[key] != null ? x[key] / x.tot : null).filter(v => v != null);
-    return ps.length ? ps.reduce((a,b)=>a+b,0) / ps.length : 0;
-  };
-  const pS  = sumProp('s');
-  const pT1 = sumProp('t1');
-  const pB  = sumProp('b');
-  const pT2 = sumProp('t2');
-  const pR  = sumProp('rn');
-  // 정규화 (합이 1이 되도록)
-  const sumP = pS + pT1 + pB + pT2 + pR;
-  const norm = (x) => x / sumP;
-  const pred = {
-    swim: goalSec * norm(pS),
-    t1:   goalSec * norm(pT1),
-    bike: goalSec * norm(pB),
-    t2:   goalSec * norm(pT2),
-    run:  goalSec * norm(pR),
-  };
-
-  // 비교용 통계
-  const totals = samples.map(x => x.tot);
-  const best = Math.min(...totals);
-  const avg  = totals.reduce((a,b)=>a+b,0) / totals.length;
-  const bestRec = samples.find(x => x.tot === best);
-
-  // 오버페이스 판정
-  let alert = '';
-  const diffFromBest = best - goalSec;
-  const pctVsBest = ((best - goalSec) / best) * 100;  // 양수면 goal이 더 빠름
-  if (goalSec < best) {
-    alert = `<div class="alert alert-red"><b>⚠ 오버페이스 경고 — 기존 기록으론 무리다</b><br>
-      목표 ${fmtSec(goalSec)} 는 개인 베스트 ${fmtSec(best)} 보다 <b>${fmtSec(diffFromBest)} (${pctVsBest.toFixed(1)}%)</b> 더 빠릅니다.
-      과거 기록에 비해 비현실적인 목표일 수 있습니다.</div>`;
-  } else if (goalSec < avg * 0.9) {
-    alert = `<div class="alert alert-yel"><b>야심찬 목표입니다</b><br>
-      평균 ${fmtSec(avg)} 대비 10% 이상 빠른 목표입니다. 훈련 강도를 확인해주세요.</div>`;
-  } else if (goalSec <= avg) {
-    alert = `<div class="alert alert-grn"><b>도전해볼 만한 목표입니다</b><br>
-      평균 ${fmtSec(avg)} 보다 빠르지만 베스트 ${fmtSec(best)} 안쪽이라 현실적입니다.</div>`;
+  if (userIn.tot != null && givenSegs.length === 0) {
+    // === 모드 1: 총기록 → 비율 분배
+    mode = '총기록 분배';
+    out.tot = userIn.tot;
+    for (const k of ['s','t1','b','t2','rn']) out[k] = userIn.tot * ratios[k];
+  } else if (userIn.tot == null && givenSegs.length > 0) {
+    // === 모드 2: 일부 종목 → 같은 비율 가정으로 총기록 추정
+    mode = '구간 → 총기록 추정';
+    // total estimates (각 입력값을 그 종목의 비율로 역산해서 평균)
+    const ests = givenSegs.map(k => userIn[k] / ratios[k]).filter(v => isFinite(v) && v > 0);
+    out.tot = ests.reduce((a,b)=>a+b,0)/ests.length;
+    for (const k of ['s','t1','b','t2','rn']) {
+      out[k] = (k in userIn && userIn[k] != null) ? userIn[k] : (out.tot * ratios[k]);
+    }
   } else {
-    alert = `<div class="alert alert-grn"><b>충분히 달성 가능한 페이스입니다</b><br>
-      평균 ${fmtSec(avg)} 보다 여유가 있습니다.</div>`;
+    // === 모드 3: 총기록 + 일부 구간 → 나머지를 비율로 분배
+    mode = '총기록 맞추기';
+    out.tot = userIn.tot;
+    const remaining = userIn.tot - givenSegSum;
+    const otherKeys = ['s','t1','b','t2','rn'].filter(k => userIn[k] == null);
+    const otherRatioSum = otherKeys.reduce((a,k) => a + ratios[k], 0);
+    for (const k of givenSegs) out[k] = userIn[k];
+    if (otherRatioSum > 0) {
+      for (const k of otherKeys) out[k] = remaining * (ratios[k] / otherRatioSum);
+    } else {
+      for (const k of otherKeys) out[k] = 0;
+    }
   }
 
-  // 구간별 비교: 예상 시간 vs 해당 구간 평균/베스트
-  const segAvg = (key) => {
-    const vs = samples.map(x => x[key]).filter(v => v != null);
-    return vs.length ? vs.reduce((a,b)=>a+b,0) / vs.length : null;
-  };
-  const avgSeg = { swim: segAvg('s'), t1: segAvg('t1'), bike: segAvg('b'), t2: segAvg('t2'), run: segAvg('rn') };
+  // 경고 판정
+  const bestT = Math.min(...samples.map(s => s.tot));
+  const avgT  = samples.map(s=>s.tot).reduce((a,b)=>a+b,0)/samples.length;
+  const segAvg = { s: avgSeg(samples,'s'), t1: avgSeg(samples,'t1'), b: avgSeg(samples,'b'), t2: avgSeg(samples,'t2'), rn: avgSeg(samples,'rn') };
+  const segBest= { s: bestSeg(samples,'s'), t1: bestSeg(samples,'t1'), b: bestSeg(samples,'b'), t2: bestSeg(samples,'t2'), rn: bestSeg(samples,'rn') };
 
-  const segCard = (label, key, predVal) => {
-    const a = avgSeg[key];
-    let sub = '';
-    if (a != null && predVal != null) {
-      const d = predVal - a;
-      const cls = d < 0 ? 'delta-down' : 'delta-up';
-      const sign = d < 0 ? '−' : '+';
-      sub = `평균 ${fmtSec(a)} <span class="${cls}">${sign}${fmtSec(Math.abs(d))}</span>`;
+  // 어떤 구간이 자기 베스트보다 빠른지 체크
+  const segWarnings = [];
+  for (const k of ['s','t1','b','t2','rn']) {
+    if (out[k] == null || segBest[k] == null) continue;
+    // 각 구간이 베스트보다 5% 이상 빠르면 warning, 베스트보다 빠르면 mild
+    if (out[k] < segBest[k] * 0.95) segWarnings.push({k, lvl:'red', best:segBest[k], val:out[k]});
+    else if (out[k] < segBest[k]) segWarnings.push({k, lvl:'yel', best:segBest[k], val:out[k]});
+  }
+
+  // 총기록 경고
+  let topAlert = '';
+  if (out.tot != null) {
+    if (out.tot < bestT) {
+      topAlert = `<div class="alert alert-red"><b>⚠ 오버페이스 경고 — 기존 기록으론 무리다</b><br>` +
+        `시뮬레이션 총기록 ${fmtSec(out.tot)} 는 개인 베스트 ${fmtSec(bestT)} 보다 ${fmtSec(bestT - out.tot)} (${(((bestT-out.tot)/bestT)*100).toFixed(1)}%) 빠릅니다.</div>`;
+    } else if (out.tot < avgT * 0.9) {
+      topAlert = `<div class="alert alert-yel"><b>야심찬 목표</b><br>평균 ${fmtSec(avgT)} 대비 10% 이상 빠른 페이스입니다.</div>`;
+    } else {
+      topAlert = `<div class="alert alert-grn"><b>달성 가능한 페이스</b><br>평균 ${fmtSec(avgT)} · 베스트 ${fmtSec(bestT)} 기준 현실적입니다.</div>`;
     }
-    return `<div class="split-card">
-      <div class="label">${label}</div>
-      <div class="val">${fmtSec(predVal)}</div>
+  }
+  // 구간 경고 (있을 때)
+  if (segWarnings.some(w => w.lvl === 'red')) {
+    const reds = segWarnings.filter(w=>w.lvl==='red').map(w => `${SEG_NAME[w.k]} ${fmtSec(w.val)} (베스트 ${fmtSec(w.best)})`).join(', ');
+    topAlert += `<div class="alert alert-red"><b>구간 페이스 경고</b><br>다음 구간이 개인 베스트보다 5% 이상 빠릅니다 — 비현실적: ${reds}</div>`;
+  } else if (segWarnings.some(w => w.lvl === 'yel')) {
+    const yels = segWarnings.filter(w=>w.lvl==='yel').map(w => `${SEG_NAME[w.k]} ${fmtSec(w.val)} (베스트 ${fmtSec(w.best)})`).join(', ');
+    topAlert += `<div class="alert alert-yel"><b>구간 페이스 주의</b><br>${yels} — 베스트 안쪽이라 도전적입니다.</div>`;
+  }
+
+  // 결과 카드 렌더
+  const isUser = (k) => userIn[k] != null;
+  const segCard = (k, label) => {
+    const v = out[k];
+    if (v == null || (k === 't1' && ratios.t1 === 0) || (k === 't2' && ratios.t2 === 0)) {
+      return `<div class="rcard"><div class="label">${label}</div><div class="val muted">—</div></div>`;
+    }
+    const a = segAvg[k];
+    const b = segBest[k];
+    const cls = isUser(k) ? 'user' : '';
+    const isBad = b != null && v < b * 0.95;
+    let sub = '';
+    if (a != null) {
+      const d = v - a;
+      const sign = d < 0 ? '−' : '+';
+      const dcls = d < 0 ? 'delta-down' : 'delta-up';
+      sub = `평균 <span class="${dcls}">${sign}${fmtSec(Math.abs(d))}</span>`;
+    }
+    return `<div class="rcard ${cls}${isBad?' bad':''}">
+      <div class="label">${label}${isUser(k) ? ' ●' : ''}</div>
+      <div class="val">${fmtSec(v)}</div>
       <div class="sub">${sub}</div>
     </div>`;
   };
+  const totBad = out.tot != null && out.tot < bestT;
+  const totCard = `<div class="rcard total${totBad?' bad':''}">
+    <div class="label">총기록${userIn.tot != null ? ' ●' : ''}</div>
+    <div class="val">${fmtSec(out.tot)}</div>
+    <div class="sub">평균 ${fmtSec(avgT)} · 베스트 ${fmtSec(bestT)}</div>
+  </div>`;
 
-  resDiv.innerHTML = alert +
+  resDiv.innerHTML = topAlert +
     `<div class="card">
-      <h2>예상 구간 배분 (과거 ${samples.length}개 기록 비율 기반)</h2>
-      <div class="split-grid">
-        ${segCard('수영', 'swim', pred.swim)}
-        ${segCard('사이클', 'bike', pred.bike)}
-        ${segCard('런', 'run', pred.run)}
-        <div class="split-card total">
-          <div class="label">목표 총기록</div>
-          <div class="val">${fmtSec(goalSec)}</div>
-          <div class="sub">평균 ${fmtSec(avg)} · 베스트 ${fmtSec(best)}</div>
-        </div>
+      <h2>시뮬레이션 결과 <span class="badge-mode">${escapeHtml(mode)}</span></h2>
+      <div class="result-grid">
+        ${segCard('s','수영')}
+        ${segCard('t1','T1')}
+        ${segCard('b','사이클')}
+        ${segCard('t2','T2')}
+        ${segCard('rn','런')}
+        ${totCard}
       </div>
       <div class="compare">
-        ${pT1 > 0 ? `T1 예상 ${fmtSec(pred.t1)} · ` : ''}
-        ${pT2 > 0 ? `T2 예상 ${fmtSec(pred.t2)} · ` : ''}
-        비율: 수영 ${(norm(pS)*100).toFixed(1)}% · 사이클 ${(norm(pB)*100).toFixed(1)}% · 런 ${(norm(pR)*100).toFixed(1)}%
+        과거 ${samples.length}개 기록 기반 비율: 수영 ${(ratios.s*100).toFixed(1)}% · T1 ${(ratios.t1*100).toFixed(1)}% · 사이클 ${(ratios.b*100).toFixed(1)}% · T2 ${(ratios.t2*100).toFixed(1)}% · 런 ${(ratios.rn*100).toFixed(1)}%
+        <br><span class="muted">● 표시 = 사용자 입력값 / 노란 배경 = 입력값 / 빨간 배경 = 베스트보다 5%+ 빠름</span>
       </div>
     </div>`;
 }
+
+const SEG_NAME = { s:'수영', t1:'T1', b:'사이클', t2:'T2', rn:'런' };
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 function escapeAttr(s) { return escapeHtml(s); }
 
-// delta CSS is inline for this page
 const st = document.createElement('style');
 st.textContent = '.delta-up{color:#c24536}.delta-down{color:#2a8a3e}';
 document.head.appendChild(st);
