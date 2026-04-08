@@ -1,9 +1,13 @@
 """
 대한철인3종협회 (triathlon.or.kr) 기록 스크래퍼
-사용법: python3 scraper.py [연도 ...]
-        예) python3 scraper.py 2021 2022 2023 2024 2025
+사용법: python3 scraper.py [연도 ...] [--append]
+        예) python3 scraper.py 2018 2019 2020 --append
         기본 연도: 2025
+--append 플래그: 기존 DB를 drop하지 않고 지정 연도만 추가
 출력: results.sqlite + data.json (검색 페이지에서 사용)
+
+시간 포맷은 저장 시 HH:MM:SS (3단)으로 정규화됨.
+원본이 HH:MM:SS:ms (4단)이거나 H:MM:SS (1자리시)여도 통일.
 """
 import json
 import re
@@ -56,6 +60,28 @@ def fetch(url: str) -> str:
 def strip_tags(s: str) -> str:
     s = re.sub(r"<[^>]+>", " ", s)
     return re.sub(r"\s+", " ", s).strip()
+
+
+def normalize_time(s: str) -> str:
+    """HH:MM:SS[:ms] 또는 H:MM:SS 등을 통일된 HH:MM:SS로 변환."""
+    if not s or s == "00:00:00":
+        return s
+    parts = s.split(":")
+    try:
+        nums = [int(p) for p in parts]
+    except ValueError:
+        return s
+    if len(nums) == 4:
+        h, m, sec, ms = nums
+        total = h * 3600 + m * 60 + sec + round(ms / 1000)
+        return f"{total // 3600:02d}:{(total % 3600) // 60:02d}:{total % 60:02d}"
+    if len(nums) == 3:
+        h, m, sec = nums
+        return f"{h:02d}:{m:02d}:{sec:02d}"
+    if len(nums) == 2:
+        m, sec = nums
+        return f"00:{m:02d}:{sec:02d}"
+    return s
 
 
 def parse_tournament_list(html: str):
@@ -111,12 +137,12 @@ def parse_records(html: str):
                     "name": cells[1],
                     "bib": cells[2],
                     "club": cells[3],
-                    "swim": cells[4],
-                    "t1": cells[5],
-                    "bike": cells[6],
-                    "t2": cells[7],
-                    "run": cells[8],
-                    "total": cells[9],
+                    "swim": normalize_time(cells[4]),
+                    "t1": normalize_time(cells[5]),
+                    "bike": normalize_time(cells[6]),
+                    "t2": normalize_time(cells[7]),
+                    "run": normalize_time(cells[8]),
+                    "total": normalize_time(cells[9]),
                 }
             )
     return out
@@ -246,14 +272,23 @@ def export_json(conn):
 
 
 if __name__ == "__main__":
-    years = [int(a) for a in sys.argv[1:]] if len(sys.argv) > 1 else [2025]
-    conn = init_db(DB_PATH, drop=True)
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    flags = [a for a in sys.argv[1:] if a.startswith("--")]
+    append_mode = "--append" in flags
+    years = [int(a) for a in args] if args else [2025]
+    conn = init_db(DB_PATH, drop=not append_mode)
+    # append 모드에서는 해당 연도 기록만 삭제 후 다시 삽입 (중복 방지)
+    if append_mode:
+        for y in years:
+            conn.execute("DELETE FROM records WHERE year=?", (y,))
+        conn.commit()
     grand = 0
     for y in years:
         try:
             grand += scrape_year(conn, y)
         except Exception as e:
             print(f"!! year {y} failed: {e}", flush=True)
-    print(f"\n=== 전체 {grand}개 기록 저장 → {DB_PATH} ===", flush=True)
+    print(f"\n=== 이번 실행 {grand}개 기록 추가 → {DB_PATH} ===", flush=True)
+    # 최종 JSON export (전체 레코드 포함)
     export_json(conn)
     conn.close()
