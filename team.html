@@ -89,11 +89,32 @@
   .team-table td.num.best { font-weight: 700; color: var(--text); }
   .team-table td.name a { color: var(--text); font-weight: 600; }
   .team-table td.name a:hover { color: var(--accent); }
+  .team-table td.t-col { color: var(--muted); font-size: 12px; }
+  .team-table td.sw-cell { white-space: nowrap; font-size: 11px; }
+  .team-table td.sw-cell .sw-good { display:inline-block; padding: 2px 7px; background: #f0f7f1; color: var(--success); border-radius: 10px; font-weight: 600; margin-right: 4px; }
+  .team-table td.sw-cell .sw-bad  { display:inline-block; padding: 2px 7px; background: #fdf2f0; color: var(--danger); border-radius: 10px; font-weight: 600; }
   .team-table td.small { font-size: 11px; color: var(--muted); line-height: 1.4; white-space: normal; max-width: 260px; }
   .muted { color: var(--subtle); }
   .empty { color: var(--subtle); padding: 40px 0; text-align: center; }
 
   .summary-pill { display:inline-block; padding: 4px 11px; background: var(--accent-soft); color: var(--accent); border-radius: 14px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+
+  /* 리더보드 */
+  .leaderboard { margin-bottom: 18px; }
+  .leaderboard h2 { margin-bottom: 12px; }
+  .lb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .lb-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; }
+  .lb-card .lb-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; }
+  .lb-card .lb-head .count { color: var(--subtle); font-size: 11px; }
+  .lb-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border-soft); font-size: 12px; }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-row .r { width: 20px; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; font-size: 11px; }
+  .lb-row.first .r { color: var(--accent); font-size: 13px; }
+  .lb-row .club { flex: 1; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb-row .club a { color: var(--text); font-weight: 500; }
+  .lb-row .club a:hover { color: var(--accent); text-decoration: none; }
+  .lb-row .club .n { color: var(--subtle); font-size: 10px; margin-left: 6px; }
+  .lb-row .avg { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--text); font-size: 12px; }
 
   @media (max-width: 700px) {
     body { padding: 20px 14px 60px; }
@@ -101,7 +122,13 @@
     .card { padding: 16px 18px; }
     .team-table { font-size: 12px; }
     .team-table th, .team-table td { padding: 9px 10px; }
-    .team-table td.small { display: none; }
+    .team-table td.small,
+    .team-table td.t-col,
+    .team-table th:nth-child(5),
+    .team-table th:nth-child(7),
+    .team-table th:nth-child(11) { display: none; }
+    .team-table td.sw-cell { font-size: 10px; }
+    .team-table td.sw-cell .sw-good, .team-table td.sw-cell .sw-bad { display:block; margin: 1px 0; padding: 1px 6px; }
     input, select { font-size: 16px; }
   }
 </style>
@@ -118,6 +145,8 @@
 </nav>
 <h1>소속 · 팀 랭킹</h1>
 <div class="sub">클럽/소속 이름을 선택하면 멤버들의 거리별 베스트 기록과 랭킹을 보여줍니다.</div>
+
+<div id="leaderboard"></div>
 
 <div class="card">
   <h2>소속 선택</h2>
@@ -262,6 +291,9 @@ async function load() {
   document.getElementById('clubList').innerHTML =
     topClubs.map(c => `<option value="${escapeAttr(c)}">`).join('');
 
+  // 거리별 상위 클럽 리더보드
+  renderLeaderboard();
+
   document.getElementById('club').addEventListener('input', onClubChange);
   document.getElementById('club').addEventListener('change', onClubChange);
   document.getElementById('dist').addEventListener('change', render);
@@ -270,8 +302,10 @@ async function load() {
   if (p.get('club')) {
     document.getElementById('club').value = p.get('club');
     onClubChange();
-    if (p.get('dist')) document.getElementById('dist').value = p.get('dist');
-    render();
+    if (p.get('dist')) {
+      document.getElementById('dist').value = p.get('dist');
+      render();
+    }
   }
 }
 
@@ -319,6 +353,69 @@ function onClubChange() {
   render();
 }
 
+function renderLeaderboard() {
+  const div = document.getElementById('leaderboard');
+  if (!div) return;
+
+  // (cat, club) → { name → bestTotal }
+  const byCat = {};
+  for (const r of DATA) {
+    if (!r.club) continue;
+    const cat = distCat(r);
+    if (!cat || cat === 'other' || cat.startsWith('custom:')) continue;
+    const tot  = cleanSec(r.total, 'total');
+    const swim = cleanSec(r.swim, 'swim');
+    const bike = cleanSec(r.bike, 'bike');
+    const run  = cleanSec(r.run, 'run');
+    if (tot == null || swim == null || bike == null || run == null) continue;
+    if (!byCat[cat]) byCat[cat] = {};
+    if (!byCat[cat][r.club]) byCat[cat][r.club] = {};
+    const prev = byCat[cat][r.club][r.name];
+    if (prev == null || tot < prev) byCat[cat][r.club][r.name] = tot;
+  }
+
+  const MIN_MEMBERS = 3;
+  const TOP_N = 5;
+  const ORDER = ['sprint', 'standard', 'half', 'full', 'super_sprint'];
+  const catsPresent = ORDER.filter(c => byCat[c]);
+
+  if (catsPresent.length === 0) { div.innerHTML = ''; return; }
+
+  const cards = catsPresent.map(cat => {
+    const clubs = Object.entries(byCat[cat])
+      .map(([club, mems]) => {
+        const vals = Object.values(mems);
+        if (vals.length < MIN_MEMBERS) return null;
+        const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+        return { club, avg, n: vals.length };
+      })
+      .filter(Boolean)
+      .sort((a,b) => a.avg - b.avg)
+      .slice(0, TOP_N);
+
+    if (clubs.length === 0) return '';
+
+    const rows = clubs.map((c, i) => {
+      const href = `team.html?club=${encodeURIComponent(c.club)}&dist=${encodeURIComponent(cat)}`;
+      return `<div class="lb-row${i===0?' first':''}">
+        <div class="r">${i+1}</div>
+        <div class="club"><a href="${href}">${escapeHtml(c.club)}</a><span class="n">${c.n}명</span></div>
+        <div class="avg">${fmtSec(c.avg)}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="lb-card">
+      <div class="lb-head">
+        <span class="${distChipCls(cat)}">${escapeHtml(labelOfCat(cat))}</span>
+        <span class="count">팀 평균 · 최소 ${MIN_MEMBERS}명</span>
+      </div>
+      ${rows}
+    </div>`;
+  }).filter(Boolean).join('');
+
+  div.innerHTML = `<h2>거리별 상위 클럽 · 팀 평균 기준</h2><div class="lb-grid">${cards}</div>`;
+}
+
 function render() {
   const club = document.getElementById('club').value.trim();
   const selCat = document.getElementById('dist').value;
@@ -361,19 +458,71 @@ function render() {
   const pop = POP_STATS[selCat];
   const teamBestPct = pop ? percentileRank(pop.total.sorted, best) : null;
 
+  // 대회·부문별 구간 정렬배열 인덱스 (같은 카테고리만)
+  const raceIdx = {};
+  for (const r of DATA) {
+    if (distCat(r) !== selCat) continue;
+    const k = r.tour + '||' + r.part;
+    if (!raceIdx[k]) raceIdx[k] = { swim: [], bike: [], run: [] };
+    const sw = cleanSec(r.swim, 'swim');
+    const bk = cleanSec(r.bike, 'bike');
+    const rn = cleanSec(r.run, 'run');
+    if (sw != null) raceIdx[k].swim.push(sw);
+    if (bk != null) raceIdx[k].bike.push(bk);
+    if (rn != null) raceIdx[k].run.push(rn);
+  }
+  for (const k in raceIdx) {
+    raceIdx[k].swim.sort((a,b)=>a-b);
+    raceIdx[k].bike.sort((a,b)=>a-b);
+    raceIdx[k].run.sort((a,b)=>a-b);
+  }
+  const SEG_NAME = { swim: '수영', bike: '사이클', run: '런' };
+  function computeStrength(name) {
+    const mine = DATA.filter(r => r.name === name && (r.club || '') === club && distCat(r) === selCat);
+    const pcts = { swim: [], bike: [], run: [] };
+    for (const rec of mine) {
+      const idx = raceIdx[rec.tour + '||' + rec.part];
+      if (!idx) continue;
+      for (const k of ['swim','bike','run']) {
+        const me = cleanSec(rec[k], k);
+        if (me == null || idx[k].length < 3) continue;
+        let rank = idx[k].findIndex(v => v >= me);
+        if (rank === -1) rank = idx[k].length;
+        pcts[k].push(((rank + 1) / idx[k].length) * 100);
+      }
+    }
+    const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : null;
+    const o = { swim: avg(pcts.swim), bike: avg(pcts.bike), run: avg(pcts.run) };
+    const valid = Object.entries(o).filter(([,v]) => v != null);
+    if (valid.length < 2) return null;
+    valid.sort((a,b) => a[1] - b[1]);
+    return { best: valid[0], worst: valid[valid.length-1] };
+  }
+
   const rowsHtml = members.map((m, i) => {
     const pct = pop ? percentileRank(pop.total.sorted, m.sec) : null;
     const swim = cleanSec(m.record.swim, 'swim');
+    const t1   = cleanSec(m.record.t1, 't1');
     const bike = cleanSec(m.record.bike, 'bike');
+    const t2   = cleanSec(m.record.t2, 't2');
     const run  = cleanSec(m.record.run, 'run');
     const nameHref = `./?q=${encodeURIComponent(m.name)}${club ? '&club=' + encodeURIComponent(club) : ''}`;
+    const sw = computeStrength(m.name);
+    let swHtml = '<span class="muted">-</span>';
+    if (sw) {
+      swHtml = `<span class="sw-good">${SEG_NAME[sw.best[0]]} ${sw.best[1].toFixed(0)}%</span>` +
+               `<span class="sw-bad">${SEG_NAME[sw.worst[0]]} ${sw.worst[1].toFixed(0)}%</span>`;
+    }
     return `<tr>
       <td class="rank">${i+1}</td>
       <td class="name"><a href="${nameHref}">${escapeHtml(m.name)}</a></td>
       <td class="num best">${fmtSec(m.sec)}</td>
       <td class="num">${fmtSec(swim)}</td>
+      <td class="num t-col">${fmtSec(t1)}</td>
       <td class="num">${fmtSec(bike)}</td>
+      <td class="num t-col">${fmtSec(t2)}</td>
       <td class="num">${fmtSec(run)}</td>
+      <td class="sw-cell">${swHtml}</td>
       <td class="num">${pct != null ? `상위 ${pct.toFixed(0)}%` : '-'}</td>
       <td class="small">${escapeHtml(m.record.date.slice(0,10))} · ${escapeHtml(m.record.tour)}</td>
     </tr>`;
@@ -411,7 +560,7 @@ function render() {
         <table class="team-table">
           <thead>
             <tr>
-              <th>#</th><th>이름</th><th>총기록</th><th>수영</th><th>사이클</th><th>런</th><th>전체 풀</th><th>대회</th>
+              <th>#</th><th>이름</th><th>총기록</th><th>수영</th><th>T1</th><th>사이클</th><th>T2</th><th>런</th><th>강점/약점</th><th>전체 풀</th><th>대회</th>
             </tr>
           </thead>
           <tbody>${rowsHtml}</tbody>

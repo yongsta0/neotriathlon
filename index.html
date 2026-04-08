@@ -147,6 +147,21 @@
   .tag-strong { background: #e9f4ed; color: var(--success); }
   .tag-weak   { background: #fdeceb; color: var(--danger); }
   .tag-neutral { background: var(--bg); color: var(--muted); }
+  .rivals-card { grid-column: 1 / -1; }
+  .rival-row { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 12px; align-items: center; padding: 9px 10px; border-bottom: 1px solid var(--border-soft); font-size: 12px; border-radius: 8px; }
+  .rival-row:last-child { border-bottom: none; }
+  .rival-row.me { background: var(--accent-soft); border: 1px solid #d9e0e9; margin: 4px 0; }
+  .rival-row.above { opacity: 0.95; }
+  .rival-row.below { opacity: 0.95; }
+  .rival-row .rv-name a { color: var(--text); font-weight: 600; }
+  .rival-row .rv-name a:hover { color: var(--accent); text-decoration: none; }
+  .rival-row .rv-club { display: block; font-size: 10px; color: var(--subtle); margin-top: 2px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rival-row .rv-time { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--text); font-size: 13px; }
+  .rival-row .rv-diff { display: block; font-size: 10px; color: var(--muted); font-weight: 500; margin-top: 1px; }
+  .rival-row.above .rv-diff { color: var(--success); }
+  .rival-row.below .rv-diff { color: var(--danger); }
+  .rival-row .rv-strength { font-size: 11px; color: var(--muted); text-align: right; }
+  .rivals-divider { height: 0; border-top: 1px dashed var(--border); margin: 4px 0; }
   .best-row { display:flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--border-soft); font-size: 12px; }
   .best-row:last-child { border-bottom: none; }
   .best-row .br-dist { font-weight: 600; color: var(--text); font-size: 12px; }
@@ -743,6 +758,91 @@ function renderProfile(name, clubF, filtered, div) {
     }
   }
 
+  // 5) 비슷한 경쟁 선수: 같은 거리 카테고리 안에서 내 베스트 기준 위3/아래3
+  let rivalsHtml = '';
+  if (filtered.length > 0) {
+    const primaryCat = distCat(filtered[0]);
+    const myBestTot = Math.min(
+      ...filtered.map(r => cleanSec(r.total, 'total')).filter(v => v != null),
+      Infinity
+    );
+    if (myBestTot !== Infinity) {
+      const myKey = name + '||' + (clubF || '(소속없음)');
+      const bestMap = {};
+      for (const r of DATA) {
+        if (distCat(r) !== primaryCat) continue;
+        const tot = cleanSec(r.total, 'total');
+        const sw  = cleanSec(r.swim, 'swim');
+        const bk  = cleanSec(r.bike, 'bike');
+        const rn  = cleanSec(r.run, 'run');
+        if (tot == null || sw == null || bk == null || rn == null) continue;
+        const k = r.name + '||' + (r.club || '(소속없음)');
+        if (k === myKey) continue;
+        if (!bestMap[k] || tot < bestMap[k].tot) bestMap[k] = { k, tot, rec: r };
+      }
+      const rivals = Object.values(bestMap).sort((a, b) => a.tot - b.tot);
+      let idx = 0;
+      while (idx < rivals.length && rivals[idx].tot < myBestTot) idx++;
+      const above = rivals.slice(Math.max(0, idx - 3), idx);
+      const below = rivals.slice(idx, idx + 3);
+
+      const rivalStrength = (rec) => {
+        const same = DATA.filter(x => x.tour === rec.tour && x.part === rec.part);
+        if (same.length < 3) return null;
+        const arr = (k) => same.map(x => cleanSec(x[k], k)).filter(v => v != null).sort((a,b)=>a-b);
+        const pct = (me, a) => {
+          if (me == null || a.length === 0) return 999;
+          let rk = a.findIndex(v => v >= me);
+          if (rk === -1) rk = a.length;
+          return ((rk + 1) / a.length) * 100;
+        };
+        const entries = [
+          ['수영', pct(cleanSec(rec.swim,'swim'), arr('swim'))],
+          ['사이클', pct(cleanSec(rec.bike,'bike'), arr('bike'))],
+          ['런', pct(cleanSec(rec.run,'run'), arr('run'))],
+        ].sort((a, b) => a[1] - b[1]);
+        if (entries[0][1] >= 999) return null;
+        return entries[0][0] + ' 상위 ' + entries[0][1].toFixed(0) + '%';
+      };
+
+      const rowHtml = (rv, kind) => {
+        const [nm, cl] = rv.k.split('||');
+        const href = './?q=' + encodeURIComponent(nm) +
+          (cl && cl !== '(소속없음)' ? '&club=' + encodeURIComponent(cl) : '');
+        const st = rivalStrength(rv.rec) || '-';
+        const diff = rv.tot - myBestTot;
+        const diffStr = (diff >= 0 ? '+' : '−') + fmtSec(Math.abs(diff));
+        return `<div class="rival-row ${kind}">
+          <div class="rv-name"><a href="${href}">${escapeHtml(nm)}</a>
+            <span class="rv-club">${escapeHtml(cl)}</span></div>
+          <div class="rv-time">${fmtSec(rv.tot)}<span class="rv-diff">${diffStr}</span></div>
+          <div class="rv-strength">${escapeHtml(st)}</div>
+        </div>`;
+      };
+
+      const aboveHtml = above.length
+        ? above.map(r => rowHtml(r, 'above')).join('')
+        : '<div class="muted" style="padding:8px 10px;font-size:11px">더 빠른 선수 데이터 없음</div>';
+      const belowHtml = below.length
+        ? below.map(r => rowHtml(r, 'below')).join('')
+        : '<div class="muted" style="padding:8px 10px;font-size:11px">더 느린 선수 데이터 없음</div>';
+      const meStrength = strongest ? (SEG_NAME[strongest] + ' 강점') : '-';
+      const meHtml = `<div class="rival-row me">
+        <div class="rv-name"><b>${escapeHtml(name)}</b>
+          <span class="rv-club">${escapeHtml(clubF || '(소속없음)')}</span></div>
+        <div class="rv-time">${fmtSec(myBestTot)}<span class="rv-diff">나의 베스트</span></div>
+        <div class="rv-strength">${escapeHtml(meStrength)}</div>
+      </div>`;
+
+      rivalsHtml = `<div class="pf-card rivals-card">
+        <h3>비슷한 경쟁 선수 · ${DIST_LABEL[primaryCat] || primaryCat} 기준</h3>
+        ${aboveHtml}
+        ${meHtml}
+        ${belowHtml}
+      </div>`;
+    }
+  }
+
   div.innerHTML =
     `<div class="profile-section">
       <h2>프로필 분석 <span style="font-size:11px;color:var(--muted);font-weight:500;margin-left:6px">${escapeHtml(name)}${clubF?' · '+escapeHtml(clubF):''}</span></h2>
@@ -764,6 +864,7 @@ function renderProfile(name, clubF, filtered, div) {
           ${trendHtml}
         </div>
         ${popHtml}
+        ${rivalsHtml}
       </div>
     </div>`;
 }
