@@ -147,6 +147,20 @@
   .tag-strong { background: #e9f4ed; color: var(--success); }
   .tag-weak   { background: #fdeceb; color: var(--danger); }
   .tag-neutral { background: var(--bg); color: var(--muted); }
+  .insight-card { grid-column: 1 / -1; background: linear-gradient(180deg, #fff 0%, #fafaf8 100%); }
+  .insight-card h3 { margin-bottom: 10px; }
+  .insight-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .ins-tag { font-size: 11px; padding: 4px 11px; border-radius: 12px; font-weight: 600; border: 1px solid; }
+  .ins-tag-good  { background: #f0f7f1; color: var(--success); border-color: #c9e3cd; }
+  .ins-tag-bad   { background: #fdf2f0; color: var(--danger);  border-color: #f5d5d0; }
+  .ins-tag-focus { background: #fff4e6; color: #8a4a1a;         border-color: #f5d9b8; }
+  .insight-para { font-size: 13px; line-height: 1.65; color: var(--text); margin-bottom: 9px; }
+  .insight-para b { font-weight: 700; }
+  .insight-para .ins-strong { color: var(--success); }
+  .insight-para .ins-weak   { color: var(--danger); }
+  .insight-para .ins-gain   { color: var(--accent); }
+  .insight-tip { margin-top: 12px; padding: 12px 14px; background: var(--accent-soft); border-radius: var(--radius); font-size: 12px; line-height: 1.6; color: var(--text); border-left: 3px solid var(--accent); }
+  .insight-tip b { color: var(--accent); font-weight: 700; display: inline-block; margin-bottom: 3px; }
   .rivals-card { grid-column: 1 / -1; }
   .rival-row { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 12px; align-items: center; padding: 9px 10px; border-bottom: 1px solid var(--border-soft); font-size: 12px; border-radius: 8px; }
   .rival-row:last-child { border-bottom: none; }
@@ -758,14 +772,23 @@ function renderProfile(name, clubF, filtered, div) {
     }
   }
 
-  // 5) 비슷한 경쟁 선수: 같은 거리 카테고리 안에서 내 베스트 기준 위3/아래3
+  // 5) 비슷한 경쟁 선수 + 6) 인사이트를 위한 데이터 준비
   let rivalsHtml = '';
+  let insightHtml = '';
+  let sharedAbove = [], sharedBelow = [], sharedPrimaryCat = null, sharedMyBestTot = null, sharedMyBestSeg = null;
   if (filtered.length > 0) {
     const primaryCat = distCat(filtered[0]);
+    sharedPrimaryCat = primaryCat;
     const myBestTot = Math.min(
       ...filtered.map(r => cleanSec(r.total, 'total')).filter(v => v != null),
       Infinity
     );
+    sharedMyBestTot = myBestTot === Infinity ? null : myBestTot;
+    sharedMyBestSeg = {
+      swim: Math.min(...filtered.map(r => cleanSec(r.swim, 'swim')).filter(v => v != null), Infinity),
+      bike: Math.min(...filtered.map(r => cleanSec(r.bike, 'bike')).filter(v => v != null), Infinity),
+      run:  Math.min(...filtered.map(r => cleanSec(r.run,  'run' )).filter(v => v != null), Infinity),
+    };
     if (myBestTot !== Infinity) {
       const myKey = name + '||' + (clubF || '(소속없음)');
       const bestMap = {};
@@ -785,6 +808,7 @@ function renderProfile(name, clubF, filtered, div) {
       while (idx < rivals.length && rivals[idx].tot < myBestTot) idx++;
       const above = rivals.slice(Math.max(0, idx - 3), idx);
       const below = rivals.slice(idx, idx + 3);
+      sharedAbove = above; sharedBelow = below;
 
       const rivalStrength = (rec) => {
         const same = DATA.filter(x => x.tour === rec.tour && x.part === rec.part);
@@ -843,10 +867,102 @@ function renderProfile(name, clubF, filtered, div) {
     }
   }
 
+  // 6) 종합 분석 · 보완 제안 (자연어 인사이트 포함)
+  if (strongest && weakest && strongest !== weakest && sharedPrimaryCat && sharedMyBestTot != null) {
+    const SEG_POP_KEY = { s: 'swim', b: 'bike', r: 'run' };
+    const SEG_MB_KEY  = { s: 'swim', b: 'bike', r: 'run' };
+    const pop = POP_STATS[sharedPrimaryCat];
+    const myB = sharedMyBestSeg;
+
+    // 약점 구간을 강점 수준으로 끌어올렸을 때 절약 가능 시간 (같은 카테고리 풀 기준)
+    let savings = null, savingsTarget = null;
+    if (pop && pop[SEG_POP_KEY[weakest]]) {
+      const arr = pop[SEG_POP_KEY[weakest]].sorted;
+      if (arr.length > 0) {
+        const targetIdx = Math.max(0, Math.min(arr.length - 1, Math.floor((segAvgPct[strongest] / 100) * arr.length) - 1));
+        const target = arr[targetIdx];
+        const myWeakSec = myB[SEG_MB_KEY[weakest]];
+        if (target != null && myWeakSec !== Infinity && myWeakSec > target) {
+          savings = myWeakSec - target;
+          savingsTarget = target;
+        }
+      }
+    }
+
+    // 더 빠른 라이벌 대비 구간 평균 격차
+    const rivalGap = { s: [], b: [], r: [] };
+    for (const rv of sharedAbove) {
+      const rs = cleanSec(rv.rec.swim, 'swim');
+      const rb = cleanSec(rv.rec.bike, 'bike');
+      const rr = cleanSec(rv.rec.run,  'run');
+      if (myB.swim !== Infinity && rs != null) rivalGap.s.push(myB.swim - rs);
+      if (myB.bike !== Infinity && rb != null) rivalGap.b.push(myB.bike - rb);
+      if (myB.run  !== Infinity && rr != null) rivalGap.r.push(myB.run  - rr);
+    }
+    const avgGap = k => rivalGap[k].length ? rivalGap[k].reduce((a,b)=>a+b,0)/rivalGap[k].length : null;
+    const gS = avgGap('s'), gB = avgGap('b'), gR = avgGap('r');
+    const gapList = [['s', gS], ['b', gB], ['r', gR]].filter(([,g]) => g != null);
+    let biggestGap = null, smallestGap = null;
+    if (gapList.length > 0) {
+      const sorted = [...gapList].sort((a,b) => b[1] - a[1]);
+      biggestGap = sorted[0];
+      smallestGap = sorted[sorted.length - 1];
+    }
+
+    // 자연어 요약 생성
+    const distLabel = DIST_LABEL[sharedPrimaryCat] || labelOfCat(sharedPrimaryCat);
+    const n = filtered.length;
+    const sp = segAvgPct[strongest], wp = segAvgPct[weakest];
+    const gapPp = Math.round(wp - sp);
+
+    let para1 = `${distLabel} 거리 <b>${n}회</b> 출전 기록을 분석한 결과, `;
+    para1 += `<b>${name}</b>님은 <b class="ins-strong">${SEG_NAME[strongest]}</b>에서 가장 뛰어난 경쟁력(같은 부문 평균 <b>상위 ${sp.toFixed(0)}%</b>)을 보이고, `;
+    para1 += `반면 <b class="ins-weak">${SEG_NAME[weakest]}</b>은(는) 상위 <b>${wp.toFixed(0)}%</b>로 강점 대비 <b>${gapPp}%p</b> 격차가 있습니다.`;
+
+    let para2 = '';
+    if (sharedAbove.length >= 2 && biggestGap && biggestGap[1] > 10) {
+      const segKo = SEG_NAME[biggestGap[0]];
+      para2 += `본인보다 빠른 선수 ${sharedAbove.length}명과 비교하면, <b>${segKo}</b>에서 평균 <b>${fmtSec(biggestGap[1])}</b> 뒤처져 있어 이 구간이 총기록 단축의 가장 큰 레버리지입니다.`;
+      if (smallestGap && smallestGap[0] !== biggestGap[0] && smallestGap[1] < 30) {
+        para2 += ` 반대로 <b>${SEG_NAME[smallestGap[0]]}</b>은(는) 이미 경쟁자 수준과 거의 동등(평균 ${smallestGap[1] >= 0 ? '+' : '−'}${fmtSec(Math.abs(smallestGap[1]))})합니다.`;
+      }
+    } else if (sharedAbove.length === 0) {
+      para2 = `현재 같은 거리 카테고리에서 기준보다 빠른 비교 대상이 없어, 본인이 상위권에 속합니다. 구간별 균형을 더 다듬어 다음 단계로 나아갈 수 있습니다.`;
+    }
+
+    let para3 = '';
+    if (savings != null && savings > 20) {
+      para3 = `만약 <b>${SEG_NAME[weakest]}</b>을(를) <b>${SEG_NAME[strongest]}</b>과 같은 상위 ${sp.toFixed(0)}% 수준(목표 ${fmtSec(savingsTarget)})으로 끌어올리면, 총기록이 약 <b class="ins-gain">${fmtSec(savings)}</b> 단축될 것으로 기대됩니다.`;
+    }
+
+    // 훈련 팁 (약점과 가장 큰 격차 구간 중 우선순위)
+    const target = biggestGap && biggestGap[1] > 30 ? biggestGap[0] : weakest;
+    const TIPS = {
+      s: '주 2-3회 수영 훈련 — 인터벌(100m×10)로 파워 향상, 장거리(2-3km) 세트로 지구력, 풀드라이 영상으로 캐치·롤링 폼 점검. 오픈워터 연습 병행.',
+      b: '주 2회 FTP 인터벌(2×20분 @85-90%) + 주 1회 장거리(80-120km). 케이던스 85-95 유지 훈련, 에어로 포지션 파워 적응 권장.',
+      r: '주 20% 룰로 Z2 주거리 증량 + 주 1회 인터벌(400m×8 또는 1km×5). 브릭(바이크→런) 훈련 주 1회, 스트라이드·드릴로 폼 효율화.',
+    };
+    const priorityKo = SEG_NAME[target];
+
+    insightHtml = `<div class="pf-card insight-card">
+      <h3>종합 분석 · 보완 제안</h3>
+      <div class="insight-tags">
+        <span class="ins-tag ins-tag-good">강점 · ${SEG_NAME[strongest]}</span>
+        <span class="ins-tag ins-tag-bad">보완 · ${SEG_NAME[weakest]}</span>
+        ${biggestGap && biggestGap[1] > 30 ? `<span class="ins-tag ins-tag-focus">최우선 투자 · ${SEG_NAME[biggestGap[0]]}</span>` : ''}
+      </div>
+      <div class="insight-para">${para1}</div>
+      ${para2 ? `<div class="insight-para">${para2}</div>` : ''}
+      ${para3 ? `<div class="insight-para">${para3}</div>` : ''}
+      <div class="insight-tip"><b>권장 훈련 (${priorityKo} 우선)</b><br>${TIPS[target]}</div>
+    </div>`;
+  }
+
   div.innerHTML =
     `<div class="profile-section">
       <h2>프로필 분석 <span style="font-size:11px;color:var(--muted);font-weight:500;margin-left:6px">${escapeHtml(name)}${clubF?' · '+escapeHtml(clubF):''}</span></h2>
       <div class="profile-grid">
+        ${insightHtml}
         <div class="pf-card">
           <h3>강점 구간 · 같은 부문 내 평균 순위</h3>
           ${strengthTag}
