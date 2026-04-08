@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a2540">
+<title>TRI · Club Rankings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #ececec;
+    --border-soft: #f3f3f1;
+    --text: #0f0f0f;
+    --muted: #6b6b6b;
+    --subtle: #a0a0a0;
+    --accent: #0a2540;
+    --accent-hover: #163a5f;
+    --accent-soft: #eef2f7;
+    --success: #1f6b3a;
+    --warning: #b7790e;
+    --danger: #a8362a;
+    --radius: 10px;
+    --radius-lg: 14px;
+    font-family: 'Inter', -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; color: var(--text); font-size: 14px; line-height: 1.5; -webkit-text-size-adjust: 100%; }
+  a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  a:hover { text-decoration: underline; }
+
+  .brand { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  .brand .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--accent); }
+  .brand .logo .dot { color: var(--danger); }
+  .brand .tag { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .nav-tabs { display: flex; gap: 4px; margin: 18px 0 22px; border-bottom: 1px solid var(--border); }
+  .nav-tabs a { padding: 10px 16px; font-size: 13px; color: var(--muted); border-bottom: 2px solid transparent; transition: all .15s; font-weight: 500; }
+  .nav-tabs a:hover { color: var(--text); text-decoration: none; }
+  .nav-tabs a.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 6px; }
+  h2 { font-size: 13px; font-weight: 600; margin: 0 0 14px; color: var(--text); text-transform: uppercase; letter-spacing: 0.06em; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; margin-bottom: 14px; }
+  label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+  input, select { font-family: inherit; font-size: 14px; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius); width: 100%; background: var(--surface); color: var(--text); outline: none; transition: border-color .15s; }
+  input::placeholder { color: var(--subtle); }
+  input:focus, select:focus { border-color: var(--accent); }
+  .row { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
+
+  .alert { padding: 14px 16px; border-radius: var(--radius); margin: 14px 0; font-size: 13px; line-height: 1.6; border: 1px solid; }
+  .alert-yel { background: #fdf8ea; border-color: #f0e1b8; color: var(--warning); }
+  .alert-grn { background: #f0f7f1; border-color: #c9e3cd; color: var(--success); }
+  .alert b { font-weight: 600; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .chip { font-size: 11px; padding: 4px 10px; background: var(--bg); color: var(--muted); border: 1px solid var(--border); border-radius: 10px; font-weight: 500; }
+  .chip.dist-sprint   { background: #fff4e6; color: #8a4a1a; border-color: #f5d9b8; }
+  .chip.dist-short    { background: #fffaeb; color: #7a5b00; border-color: #f0e1b8; }
+  .chip.dist-standard { background: var(--accent-soft); color: var(--accent); border-color: #d9e0e9; }
+  .chip.dist-half     { background: #fdf2f0; color: var(--danger); border-color: #f5d5d0; }
+  .chip.dist-full     { background: #f3eef7; color: #4a1a8a; border-color: #e0d0ef; }
+  .chip.dist-other    { background: #f2f2f2; color: #666; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 14px 0; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+  .stat-value { font-size: 20px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+
+  .team-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 13px; flex-wrap: wrap; gap: 6px; }
+  .team-head b { font-weight: 600; color: var(--text); font-size: 14px; }
+  .team-head .muted { color: var(--muted); font-size: 12px; }
+
+  .table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+  table.team-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .team-table th { background: var(--bg); color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; position: sticky; top: 0; }
+  .team-table td { padding: 11px 14px; border-bottom: 1px solid var(--border-soft); white-space: nowrap; }
+  .team-table tr:last-child td { border-bottom: none; }
+  .team-table tr:hover td { background: var(--accent-soft); }
+  .team-table td.rank { font-weight: 700; color: var(--accent); width: 40px; font-variant-numeric: tabular-nums; }
+  .team-table td.num { font-variant-numeric: tabular-nums; text-align: right; }
+  .team-table td.num.best { font-weight: 700; color: var(--text); }
+  .team-table td.name a { color: var(--text); font-weight: 600; }
+  .team-table td.name a:hover { color: var(--accent); }
+  .team-table td.small { font-size: 11px; color: var(--muted); line-height: 1.4; white-space: normal; max-width: 260px; }
+  .muted { color: var(--subtle); }
+  .empty { color: var(--subtle); padding: 40px 0; text-align: center; }
+
+  .summary-pill { display:inline-block; padding: 4px 11px; background: var(--accent-soft); color: var(--accent); border-radius: 14px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+
+  @media (max-width: 700px) {
+    body { padding: 20px 14px 60px; }
+    h1 { font-size: 22px; }
+    .card { padding: 16px 18px; }
+    .team-table { font-size: 12px; }
+    .team-table th, .team-table td { padding: 9px 10px; }
+    .team-table td.small { display: none; }
+    input, select { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="brand">
+  <div class="logo">TRI<span class="dot">·</span>PE</div>
+  <div class="tag">Club Rankings</div>
+</div>
+<nav class="nav-tabs">
+  <a href="./">탐색</a>
+  <a href="predict.html">예상기록</a>
+  <a href="team.html" class="active">팀 랭킹</a>
+</nav>
+<h1>소속 · 팀 랭킹</h1>
+<div class="sub">클럽/소속 이름을 선택하면 멤버들의 거리별 베스트 기록과 랭킹을 보여줍니다.</div>
+
+<div class="card">
+  <h2>소속 선택</h2>
+  <div class="row">
+    <div>
+      <label>소속 / 클럽 이름</label>
+      <input id="club" type="text" placeholder="예: 강남철인클럽" list="clubList" autofocus>
+      <datalist id="clubList"></datalist>
+    </div>
+    <div>
+      <label>거리</label>
+      <select id="dist"><option value="">— 선택 —</option></select>
+    </div>
+  </div>
+  <div class="chips" id="clubSummary"></div>
+</div>
+
+<div id="result"></div>
+
+<script>
+let DATA = [];
+let DISTANCES = {};
+let POP_STATS = {};
+
+function toSec(s) {
+  if (!s || s === '-' || s === '00:00:00') return null;
+  const p = s.split(':').map(Number);
+  if (p.some(isNaN)) return null;
+  if (p.length === 4) return p[0]*3600 + p[1]*60 + p[2] + p[3]/1000;
+  if (p.length === 3) return p[0]*3600 + p[1]*60 + p[2];
+  if (p.length === 2) return p[0]*60 + p[1];
+  return null;
+}
+function fmtSec(s) {
+  if (s == null || !isFinite(s)) return '-';
+  s = Math.round(s);
+  const sign = s < 0 ? '-' : ''; s = Math.abs(s);
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
+  return sign + (h > 0 ? String(h).padStart(2,'0')+':' : '') +
+         String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+const T1_MAX = 1800, T2_MAX = 600;
+function isOutlier(k, sec) {
+  if (sec == null) return false;
+  if (k === 't1' && sec > T1_MAX) return true;
+  if (k === 't2' && sec > T2_MAX) return true;
+  return false;
+}
+function cleanSec(raw, kind) {
+  const s = toSec(raw);
+  if (s == null) return null;
+  if (isOutlier(kind, s)) return null;
+  return s;
+}
+
+function classifyDistance(d) {
+  if (!d || d.swim_km == null || d.bike_km == null || d.run_km == null) return null;
+  const s = d.swim_km, b = d.bike_km, r = d.run_km;
+  if (s <= 0.5 && b <= 25 && r <= 5.5) return 'sprint';
+  if (s <= 0.85 && b <= 25 && r <= 6) return 'sprint';
+  if (s <= 0.85 && b <= 45 && r <= 11) return 'short';
+  if (s <= 1.6 && b <= 45 && r <= 11) return 'standard';
+  if (s <= 2.2 && b <= 95 && r <= 22) return 'half';
+  if (s <= 4.0 && b <= 190 && r <= 43) return 'full';
+  return 'other';
+}
+const DIST_LABEL = { sprint:'스프린트', short:'단거리', standard:'표준', half:'하프', full:'풀', other:'기타' };
+function distInfo(r) { return DISTANCES[r.tour + '||' + r.part] || null; }
+function distCat(r) { return classifyDistance(distInfo(r)) || 'other'; }
+function distSummary(r) {
+  const d = distInfo(r);
+  if (!d) return '';
+  return `${d.swim_km ?? '?'}/${d.bike_km ?? '?'}/${d.run_km ?? '?'}km`;
+}
+
+function buildPopulationStats() {
+  const b = {};
+  for (const r of DATA) {
+    const c = classifyDistance(distInfo(r)) || 'other';
+    if (!b[c]) b[c] = { t:[] };
+    const tot = cleanSec(r.total, 'total');
+    if (tot != null) b[c].t.push(tot);
+  }
+  const out = {};
+  for (const c in b) {
+    out[c] = { n: b[c].t.length, total: { sorted: [...b[c].t].sort((a,b)=>a-b) } };
+  }
+  return out;
+}
+function percentileRank(sorted, v) {
+  if (!sorted || sorted.length === 0 || v == null) return null;
+  let lo = 0, hi = sorted.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (sorted[mid] < v) lo = mid + 1;
+    else hi = mid;
+  }
+  return (lo / sorted.length) * 100;
+}
+
+async function load() {
+  try {
+    const ts = Date.now();
+    const [d1, d2] = await Promise.all([
+      fetch('data.json?ts=' + ts),
+      fetch('distances.json?ts=' + ts).catch(() => null),
+    ]);
+    DATA = await d1.json();
+    if (d2 && d2.ok) {
+      try { DISTANCES = await d2.json(); } catch (e) {}
+    }
+    POP_STATS = buildPopulationStats();
+  } catch (e) {
+    document.getElementById('result').innerHTML = '<div class="empty">데이터를 불러올 수 없습니다.</div>';
+    return;
+  }
+
+  // 소속 datalist (상위 500개)
+  const counts = {};
+  for (const r of DATA) { if (r.club) counts[r.club] = (counts[r.club] || 0) + 1; }
+  const topClubs = Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, 500);
+  document.getElementById('clubList').innerHTML =
+    topClubs.map(c => `<option value="${escapeAttr(c)}">`).join('');
+
+  document.getElementById('club').addEventListener('input', onClubChange);
+  document.getElementById('club').addEventListener('change', onClubChange);
+  document.getElementById('dist').addEventListener('change', render);
+
+  const p = new URLSearchParams(location.search);
+  if (p.get('club')) {
+    document.getElementById('club').value = p.get('club');
+    onClubChange();
+    if (p.get('dist')) document.getElementById('dist').value = p.get('dist');
+    render();
+  }
+}
+
+function onClubChange() {
+  const club = document.getElementById('club').value.trim();
+  const distSel = document.getElementById('dist');
+  const curDist = distSel.value;
+  const summary = document.getElementById('clubSummary');
+
+  if (!club) {
+    distSel.innerHTML = '<option value="">— 선택 —</option>';
+    summary.innerHTML = '';
+    document.getElementById('result').innerHTML = '';
+    return;
+  }
+
+  const teamRows = DATA.filter(r => (r.club || '') === club);
+  if (teamRows.length === 0) {
+    distSel.innerHTML = '<option value="">— 없음 —</option>';
+    summary.innerHTML = '<span class="muted">해당 소속 기록이 없습니다.</span>';
+    document.getElementById('result').innerHTML =
+      '<div class="alert alert-yel">일치하는 소속이 없습니다. 정확한 소속명을 입력하거나 자동완성에서 선택해주세요.</div>';
+    return;
+  }
+
+  const members = new Set(teamRows.map(r => r.name));
+  const catCounts = {};
+  teamRows.forEach(r => {
+    const c = distCat(r);
+    catCounts[c] = (catCounts[c] || 0) + 1;
+  });
+  const cats = Object.keys(catCounts).sort((a,b) => catCounts[b] - catCounts[a]);
+
+  distSel.innerHTML = cats.map(c => {
+    const lbl = (DIST_LABEL[c] || c) + ' · ' + catCounts[c] + '건';
+    return `<option value="${escapeAttr(c)}"${c===curDist?' selected':''}>${escapeHtml(lbl)}</option>`;
+  }).join('');
+  if (!cats.includes(curDist)) distSel.value = cats[0];
+
+  summary.innerHTML =
+    `<span class="chip">${members.size}명</span>` +
+    `<span class="chip">${teamRows.length}건 기록</span>` +
+    cats.slice(0, 3).map(c => `<span class="chip dist-${c}">${DIST_LABEL[c]||c} ${catCounts[c]}</span>`).join('');
+
+  render();
+}
+
+function render() {
+  const club = document.getElementById('club').value.trim();
+  const selCat = document.getElementById('dist').value;
+  const resDiv = document.getElementById('result');
+  if (!club || !selCat) { resDiv.innerHTML = ''; return; }
+
+  const teamRows = DATA.filter(r => (r.club || '') === club && distCat(r) === selCat);
+  if (teamRows.length === 0) {
+    resDiv.innerHTML = '<div class="empty">해당 거리의 기록이 없습니다.</div>';
+    return;
+  }
+
+  // 멤버별 베스트
+  const byName = {};
+  for (const r of teamRows) {
+    const tot = cleanSec(r.total, 'total');
+    if (tot == null) continue;
+    if (!byName[r.name] || tot < byName[r.name].sec) {
+      byName[r.name] = { sec: tot, record: r };
+    }
+  }
+  const members = Object.entries(byName)
+    .map(([name, v]) => ({ name, sec: v.sec, record: v.record }))
+    .sort((a, b) => a.sec - b.sec);
+
+  if (members.length === 0) {
+    resDiv.innerHTML = '<div class="empty">정상 총기록이 있는 멤버가 없습니다.</div>';
+    return;
+  }
+
+  const secs = members.map(m => m.sec);
+  const best = secs[0];
+  const worst = secs[secs.length - 1];
+  const median = secs[Math.floor(secs.length/2)];
+  const mean = secs.reduce((a,b)=>a+b,0)/secs.length;
+
+  const pop = POP_STATS[selCat];
+  const teamBestPct = pop ? percentileRank(pop.total.sorted, best) : null;
+
+  const rowsHtml = members.map((m, i) => {
+    const pct = pop ? percentileRank(pop.total.sorted, m.sec) : null;
+    const swim = cleanSec(m.record.swim, 'swim');
+    const bike = cleanSec(m.record.bike, 'bike');
+    const run  = cleanSec(m.record.run, 'run');
+    const nameHref = `./?q=${encodeURIComponent(m.name)}${club ? '&club=' + encodeURIComponent(club) : ''}`;
+    return `<tr>
+      <td class="rank">${i+1}</td>
+      <td class="name"><a href="${nameHref}">${escapeHtml(m.name)}</a></td>
+      <td class="num best">${fmtSec(m.sec)}</td>
+      <td class="num">${fmtSec(swim)}</td>
+      <td class="num">${fmtSec(bike)}</td>
+      <td class="num">${fmtSec(run)}</td>
+      <td class="num">${pct != null ? `상위 ${pct.toFixed(0)}%` : '-'}</td>
+      <td class="small">${escapeHtml(m.record.date.slice(0,10))} · ${escapeHtml(m.record.tour)}</td>
+    </tr>`;
+  }).join('');
+
+  resDiv.innerHTML =
+    `<div class="card">
+      <div class="team-head">
+        <div>
+          <span class="chip dist-${selCat}">${DIST_LABEL[selCat]||selCat}</span>
+          <b style="margin-left:6px">${escapeHtml(club)}</b>
+          <span class="muted" style="margin-left:6px">· ${members.length}명 랭킹</span>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">팀 베스트</div>
+          <div class="stat-value">${fmtSec(best)}</div>
+          <div class="muted" style="font-size:11px;margin-top:2px">${escapeHtml(members[0].name)}${teamBestPct != null ? ` · 전체 상위 ${teamBestPct.toFixed(0)}%` : ''}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">팀 중앙값</div>
+          <div class="stat-value">${fmtSec(median)}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">팀 평균</div>
+          <div class="stat-value">${fmtSec(mean)}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">멤버 수</div>
+          <div class="stat-value">${members.length}</div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="team-table">
+          <thead>
+            <tr>
+              <th>#</th><th>이름</th><th>총기록</th><th>수영</th><th>사이클</th><th>런</th><th>전체 풀</th><th>대회</th>
+            </tr>
+          </thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+load();
+</script>
+</body>
+</html>
