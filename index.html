@@ -46,9 +46,13 @@
   .delta-down { color: #2a8a3e; }
   .na { color: #bbb; }
   .bad { color: #c24536; cursor: help; border-bottom: 1px dotted #c24536; }
-  .dist-pill { display:inline-block; font-size:11px; padding:1px 7px; border-radius:10px; margin-right:4px; font-weight:600; }
-  .dist-half { background:#ffe2e2; color:#8a1a1a; border:1px solid #f5b4b4; }
-  .dist-std  { background:#e6f0ff; color:#1a3e72; border:1px solid #b8ccee; }
+  .dist-pill { display:inline-block; font-size:11px; padding:1px 7px; border-radius:10px; margin-right:4px; font-weight:600; cursor: help; }
+  .dist-sprint { background:#fff0e6; color:#8a4a1a; border:1px solid #f5cca3; }
+  .dist-short  { background:#fffbe6; color:#7a5b00; border:1px solid #f5e7a3; }
+  .dist-std    { background:#e6f0ff; color:#1a3e72; border:1px solid #b8ccee; }
+  .dist-half   { background:#ffe2e2; color:#8a1a1a; border:1px solid #f5b4b4; }
+  .dist-full   { background:#f0e6ff; color:#4a1a8a; border:1px solid #cbb4f5; }
+  .dist-other  { background:#eee; color:#666; border:1px solid #ccc; }
   .predict-link { display:inline-block; margin-left:10px; padding: 4px 12px; background:#1a3e72; color:#fff; text-decoration:none; border-radius: 14px; font-size: 12px; font-weight: 600; }
   .predict-link:hover { background:#274f8b; }
 
@@ -85,6 +89,7 @@
 <div class="controls">
   <input id="q" type="text" placeholder="이름을 입력하세요 (예: 김철수)" autofocus>
   <select id="club"><option value="">소속 전체</option></select>
+  <select id="dist"><option value="">거리 전체</option></select>
   <select id="part"><option value="">부문 전체</option></select>
 </div>
 
@@ -100,36 +105,60 @@
 
 <script>
 let DATA = [];
-let DIST_MAP = {}; // `${tour}||${part}` → 'half' | 'std'
-const HALF_THRESHOLD_SEC = 5 * 3600;
+let DISTANCES = {}; // 'tour||part' → {swim_km, bike_km, run_km}
 let charts = {};
 
-// 대회+부문 평균 총기록을 기준으로 half/std 분류
-function buildDistMap(data) {
-  const groups = {};
-  for (const r of data) {
-    const key = r.tour + '||' + r.part;
-    const sec = cleanSec(r.total, 'total');
-    if (sec == null) continue;
-    (groups[key] ||= []).push(sec);
-  }
-  const map = {};
-  for (const key in groups) {
-    const arr = groups[key];
-    // 중앙값 사용 (평균은 아웃라이어에 취약)
-    arr.sort((a,b) => a - b);
-    const median = arr[Math.floor(arr.length/2)];
-    map[key] = median > HALF_THRESHOLD_SEC ? 'half' : 'std';
-  }
-  return map;
+// 거리 정보 → 표준 카테고리로 분류
+// (수영 km, 자전거 km, 달리기 km) → 카테고리명
+function classifyDistance(d) {
+  if (!d || d.swim_km == null || d.bike_km == null || d.run_km == null) return null;
+  const s = d.swim_km, b = d.bike_km, r = d.run_km;
+  // 잘 알려진 종목 거리
+  if (s <= 0.5 && b <= 25 && r <= 5.5) return 'sprint';     // 슈퍼스프린트/스프린트
+  if (s <= 0.85 && b <= 25 && r <= 6) return 'sprint';
+  if (s <= 0.85 && b <= 45 && r <= 11) return 'short';      // 단거리 변형
+  if (s <= 1.6 && b <= 45 && r <= 11) return 'standard';    // 표준(올림픽)
+  if (s <= 2.2 && b <= 95 && r <= 22) return 'half';        // 하프 70.3
+  if (s <= 4.0 && b <= 190 && r <= 43) return 'full';       // 풀
+  return 'other';
 }
-function distOf(r) {
-  return DIST_MAP[r.tour + '||' + r.part] || 'std';
+const DIST_LABEL = {
+  sprint: '스프린트',
+  short: '단거리',
+  standard: '표준',
+  half: '하프',
+  full: '풀',
+  other: '기타',
+};
+const DIST_BADGE_CLS = {
+  sprint:   'dist-sprint',
+  short:    'dist-short',
+  standard: 'dist-std',
+  half:     'dist-half',
+  full:     'dist-full',
+  other:    'dist-other',
+};
+function distInfo(r) {
+  return DISTANCES[r.tour + '||' + r.part] || null;
+}
+function distCat(r) {
+  return classifyDistance(distInfo(r)) || 'other';
 }
 function distBadge(r) {
-  const d = distOf(r);
-  if (d === 'half') return '<span class="dist-pill dist-half">하프</span>';
-  return '<span class="dist-pill dist-std">표준</span>';
+  const d = distInfo(r);
+  const cat = classifyDistance(d) || 'other';
+  const cls = DIST_BADGE_CLS[cat] || 'dist-other';
+  let label = DIST_LABEL[cat] || '기타';
+  let title = '';
+  if (d) {
+    title = `수영 ${d.swim_km ?? '?'}km · 사이클 ${d.bike_km ?? '?'}km · 런 ${d.run_km ?? '?'}km`;
+  }
+  return `<span class="dist-pill ${cls}" title="${escapeAttr(title)}">${label}</span>`;
+}
+function distSummary(r) {
+  const d = distInfo(r);
+  if (!d) return '';
+  return `${d.swim_km ?? '?'}/${d.bike_km ?? '?'}/${d.run_km ?? '?'}km`;
 }
 
 // HH:MM:SS[:ms] or MM:SS → seconds (returns null if invalid/empty)
@@ -185,12 +214,20 @@ function fmtSec(s) {
 
 async function load() {
   try {
-    const res = await fetch('data.json?ts=' + Date.now());
-    DATA = await res.json();
-    DIST_MAP = buildDistMap(DATA);
-    const halfN = Object.values(DIST_MAP).filter(v => v === 'half').length;
+    const ts = Date.now();
+    const [dataRes, distRes] = await Promise.all([
+      fetch('data.json?ts=' + ts),
+      fetch('distances.json?ts=' + ts).catch(() => null),
+    ]);
+    DATA = await dataRes.json();
+    if (distRes && distRes.ok) {
+      try { DISTANCES = await distRes.json(); } catch (e) { DISTANCES = {}; }
+    }
+    const distCnt = Object.keys(DISTANCES).length;
     document.getElementById('datasub').textContent =
-      `대한철인3종협회 공개 기록 · 총 ${DATA.length.toLocaleString()}건 · 하프 ${halfN}개 부문 · 동명이인은 소속/부문으로 구분`;
+      `대한철인3종협회 공개 기록 · 총 ${DATA.length.toLocaleString()}건` +
+      (distCnt ? ` · 거리 정보 ${distCnt}개 부문 매핑` : '') +
+      ` · 동명이인은 소속/부문으로 구분`;
   } catch (e) {
     document.getElementById('result').innerHTML =
       '<div class="empty">data.json 을 불러올 수 없습니다.<br>먼저 <code>python3 scraper.py</code> 를 실행하세요.</div>';
@@ -198,6 +235,7 @@ async function load() {
   }
   document.getElementById('q').addEventListener('input', render);
   document.getElementById('club').addEventListener('change', render);
+  document.getElementById('dist').addEventListener('change', render);
   document.getElementById('part').addEventListener('change', render);
 }
 
@@ -206,6 +244,7 @@ function uniq(arr) { return [...new Set(arr)].sort(); }
 function render() {
   const q = document.getElementById('q').value.trim();
   const clubF = document.getElementById('club').value;
+  const distF = document.getElementById('dist').value;
   const partF = document.getElementById('part').value;
   const candDiv = document.getElementById('candidates');
   const sumDiv = document.getElementById('summary');
@@ -238,14 +277,37 @@ function render() {
   const partsSource = clubF
     ? nameMatches.filter(r => (r.club || '(소속없음)') === clubF)
     : nameMatches;
-  const parts = uniq(partsSource.map(r => r.part));
-  // 만약 현재 선택된 부문이 새 소속에서 존재하지 않으면 초기화
+
+  // 거리 카테고리 후보 (소속까지 적용한 결과 기준)
+  const distCounts = {};
+  partsSource.forEach(r => {
+    const c = distCat(r);
+    distCounts[c] = (distCounts[c] || 0) + 1;
+  });
+  const distCats = Object.keys(distCounts).sort((a,b) => distCounts[b] - distCounts[a]);
+  // 자동 기본값: 사용자가 선택 안 했고 거리 종류가 2개 이상이면 가장 흔한 거리 자동 선택
+  let effectiveDistF = distF;
+  if (!distF && distCats.length > 1) {
+    effectiveDistF = distCats[0];
+    document.getElementById('dist').value = effectiveDistF;
+  } else if (distF && !distCats.includes(distF)) {
+    effectiveDistF = '';
+    document.getElementById('dist').value = '';
+  }
+
+  // 거리 적용한 뒤 부문 후보
+  const distFiltered = effectiveDistF
+    ? partsSource.filter(r => distCat(r) === effectiveDistF)
+    : partsSource;
+  const parts = uniq(distFiltered.map(r => r.part));
   let effectivePartF = partF;
   if (partF && !parts.includes(partF)) {
     effectivePartF = '';
     document.getElementById('part').value = '';
   }
+
   fillSelect('club', clubs, clubF);
+  fillDistSelect(distCats, distCounts, effectiveDistF);
   fillSelect('part', parts, effectivePartF);
 
   if (clubs.length > 1) {
@@ -262,15 +324,15 @@ function render() {
   // 3. 필터 적용
   let filtered = nameMatches;
   if (clubF) filtered = filtered.filter(r => (r.club || '(소속없음)') === clubF);
+  if (effectiveDistF) filtered = filtered.filter(r => distCat(r) === effectiveDistF);
   if (effectivePartF) filtered = filtered.filter(r => r.part === effectivePartF);
   filtered.sort((a, b) => (a.date > b.date ? 1 : -1));
 
-  // 예상기록 링크: 현재 선택된 이름/소속/거리(가장 흔한 거리)를 파라미터로 전달
-  const halfCnt = filtered.filter(r => distOf(r) === 'half').length;
-  const mostDist = halfCnt > filtered.length/2 ? 'half' : 'std';
+  // 예상기록 링크: 현재 선택된 이름/소속/거리를 파라미터로 전달
+  const linkDist = effectiveDistF || (distCats[0] || 'standard');
   const predictUrl = 'predict.html?name=' + encodeURIComponent(q) +
     (clubF ? '&club=' + encodeURIComponent(clubF) : '') +
-    '&dist=' + mostDist;
+    '&dist=' + encodeURIComponent(linkDist);
   sumDiv.innerHTML = '총 <b>' + filtered.length + '</b>건의 기록' +
     `<a class="predict-link" href="${predictUrl}">🎯 이 선수로 예상기록 계산 →</a>`;
 
@@ -349,10 +411,12 @@ function renderCharts(filtered, div) {
     bike:  filtered.map(r => cleanSec(r.bike, 'bike')),
     run:   filtered.map(r => cleanSec(r.run, 'run')),
   };
-  // 하프 대회는 포인트 스타일로 구분 (큰 사각형)
-  const isHalf = filtered.map(r => distOf(r) === 'half');
-  const pointStyles = isHalf.map(h => h ? 'rectRot' : 'circle');
-  const pointRadii  = isHalf.map(h => h ? 7 : 4);
+  // 거리 카테고리별로 포인트 스타일 다르게
+  const cats = filtered.map(r => distCat(r));
+  const STYLE_MAP = { sprint:'triangle', short:'rect', standard:'circle', half:'rectRot', full:'star', other:'cross' };
+  const pointStyles = cats.map(c => STYLE_MAP[c] || 'circle');
+  const pointRadii  = cats.map(c => c === 'half' || c === 'full' ? 7 : 4);
+  const isHalf = cats.map(c => c === 'half');
   const COLORS = {
     total: '#1a3e72',
     swim:  '#2aa9c0',
@@ -398,7 +462,10 @@ function renderCharts(filtered, div) {
           callbacks: {
             title: (items) => {
               const i = items[0].dataIndex;
-              return fullLabels[i] + (isHalf[i] ? '  [하프]' : '');
+              const r = filtered[i];
+              const cat = DIST_LABEL[cats[i]] || '';
+              const ds = distSummary(r);
+              return fullLabels[i] + (cat ? `  [${cat}${ds ? ' ' + ds : ''}]` : '');
             },
             label: (ctx) => ctx.dataset.label + ': ' + fmtSec(ctx.parsed.y),
           }
@@ -535,6 +602,15 @@ function fillSelect(id, opts, current) {
   sel.innerHTML = '<option value="">' + placeholder + '</option>' +
     opts.map(o => '<option value="' + escapeAttr(o) + '"' +
       (current === o ? ' selected' : '') + '>' + escapeHtml(o) + '</option>').join('');
+}
+function fillDistSelect(cats, counts, current) {
+  const sel = document.getElementById('dist');
+  sel.innerHTML = '<option value="">거리 전체</option>' +
+    cats.map(c => {
+      const label = (DIST_LABEL[c] || '기타') + ' (' + counts[c] + ')';
+      return '<option value="' + escapeAttr(c) + '"' +
+        (current === c ? ' selected' : '') + '>' + escapeHtml(label) + '</option>';
+    }).join('');
 }
 function pickClub(c) { document.getElementById('club').value = c; render(); }
 function escapeHtml(s) {
