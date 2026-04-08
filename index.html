@@ -791,9 +791,12 @@ function renderProfile(name, clubF, filtered, div) {
     };
     if (myBestTot !== Infinity) {
       const myKey = name + '||' + (clubF || '(소속없음)');
+      // 본인이 출전한 부문 목록 — 같은 부문에서 뛴 선수만 비교 대상으로 삼는다
+      const myParts = new Set(filtered.map(r => r.part));
       const bestMap = {};
       for (const r of DATA) {
         if (distCat(r) !== primaryCat) continue;
+        if (!myParts.has(r.part)) continue;  // 같은 부문만
         const tot = cleanSec(r.total, 'total');
         const sw  = cleanSec(r.swim, 'swim');
         const bk  = cleanSec(r.bike, 'bike');
