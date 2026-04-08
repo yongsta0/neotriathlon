@@ -1,0 +1,7 @@
+# 로컬 산출물
+*.sqlite
+*.sqlite-journal
+*.log
+__pycache__/
+*.pyc
+.DS_Store

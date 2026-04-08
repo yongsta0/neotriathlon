@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>철인3종 기록 검색</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root { font-family: -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif; }
+  body { max-width: 1200px; margin: 30px auto; padding: 0 20px; color: #222; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 16px; margin: 24px 0 8px; color: #333; }
+  .sub { color: #666; font-size: 13px; margin-bottom: 20px; }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  input, select { font-size: 15px; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; }
+  input[type=text] { flex: 1 1 220px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 6px 8px; border-bottom: 1px solid #eee; text-align: left; white-space: nowrap; }
+  th { background: #f5f5f5; position: sticky; top: 0; }
+  td.r { text-align: right; font-variant-numeric: tabular-nums; }
+  .pill { display:inline-block; background:#eef; color:#446; padding:2px 8px; border-radius:10px; font-size:12px; margin-right:4px; }
+  .empty { color:#999; padding: 30px 0; text-align: center; }
+  .candidates { margin: 14px 0; padding: 10px 12px; background: #fffbe6; border: 1px solid #f5e7a3; border-radius: 6px; font-size: 13px; }
+  .candidates b { color: #7a5b00; }
+  .cand-btn { display:inline-block; margin: 4px 6px 0 0; padding: 4px 10px; background:#fff; border:1px solid #d4b94a; border-radius: 14px; cursor: pointer; font-size: 12px; }
+  .cand-btn.active { background:#f5d76e; }
+  .summary { margin: 8px 0 14px; font-size: 13px; color: #555; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 12px 0; }
+  .stat-card { background:#f7f9fc; border:1px solid #e3e8ef; border-radius: 8px; padding: 12px; }
+  .stat-label { font-size: 11px; color:#667; text-transform: uppercase; letter-spacing: .04em; }
+  .stat-value { font-size: 22px; font-weight: 700; margin-top: 2px; color:#1a3e72; font-variant-numeric: tabular-nums; }
+  .stat-sub { font-size: 11px; color:#888; margin-top: 2px; }
+  .chart-box { background:#fff; border:1px solid #e3e8ef; border-radius: 8px; padding: 12px; margin: 10px 0; }
+  .chart-box canvas { max-height: 280px; }
+  .two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+  .race-pick { font-size: 12px; color: #666; margin: 4px 0 8px; }
+  .race-pick select { font-size: 13px; padding: 4px 8px; }
+  .tabs { display: flex; gap: 4px; margin: 4px 0 10px; flex-wrap: wrap; }
+  .tab { font-size: 12px; padding: 4px 12px; border: 1px solid #c8d2e0; background: #fff; border-radius: 14px; cursor: pointer; color: #446; }
+  .tab.active { background: #1a3e72; color: #fff; border-color: #1a3e72; }
+  .delta-up { color: #c24536; }
+  .delta-down { color: #2a8a3e; }
+</style>
+</head>
+<body>
+<h1>철인3종 기록 검색</h1>
+<div class="sub" id="datasub">대한철인3종협회 공개 기록 · 동명이인은 소속/부문으로 구분</div>
+
+<div class="controls">
+  <input id="q" type="text" placeholder="이름을 입력하세요 (예: 김철수)" autofocus>
+  <select id="club"><option value="">소속 전체</option></select>
+  <select id="part"><option value="">부문 전체</option></select>
+</div>
+
+<div id="candidates"></div>
+<div id="summary" class="summary"></div>
+
+<div id="stats"></div>
+
+<div id="charts"></div>
+
+<h2 id="record-heading" style="display:none">기록 목록</h2>
+<div id="result"></div>
+
+<script>
+let DATA = [];
+let charts = {};
+
+// HH:MM:SS or MM:SS → seconds (returns null if invalid/empty)
+function toSec(s) {
+  if (!s || s === '-' || s === '00:00:00') return null;
+  const parts = s.split(':').map(Number);
+  if (parts.some(isNaN)) return null;
+  if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
+  if (parts.length === 2) return parts[0]*60 + parts[1];
+  return null;
+}
+// seconds → HH:MM:SS
+function fmtSec(s) {
+  if (s == null) return '-';
+  s = Math.round(s);
+  const h = Math.floor(s/3600);
+  const m = Math.floor((s%3600)/60);
+  const sec = s%60;
+  return (h>0 ? String(h).padStart(2,'0')+':' : '') +
+         String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+
+async function load() {
+  try {
+    const res = await fetch('data.json?ts=' + Date.now());
+    DATA = await res.json();
+    document.getElementById('datasub').textContent =
+      `대한철인3종협회 공개 기록 · 총 ${DATA.length.toLocaleString()}건 · 동명이인은 소속/부문으로 구분`;
+  } catch (e) {
+    document.getElementById('result').innerHTML =
+      '<div class="empty">data.json 을 불러올 수 없습니다.<br>먼저 <code>python3 scraper.py</code> 를 실행하세요.</div>';
+    return;
+  }
+  document.getElementById('q').addEventListener('input', render);
+  document.getElementById('club').addEventListener('change', render);
+  document.getElementById('part').addEventListener('change', render);
+}
+
+function uniq(arr) { return [...new Set(arr)].sort(); }
+
+function render() {
+  const q = document.getElementById('q').value.trim();
+  const clubF = document.getElementById('club').value;
+  const partF = document.getElementById('part').value;
+  const candDiv = document.getElementById('candidates');
+  const sumDiv = document.getElementById('summary');
+  const statsDiv = document.getElementById('stats');
+  const chartsDiv = document.getElementById('charts');
+  const resDiv = document.getElementById('result');
+  const recHead = document.getElementById('record-heading');
+
+  destroyCharts();
+  if (!q) {
+    candDiv.innerHTML = ''; sumDiv.innerHTML = '';
+    statsDiv.innerHTML = ''; chartsDiv.innerHTML = '';
+    resDiv.innerHTML = ''; recHead.style.display = 'none';
+    return;
+  }
+
+  // 1. 이름 일치 행
+  const nameMatches = DATA.filter(r => r.name === q);
+  if (nameMatches.length === 0) {
+    candDiv.innerHTML = ''; sumDiv.innerHTML = '';
+    statsDiv.innerHTML = ''; chartsDiv.innerHTML = '';
+    resDiv.innerHTML = '<div class="empty">해당 이름의 기록이 없습니다.</div>';
+    recHead.style.display = 'none';
+    return;
+  }
+
+  // 2. 후보 (소속 기준)
+  const clubs = uniq(nameMatches.map(r => r.club || '(소속없음)'));
+  // 부문 목록은 선택된 소속의 기록에서만 추출 (소속 미선택 시 전체)
+  const partsSource = clubF
+    ? nameMatches.filter(r => (r.club || '(소속없음)') === clubF)
+    : nameMatches;
+  const parts = uniq(partsSource.map(r => r.part));
+  // 만약 현재 선택된 부문이 새 소속에서 존재하지 않으면 초기화
+  let effectivePartF = partF;
+  if (partF && !parts.includes(partF)) {
+    effectivePartF = '';
+    document.getElementById('part').value = '';
+  }
+  fillSelect('club', clubs, clubF);
+  fillSelect('part', parts, effectivePartF);
+
+  if (clubs.length > 1) {
+    candDiv.innerHTML =
+      '<div class="candidates"><b>동명이인 후보 ' + clubs.length + '명</b> — 본인의 소속을 선택하세요:<br>' +
+      clubs.map(c =>
+        '<span class="cand-btn ' + (clubF === c ? 'active' : '') +
+        '" onclick="pickClub(' + JSON.stringify(c) + ')">' + escapeHtml(c) + '</span>'
+      ).join('') + '</div>';
+  } else {
+    candDiv.innerHTML = '';
+  }
+
+  // 3. 필터 적용
+  let filtered = nameMatches;
+  if (clubF) filtered = filtered.filter(r => (r.club || '(소속없음)') === clubF);
+  if (effectivePartF) filtered = filtered.filter(r => r.part === effectivePartF);
+  filtered.sort((a, b) => (a.date > b.date ? 1 : -1));
+
+  sumDiv.innerHTML = '총 <b>' + filtered.length + '</b>건의 기록';
+
+  if (filtered.length === 0) {
+    statsDiv.innerHTML = ''; chartsDiv.innerHTML = '';
+    resDiv.innerHTML = '<div class="empty">필터에 맞는 기록이 없습니다.</div>';
+    recHead.style.display = 'none';
+    return;
+  }
+
+  renderStats(filtered, statsDiv);
+  renderCharts(filtered, chartsDiv);
+  renderTable(filtered, resDiv);
+  recHead.style.display = '';
+}
+
+function renderStats(filtered, div) {
+  const totals = filtered.map(r => toSec(r.total)).filter(v => v != null);
+  const best = totals.length ? Math.min(...totals) : null;
+  const bestRow = filtered.find(r => toSec(r.total) === best);
+
+  // 평균 백분위 (해당 부문/대회 안에서)
+  let pctSum = 0, pctN = 0;
+  filtered.forEach(r => {
+    const same = DATA.filter(x => x.tour === r.tour && x.part === r.part);
+    if (same.length > 1 && r.rank) {
+      // (전체 - 본인순위 + 1) / 전체 * 100  → 상위%로 환산: 본인 순위/전체*100
+      const topPct = (r.rank / same.length) * 100;
+      pctSum += topPct; pctN++;
+    }
+  });
+  const avgPct = pctN ? (pctSum / pctN) : null;
+
+  div.innerHTML =
+    '<div class="stat-grid">' +
+    statCard('출전 횟수', filtered.length + '회', filtered[0].date.slice(0,4) + ' ~ ' + filtered[filtered.length-1].date.slice(0,4)) +
+    statCard('베스트 기록', fmtSec(best), bestRow ? bestRow.tour : '') +
+    statCard('평균 상위 %', avgPct != null ? avgPct.toFixed(1) + '%' : '-', '같은 부문 내 평균 순위 백분위') +
+    '</div>';
+}
+function statCard(label, value, sub) {
+  return '<div class="stat-card"><div class="stat-label">' + escapeHtml(label) + '</div>' +
+         '<div class="stat-value">' + escapeHtml(value) + '</div>' +
+         (sub ? '<div class="stat-sub">' + escapeHtml(sub) + '</div>' : '') + '</div>';
+}
+
+function renderCharts(filtered, div) {
+  // race options for distribution chart
+  const raceOpts = filtered.map((r,i) =>
+    `<option value="${i}">${escapeHtml(r.date + ' · ' + r.tour)}</option>`
+  ).join('');
+  const defaultIdx = filtered.length - 1;
+
+  div.innerHTML =
+    '<div class="two-col">' +
+      '<div class="chart-box"><h2 style="margin-top:0">기록 추이</h2>' +
+        '<div class="tabs" id="trendTabs">' +
+          '<span class="tab active" data-metric="all">종합</span>' +
+          '<span class="tab" data-metric="total">총기록</span>' +
+          '<span class="tab" data-metric="swim">수영</span>' +
+          '<span class="tab" data-metric="bike">사이클</span>' +
+          '<span class="tab" data-metric="run">런</span>' +
+        '</div>' +
+        '<canvas id="trendChart"></canvas></div>' +
+      '<div class="chart-box"><h2 style="margin-top:0">같은 부문 내 본인 위치</h2>' +
+        '<div class="race-pick">대회 선택: <select id="raceSel">' + raceOpts + '</select></div>' +
+        '<canvas id="distChart"></canvas></div>' +
+    '</div>';
+
+  // Trend data per metric
+  const labels = filtered.map(r => r.date.replace(/^\d{4}\./, '').replace(/\s*~.*/, '')); // "MM.DD"
+  const fullLabels = filtered.map(r => r.date + ' ' + r.tour);
+  const series = {
+    total: filtered.map(r => toSec(r.total)),
+    swim:  filtered.map(r => toSec(r.swim)),
+    bike:  filtered.map(r => toSec(r.bike)),
+    run:   filtered.map(r => toSec(r.run)),
+  };
+  const COLORS = {
+    total: '#1a3e72',
+    swim:  '#2aa9c0',
+    bike:  '#e09f3e',
+    run:   '#c24536',
+  };
+  const NAMES = { total: '총기록', swim: '수영', bike: '사이클', run: '런' };
+
+  function buildDatasets(metric) {
+    if (metric === 'all') {
+      // dual-axis combined view
+      return {
+        datasets: [
+          { label: '총기록', data: series.total, borderColor: COLORS.total, backgroundColor: COLORS.total + '22', tension: 0.25, yAxisID: 'y' },
+          { label: '수영',   data: series.swim,  borderColor: COLORS.swim,  borderDash: [4,4], tension: 0.25, yAxisID: 'y2' },
+          { label: '사이클', data: series.bike,  borderColor: COLORS.bike,  borderDash: [4,4], tension: 0.25, yAxisID: 'y2' },
+          { label: '런',     data: series.run,   borderColor: COLORS.run,   borderDash: [4,4], tension: 0.25, yAxisID: 'y2' },
+        ],
+        dual: true
+      };
+    }
+    return {
+      datasets: [{
+        label: NAMES[metric],
+        data: series[metric],
+        borderColor: COLORS[metric],
+        backgroundColor: COLORS[metric] + '33',
+        tension: 0.25,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }],
+      dual: false
+    };
+  }
+
+  function buildOptions(dual, metric) {
+    const opts = {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            title: (items) => fullLabels[items[0].dataIndex],
+            label: (ctx) => ctx.dataset.label + ': ' + fmtSec(ctx.parsed.y),
+          }
+        },
+        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+      },
+      scales: {
+        x: { ticks: { font: { size: 11 } } }
+      }
+    };
+    if (dual) {
+      opts.scales.y  = { position: 'left',  title: { display: true, text: '총기록' }, ticks: { callback: v => fmtSec(v) } };
+      opts.scales.y2 = { position: 'right', title: { display: true, text: '구간' }, grid: { drawOnChartArea: false }, ticks: { callback: v => fmtSec(v) } };
+    } else {
+      opts.scales.y = { title: { display: true, text: NAMES[metric] }, ticks: { callback: v => fmtSec(v) } };
+      opts.plugins.legend.display = false;
+    }
+    return opts;
+  }
+
+  function drawTrend(metric) {
+    if (charts.trend) charts.trend.destroy();
+    const built = buildDatasets(metric);
+    charts.trend = new Chart(document.getElementById('trendChart'), {
+      type: 'line',
+      data: { labels, datasets: built.datasets },
+      options: buildOptions(built.dual, metric)
+    });
+  }
+  drawTrend('all');
+
+  document.querySelectorAll('#trendTabs .tab').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('#trendTabs .tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      drawTrend(el.dataset.metric);
+    });
+  });
+
+  const select = document.getElementById('raceSel');
+  select.value = String(defaultIdx);
+  const drawDist = () => {
+    if (charts.dist) charts.dist.destroy();
+    const r = filtered[Number(select.value)];
+    const same = DATA.filter(x => x.tour === r.tour && x.part === r.part)
+                     .map(x => ({ name: x.name, sec: toSec(x.total), rank: x.rank }))
+                     .filter(x => x.sec != null);
+    if (same.length === 0) return;
+    same.sort((a,b) => a.sec - b.sec);
+    // histogram bins
+    const minS = same[0].sec, maxS = same[same.length-1].sec;
+    const span = Math.max(1, maxS - minS);
+    const binCount = Math.min(20, Math.max(6, Math.round(Math.sqrt(same.length))));
+    const binSize = span / binCount;
+    const bins = new Array(binCount).fill(0);
+    const binLabels = [];
+    for (let i = 0; i < binCount; i++) {
+      binLabels.push(fmtSec(minS + binSize*i));
+    }
+    same.forEach(x => {
+      let idx = Math.floor((x.sec - minS) / binSize);
+      if (idx >= binCount) idx = binCount - 1;
+      bins[idx]++;
+    });
+    const mySec = toSec(r.total);
+    let myBin = Math.floor((mySec - minS) / binSize);
+    if (myBin >= binCount) myBin = binCount - 1;
+    if (myBin < 0) myBin = 0;
+    const colors = bins.map((_, i) => i === myBin ? '#c24536' : '#9bb3d4');
+
+    const myRank = r.rank;
+    const total = same.length;
+    const topPct = ((myRank / total) * 100).toFixed(1);
+
+    charts.dist = new Chart(document.getElementById('distChart'), {
+      type: 'bar',
+      data: { labels: binLabels, datasets: [{ data: bins, backgroundColor: colors, borderWidth: 0 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: `${r.part} · 총 ${total}명 중 ${myRank}위 (상위 ${topPct}%) · 본인 ${fmtSec(mySec)}`,
+            font: { size: 12 }
+          },
+          tooltip: { callbacks: { title: (it) => '구간: ' + binLabels[it[0].dataIndex] + '~', label: (ctx) => ctx.parsed.y + '명' } }
+        },
+        scales: {
+          x: { ticks: { font: { size: 9 }, maxRotation: 60, minRotation: 45 } },
+          y: { title: { display: true, text: '인원' }, ticks: { precision: 0 } }
+        }
+      }
+    });
+  };
+  select.addEventListener('change', drawDist);
+  drawDist();
+}
+
+function renderTable(filtered, div) {
+  div.innerHTML =
+    '<table><thead><tr>' +
+    '<th>날짜</th><th>대회</th><th>부문</th><th>소속</th>' +
+    '<th class="r">순위</th><th class="r">수영</th><th class="r">T1</th>' +
+    '<th class="r">사이클</th><th class="r">T2</th><th class="r">런</th><th class="r">총기록</th>' +
+    '</tr></thead><tbody>' +
+    filtered.map(r => {
+      const same = DATA.filter(x => x.tour === r.tour && x.part === r.part);
+      const totalN = same.length;
+      const rankStr = totalN > 0 ? `${r.rank}/${totalN}` : String(r.rank);
+      return '<tr><td>' + escapeHtml(r.date) + '</td>' +
+        '<td>' + escapeHtml(r.tour) + '</td>' +
+        '<td><span class="pill">' + escapeHtml(r.part) + '</span></td>' +
+        '<td>' + escapeHtml(r.club || '-') + '</td>' +
+        '<td class="r">' + rankStr + '</td>' +
+        '<td class="r">' + escapeHtml(r.swim) + '</td>' +
+        '<td class="r">' + escapeHtml(r.t1) + '</td>' +
+        '<td class="r">' + escapeHtml(r.bike) + '</td>' +
+        '<td class="r">' + escapeHtml(r.t2) + '</td>' +
+        '<td class="r">' + escapeHtml(r.run) + '</td>' +
+        '<td class="r"><b>' + escapeHtml(r.total) + '</b></td></tr>';
+    }).join('') +
+    '</tbody></table>';
+}
+
+function destroyCharts() {
+  Object.values(charts).forEach(c => c && c.destroy && c.destroy());
+  charts = {};
+}
+
+function fillSelect(id, opts, current) {
+  const sel = document.getElementById(id);
+  const placeholder = id === 'club' ? '소속 전체' : '부문 전체';
+  sel.innerHTML = '<option value="">' + placeholder + '</option>' +
+    opts.map(o => '<option value="' + escapeAttr(o) + '"' +
+      (current === o ? ' selected' : '') + '>' + escapeHtml(o) + '</option>').join('');
+}
+function pickClub(c) { document.getElementById('club').value = c; render(); }
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+load();
+</script>
+</body>
+</html>
