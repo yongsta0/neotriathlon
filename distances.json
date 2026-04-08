@@ -28433,5 +28433,104 @@
       "Run"
     ],
     "src": "unknown"
+  },
+  "2025 전국생활체육대축전||동호인부 동호인 20대 남": {
+    "swim_km": 1.5,
+    "bike_km": 40.0,
+    "run_km": 10.0,
+    "raw": [
+      "Swim 1.5km",
+      "Bike 40km",
+      "Run 10km"
+    ],
+    "src": "manual_standard"
+  },
+  "2025 전국생활체육대축전||동호인부 동호인 30대 남": {
+    "swim_km": 1.5,
+    "bike_km": 40.0,
+    "run_km": 10.0,
+    "raw": [
+      "Swim 1.5km",
+      "Bike 40km",
+      "Run 10km"
+    ],
+    "src": "manual_standard"
+  },
+  "2025 전국생활체육대축전||동호인부 동호인 40대 남": {
+    "swim_km": 1.5,
+    "bike_km": 40.0,
+    "run_km": 10.0,
+    "raw": [
+      "Swim 1.5km",
+      "Bike 40km",
+      "Run 10km"
+    ],
+    "src": "manual_standard"
+  },
+  "2025 전국생활체육대축전||동호인부 동호인 50대 남": {
+    "swim_km": 1.5,
+    "bike_km": 40.0,
+    "run_km": 10.0,
+    "raw": [
+      "Swim 1.5km",
+      "Bike 40km",
+      "Run 10km"
+    ],
+    "src": "manual_standard"
+  },
+  "2025 전국생활체육대축전||동호인부 동호인 60대 이상 남": {
+    "swim_km": 1.5,
+    "bike_km": 40.0,
+    "run_km": 10.0,
+    "raw": [
+      "Swim 1.5km",
+      "Bike 40km",
+      "Run 10km"
+    ],
+    "src": "manual_standard"
+  },
+  "2025 전국생활체육대축전||동호인부 동호인 20대 여": {
+    "swim_km": 1.5,
+    "bike_km": 40.0,
+    "run_km": 10.0,
+    "raw": [
+      "Swim 1.5km",
+      "Bike 40km",
+      "Run 10km"
+    ],
+    "src": "manual_standard"
+  },
+  "2025 전국생활체육대축전||동호인부 동호인 30대 여": {
+    "swim_km": 1.5,
+    "bike_km": 40.0,
+    "run_km": 10.0,
+    "raw": [
+      "Swim 1.5km",
+      "Bike 40km",
+      "Run 10km"
+    ],
+    "src": "manual_standard"
+  },
+  "2025 전국생활체육대축전||동호인부 동호인 40대 여": {
+    "swim_km": 1.5,
+    "bike_km": 40.0,
+    "run_km": 10.0,
+    "raw": [
+      "Swim 1.5km",
+      "Bike 40km",
+      "Run 10km"
+    ],
+    "src": "manual_standard"
+  },
+  "2025 전국생활체육대축전||동호인부 동호인 50대 이상 여": {
+    "swim_km": 1.5,
+    "bike_km": 40.0,
+    "run_km": 10.0,
+    "raw": [
+      "Swim 1.5km",
+      "Bike 40km",
+      "Run 10km"
+    ],
+    "src": "manual_standard"
   }
 }
