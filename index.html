@@ -147,6 +147,9 @@
   .tag-strong { background: #e9f4ed; color: var(--success); }
   .tag-weak   { background: #fdeceb; color: var(--danger); }
   .tag-neutral { background: var(--bg); color: var(--muted); }
+  .profile-overview { font-size: 14px; line-height: 1.75; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 14px; }
+  .profile-overview b { font-weight: 700; }
+  .profile-overview .ins-strong { color: var(--success); }
   .insight-card { grid-column: 1 / -1; background: linear-gradient(180deg, #fff 0%, #fafaf8 100%); }
   .insight-card h3 { margin-bottom: 10px; }
   .insight-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
@@ -961,9 +964,76 @@ function renderProfile(name, clubF, filtered, div) {
     </div>`;
   }
 
+  // 7) 프로필 개요 텍스트 (도식화 위 간단 요약 — bio-style)
+  let overviewHtml = '';
+  if (all.length > 0) {
+    const dates = all.map(r => r.date).filter(Boolean).sort();
+    const firstYear = dates[0] ? dates[0].slice(0, 4) : '?';
+    const lastYear  = dates[dates.length - 1] ? dates[dates.length - 1].slice(0, 4) : '?';
+    const span = firstYear === lastYear ? firstYear + '년' : firstYear + '~' + lastYear + '년';
+    const totalRaces = all.length;
+
+    // 주요 출전 거리 분포
+    const catCount = {};
+    all.forEach(r => { const c = distCat(r); catCount[c] = (catCount[c] || 0) + 1; });
+    const topCats = Object.entries(catCount).sort((a,b) => b[1] - a[1]).slice(0, 2);
+    const catPhrase = topCats.map(([c, n]) =>
+      `${DIST_LABEL[c] || labelOfCat(c)} ${n}회`
+    ).join(', ');
+    const primaryCatLabel = topCats[0] ? (DIST_LABEL[topCats[0][0]] || labelOfCat(topCats[0][0])) : '';
+
+    // 주력 거리의 베스트 총기록
+    const primaryCat = topCats[0] ? topCats[0][0] : null;
+    let bestLine = '';
+    if (primaryCat) {
+      const tots = all.filter(r => distCat(r) === primaryCat)
+                      .map(r => cleanSec(r.total, 'total')).filter(v => v != null);
+      if (tots.length > 0) {
+        const bestT = Math.min(...tots);
+        bestLine = `주력 ${primaryCatLabel} 베스트는 <b>${fmtSec(bestT)}</b>`;
+      }
+    }
+
+    // 평균 부문 순위 백분위
+    let pctSum = 0, pctN = 0;
+    all.forEach(r => {
+      const same = DATA.filter(x => x.tour === r.tour && x.part === r.part);
+      if (same.length > 1 && r.rank) {
+        pctSum += (r.rank / same.length) * 100;
+        pctN++;
+      }
+    });
+    const avgPct = pctN ? (pctSum / pctN) : null;
+    const rankLine = avgPct != null
+      ? `같은 부문 내 평균 순위는 <b>상위 ${avgPct.toFixed(0)}%</b> 수준`
+      : '';
+
+    // 소속
+    const clubCounts = {};
+    all.forEach(r => { if (r.club) clubCounts[r.club] = (clubCounts[r.club] || 0) + 1; });
+    const topClub = Object.entries(clubCounts).sort((a,b) => b[1] - a[1])[0];
+    const clubLine = topClub ? `주 소속은 <b>${escapeHtml(topClub[0])}</b>` : '';
+
+    // 강점 한마디
+    const strengthLine = strongest
+      ? `구간별로는 <b class="ins-strong">${SEG_NAME[strongest]}</b>이(가) 가장 강점`
+      : '';
+
+    // 문장 조립 — 의미 있는 조각만 이어붙임
+    const sentences = [];
+    sentences.push(`<b>${escapeHtml(name)}</b>${clubF ? ` (${escapeHtml(clubF)})` : ''} 선수는 ${span} 사이 총 <b>${totalRaces}회</b> 대회에 출전했습니다 (${catPhrase}).`);
+    const line2Parts = [clubLine, bestLine].filter(Boolean);
+    if (line2Parts.length > 0) sentences.push(line2Parts.join(', ') + '.');
+    const line3Parts = [rankLine, strengthLine].filter(Boolean);
+    if (line3Parts.length > 0) sentences.push(line3Parts.join('이며, ') + '입니다.');
+
+    overviewHtml = `<div class="profile-overview">${sentences.join(' ')}</div>`;
+  }
+
   div.innerHTML =
     `<div class="profile-section">
       <h2>프로필 분석 <span style="font-size:11px;color:var(--muted);font-weight:500;margin-left:6px">${escapeHtml(name)}${clubF?' · '+escapeHtml(clubF):''}</span></h2>
+      ${overviewHtml}
       <div class="profile-grid">
         ${insightHtml}
         <div class="pf-card">
