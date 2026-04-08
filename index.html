@@ -79,6 +79,7 @@
 <body>
 <h1>철인3종 기록 검색</h1>
 <div class="sub" id="datasub">대한철인3종협회 공개 기록 · 동명이인은 소속/부문으로 구분</div>
+<div style="margin-bottom:14px"><a href="predict.html" style="color:#1a3e72;font-size:13px">→ 예상기록 계산 페이지</a></div>
 
 <div class="controls">
   <input id="q" type="text" placeholder="이름을 입력하세요 (예: 김철수)" autofocus>
@@ -130,11 +131,12 @@ function distBadge(r) {
   return '<span class="dist-pill dist-std">표준</span>';
 }
 
-// HH:MM:SS or MM:SS → seconds (returns null if invalid/empty)
+// HH:MM:SS[:ms] or MM:SS → seconds (returns null if invalid/empty)
 function toSec(s) {
   if (!s || s === '-' || s === '00:00:00') return null;
   const parts = s.split(':').map(Number);
   if (parts.some(isNaN)) return null;
+  if (parts.length === 4) return parts[0]*3600 + parts[1]*60 + parts[2] + parts[3]/1000;
   if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
   if (parts.length === 2) return parts[0]*60 + parts[1];
   return null;
@@ -154,6 +156,10 @@ function fmtCell(raw, kind) {
   if (sec == null) return '<span class="na">—</span>';
   if (isOutlier(kind, sec)) {
     return `<span class="bad" title="원본 데이터 오류로 추정 (${escapeHtml(raw)})">—</span>`;
+  }
+  // ms 포함이거나 비정규 포맷 → 정규화
+  if (raw.split(':').length !== 3 || raw.length < 8) {
+    return escapeHtml(fmtSec(sec));
   }
   return escapeHtml(raw);
 }
