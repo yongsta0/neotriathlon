@@ -144,7 +144,7 @@
   <a href="team.html" class="active">팀 랭킹</a>
 </nav>
 <h1>소속 · 팀 랭킹</h1>
-<div class="sub">클럽/소속 이름을 선택하면 멤버들의 거리별 베스트 기록과 랭킹을 보여줍니다.</div>
+<div class="sub">클럽/소속 이름을 선택하면 멤버들의 거리별 베스트 기록과 랭킹을 보여줍니다. <b>표준(올림픽) 거리는 순수 1.5km·40km·10km 코스만</b> 비교에 반영 — 수영 단축·듀애슬론 등은 제외하여 객관성을 확보합니다.</div>
 
 <div id="leaderboard"></div>
 
@@ -236,6 +236,11 @@ function distChipCls(cat) {
 }
 function distInfo(r) { return DISTANCES[r.tour + '||' + r.part] || null; }
 function distCat(r) { return classifyDistance(distInfo(r)) || 'other'; }
+// 순수 표준(1.5/40/10, 단축·듀애슬론 없음)인지 — 클럽 비교/랭킹용
+function isPureStandard(r) {
+  const d = distInfo(r);
+  return !!(d && d.pure_standard === true);
+}
 function distSummary(r) {
   const d = distInfo(r);
   if (!d) return '';
@@ -335,6 +340,8 @@ function onClubChange() {
   const catCounts = {};
   teamRows.forEach(r => {
     const c = distCat(r);
+    // 표준 대회는 순수 표준만 카운트 (랭킹과 일관성 유지)
+    if (c === 'standard' && !isPureStandard(r)) return;
     catCounts[c] = (catCounts[c] || 0) + 1;
   });
   const cats = Object.keys(catCounts).sort((a,b) => catCounts[b] - catCounts[a]);
@@ -363,6 +370,8 @@ function renderLeaderboard() {
     if (!r.club) continue;
     const cat = distCat(r);
     if (!cat || cat === 'other' || cat.startsWith('custom:')) continue;
+    // 표준 대회는 순수 표준(단축/듀애슬론 제외)만 랭킹에 반영
+    if (cat === 'standard' && !isPureStandard(r)) continue;
     const tot  = cleanSec(r.total, 'total');
     const swim = cleanSec(r.swim, 'swim');
     const bike = cleanSec(r.bike, 'bike');
@@ -422,7 +431,13 @@ function render() {
   const resDiv = document.getElementById('result');
   if (!club || !selCat) { resDiv.innerHTML = ''; return; }
 
-  const teamRows = DATA.filter(r => (r.club || '') === club && distCat(r) === selCat);
+  const teamRows = DATA.filter(r => {
+    if ((r.club || '') !== club) return false;
+    if (distCat(r) !== selCat) return false;
+    // 표준은 순수 표준만
+    if (selCat === 'standard' && !isPureStandard(r)) return false;
+    return true;
+  });
   if (teamRows.length === 0) {
     resDiv.innerHTML = '<div class="empty">해당 거리의 기록이 없습니다.</div>';
     return;

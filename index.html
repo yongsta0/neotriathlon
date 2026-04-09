@@ -120,6 +120,7 @@
 
   /* 거리 배지 */
   .dist-pill { display:inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-right: 5px; font-weight: 600; cursor: help; letter-spacing: 0.02em; }
+  .variant-tag { display:inline-block; font-size: 9px; padding: 2px 7px; border-radius: 10px; margin-right: 5px; font-weight: 700; background: #fff4e6; color: #8a4a1a; border: 1px solid #f5d9b8; cursor: help; text-transform: uppercase; letter-spacing: 0.04em; }
   .dist-sprint { background: #fff4e6; color: #8a4a1a; }
   .dist-short  { background: #fffaeb; color: #7a5b00; }
   .dist-std    { background: #eef2f7; color: var(--accent); }
@@ -167,6 +168,8 @@
   .insight-basis b { color: var(--text); font-weight: 600; }
   .insight-basis .basis-parts { margin: 0; padding-left: 16px; font-size: 12px; color: var(--text); }
   .insight-basis .basis-parts li { margin: 2px 0; }
+  .insight-basis .basis-note-pure { margin-top: 8px; padding: 7px 10px; background: var(--accent-soft); border-radius: 6px; color: var(--accent); font-size: 11px; line-height: 1.5; }
+  .insight-basis .basis-note-pure b { color: var(--accent); font-weight: 700; }
   .insight-basis .basis-warn { margin-top: 8px; padding: 8px 10px; background: #fdf8ea; border: 1px solid #f0e1b8; border-radius: 6px; color: var(--warning); font-size: 11px; line-height: 1.5; }
   .insight-basis .basis-warn b { color: var(--warning); }
   .insight-tip { margin-top: 12px; padding: 12px 14px; background: var(--accent-soft); border-radius: var(--radius); font-size: 12px; line-height: 1.6; color: var(--text); border-left: 3px solid var(--accent); }
@@ -408,6 +411,15 @@ function distInfo(r) {
 function distCat(r) {
   return classifyDistance(distInfo(r)) || 'other';
 }
+// 순수 올림픽 표준(1.5/40/10, 단축·듀애슬론 없음)인지 — 랭킹·비교용
+function isPureStandard(r) {
+  const d = distInfo(r);
+  return !!(d && d.pure_standard === true);
+}
+// 표준 분류이지만 순수 표준이 아닌 변형인지 — 개인 분석 표식용
+function isVariantStandard(r) {
+  return distCat(r) === 'standard' && !isPureStandard(r);
+}
 function fmtKm(v) {
   if (v == null) return '?';
   // 1.5 → "1.5", 40 → "40", 0.75 → "0.75"
@@ -429,7 +441,14 @@ function distBadge(r) {
       extra = ` · ${fmtKm(d.swim_km)}/${fmtKm(d.bike_km)}/${fmtKm(d.run_km)}`;
     }
   }
-  return `<span class="dist-pill ${cls}" title="${escapeAttr(title)}">${label}${extra}</span>`;
+  // 표준 분류인데 순수 표준이 아니면 '변형' 배지 부착 (수영 단축·듀애슬론 등)
+  let variantTag = '';
+  if (cat === 'standard' && d && d.pure_standard === false) {
+    const reason = d.variant_reason || '';
+    const tip = reason === 'duathlon' ? '수영 없음 (듀애슬론)' : ('실제 구간 시간 기준 변형 — ' + reason);
+    variantTag = `<span class="variant-tag" title="${escapeAttr(tip)}">변형</span>`;
+  }
+  return `<span class="dist-pill ${cls}" title="${escapeAttr(title)}">${label}${extra}</span>${variantTag}`;
 }
 function distSummary(r) {
   const d = distInfo(r);
@@ -789,24 +808,31 @@ function renderProfile(name, clubF, filtered, div) {
   if (filtered.length > 0) {
     const primaryCat = distCat(filtered[0]);
     sharedPrimaryCat = primaryCat;
+    // 라이벌/인사이트 비교는 순수 표준만 사용 (객관성). filtered 내에서 순수만 추출.
+    const fairPool = primaryCat === 'standard'
+      ? filtered.filter(r => isPureStandard(r))
+      : filtered;
     const myBestTot = Math.min(
-      ...filtered.map(r => cleanSec(r.total, 'total')).filter(v => v != null),
+      ...fairPool.map(r => cleanSec(r.total, 'total')).filter(v => v != null),
       Infinity
     );
     sharedMyBestTot = myBestTot === Infinity ? null : myBestTot;
     sharedMyBestSeg = {
-      swim: Math.min(...filtered.map(r => cleanSec(r.swim, 'swim')).filter(v => v != null), Infinity),
-      bike: Math.min(...filtered.map(r => cleanSec(r.bike, 'bike')).filter(v => v != null), Infinity),
-      run:  Math.min(...filtered.map(r => cleanSec(r.run,  'run' )).filter(v => v != null), Infinity),
+      swim: Math.min(...fairPool.map(r => cleanSec(r.swim, 'swim')).filter(v => v != null), Infinity),
+      bike: Math.min(...fairPool.map(r => cleanSec(r.bike, 'bike')).filter(v => v != null), Infinity),
+      run:  Math.min(...fairPool.map(r => cleanSec(r.run,  'run' )).filter(v => v != null), Infinity),
     };
     if (myBestTot !== Infinity) {
       const myKey = name + '||' + (clubF || '(소속없음)');
       // 본인이 출전한 부문 목록 — 같은 부문에서 뛴 선수만 비교 대상으로 삼는다
       const myParts = new Set(filtered.map(r => r.part));
+      // 표준 카테고리면 순수 표준(1.5/40/10)만 비교 대상으로 — 단축/듀애슬론 제외
+      const requirePure = primaryCat === 'standard';
       const bestMap = {};
       for (const r of DATA) {
         if (distCat(r) !== primaryCat) continue;
         if (!myParts.has(r.part)) continue;  // 같은 부문만
+        if (requirePure && !isPureStandard(r)) continue;
         const tot = cleanSec(r.total, 'total');
         const sw  = cleanSec(r.swim, 'swim');
         const bk  = cleanSec(r.bike, 'bike');
@@ -981,9 +1007,13 @@ function renderProfile(name, clubF, filtered, div) {
     const multiWarn = myParts.length > 1
       ? `<div class="basis-warn">⚠ 여러 부문이 섞여 있습니다. 부문별 경쟁 수준(엘리트/동호인/연령대)이 달라 해석에 주의가 필요합니다. 정확한 분석을 원하시면 <b>부문</b> 필터에서 하나만 선택해주세요.</div>`
       : '';
+    const pureNote = sharedPrimaryCat === 'standard'
+      ? `<div class="basis-note-pure">※ 표준 코스는 <b>순수 1.5km·40km·10km 대회</b>만 라이벌·단축시간 계산에 사용됩니다 (듀애슬론·수영 단축 등 변형 제외).</div>`
+      : '';
     const basisNote = `<div class="insight-basis">
       <div class="basis-title">※ 분석 기준 부문 ${partPoolN ? `(같은 부문 내 표본 n=${partPoolN.toLocaleString()})` : ''}</div>
       <ul class="basis-parts">${partsDetailList}</ul>
+      ${pureNote}
       ${multiWarn}
     </div>`;
 
