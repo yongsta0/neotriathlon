@@ -31,6 +31,8 @@ HERE = Path(__file__).parent
 DB_PATH = HERE / "results.sqlite"
 JSON_PATH = HERE / "data.json"
 JSON_MIN_PATH = HERE / "data.min.json"
+JSON_ARCHIVE_PATH = HERE / "data.archive.min.json"
+SPLIT_YEAR_CUTOFF = 2022  # rows with year >= this go in the "recent" file loaded first
 
 # 협회 사이트 인증서 체인 문제 우회 (최소 범위)
 SSL_CTX = ssl.create_default_context()
@@ -271,31 +273,42 @@ def export_json(conn):
     )
     print(f"JSON export: {JSON_PATH} ({len(rows)} rows)")
 
-    # Compact columnar format — 3x faster parse on mobile
-    tours_list, parts_list, clubs_list = [], [], []
-    tour_idx, part_idx, club_idx = {}, {}, {}
-    def _idx(s, lst, mp):
-        s = s or ""
-        if s not in mp:
-            mp[s] = len(lst); lst.append(s)
-        return mp[s]
-    compact_rows = []
-    for r in rows:
-        compact_rows.append([
-            _idx(r["tour"], tours_list, tour_idx),
-            _idx(r["part"], parts_list, part_idx),
-            _idx(r.get("club") or "", clubs_list, club_idx),
-            r["rank"], r["name"], r.get("date", ""),
-            r.get("swim", ""), r.get("t1", ""),
-            r.get("bike", ""), r.get("t2", ""),
-            r.get("run", ""), r.get("total", ""),
-        ])
+    # Compact columnar format — split by year for progressive loading on mobile
+    def _build_compact(rows_subset):
+        tours_list, parts_list, clubs_list = [], [], []
+        tour_idx, part_idx, club_idx = {}, {}, {}
+        def _idx(s, lst, mp):
+            s = s or ""
+            if s not in mp:
+                mp[s] = len(lst); lst.append(s)
+            return mp[s]
+        compact_rows = []
+        for r in rows_subset:
+            compact_rows.append([
+                _idx(r["tour"], tours_list, tour_idx),
+                _idx(r["part"], parts_list, part_idx),
+                _idx(r.get("club") or "", clubs_list, club_idx),
+                r["rank"], r["name"], r.get("date", ""),
+                r.get("swim", ""), r.get("t1", ""),
+                r.get("bike", ""), r.get("t2", ""),
+                r.get("run", ""), r.get("total", ""),
+            ])
+        return {"t": tours_list, "p": parts_list, "c": clubs_list, "r": compact_rows}
+
+    def _year_of(r): return (r.get("date") or "")[:4]
+    recent = [r for r in rows if _year_of(r) >= str(SPLIT_YEAR_CUTOFF)]
+    archive = [r for r in rows if _year_of(r) < str(SPLIT_YEAR_CUTOFF) or not r.get("date")]
+
     JSON_MIN_PATH.write_text(
-        json.dumps({"t": tours_list, "p": parts_list, "c": clubs_list, "r": compact_rows},
-                   ensure_ascii=False, separators=(",", ":")),
+        json.dumps(_build_compact(recent), ensure_ascii=False, separators=(",", ":")),
         encoding="utf-8",
     )
-    print(f"Compact export: {JSON_MIN_PATH} ({JSON_MIN_PATH.stat().st_size/1024/1024:.1f}MB)")
+    JSON_ARCHIVE_PATH.write_text(
+        json.dumps(_build_compact(archive), ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8",
+    )
+    print(f"Compact export: {JSON_MIN_PATH} ({JSON_MIN_PATH.stat().st_size/1024/1024:.1f}MB, {len(recent)} rows {SPLIT_YEAR_CUTOFF}+)")
+    print(f"Archive export: {JSON_ARCHIVE_PATH} ({JSON_ARCHIVE_PATH.stat().st_size/1024/1024:.1f}MB, {len(archive)} rows <{SPLIT_YEAR_CUTOFF})")
 
 
 if __name__ == "__main__":

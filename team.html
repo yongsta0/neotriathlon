@@ -290,35 +290,52 @@ function percentileRank(sorted, v) {
 async function load() {
   try {
     const ts = Date.now();
+    const expandCompact = async (compact) => {
+      const { t: tours, p: parts, c: clubs, r: rows } = compact;
+      const out = new Array(rows.length);
+      const CHUNK = 8000;
+      const yieldFrame = () => new Promise(rs => setTimeout(rs, 0));
+      for (let s = 0; s < rows.length; s += CHUNK) {
+        const e = Math.min(s + CHUNK, rows.length);
+        for (let i = s; i < e; i++) {
+          const row = rows[i];
+          out[i] = {
+            tour: tours[row[0]], part: parts[row[1]], club: clubs[row[2]],
+            rank: row[3], name: row[4], date: row[5],
+            swim: row[6], t1: row[7], bike: row[8], t2: row[9], run: row[10], total: row[11],
+          };
+        }
+        if (e < rows.length) await yieldFrame();
+      }
+      return out;
+    };
+
     const [d1, d2] = await Promise.all([
       fetch('data.min.json?ts=' + ts),
       fetch('distances.json?ts=' + ts).catch(() => null),
     ]);
-    const compact = await d1.json();
-    const { t: tours, p: parts, c: clubs, r: rows } = compact;
-    DATA = new Array(rows.length);
-    const CHUNK = 8000;
-    const yieldFrame = () => new Promise(r => setTimeout(r, 0));
-    for (let start = 0; start < rows.length; start += CHUNK) {
-      const end = Math.min(start + CHUNK, rows.length);
-      for (let i = start; i < end; i++) {
-        const row = rows[i];
-        DATA[i] = {
-          tour: tours[row[0]], part: parts[row[1]], club: clubs[row[2]],
-          rank: row[3], name: row[4], date: row[5],
-          swim: row[6], t1: row[7], bike: row[8], t2: row[9], run: row[10], total: row[11],
-        };
-      }
-      if (end < rows.length) await yieldFrame();
-    }
+    DATA = await expandCompact(await d1.json());
     if (d2 && d2.ok) {
       try { DISTANCES = await d2.json(); } catch (e) {}
     }
-    // 인덱스와 POP_STATS는 실제 사용 직전에 빌드 (로딩 블로킹 제거)
-    let _idxBuilt = false;
+
+    // 인덱스·POP_STATS lazy
+    let _idxBuilt = false, _popBuilt = false;
+    const invalidate = () => { _idxBuilt = false; _popBuilt = false; POP_STATS = {}; };
     window._ensureIdx = () => { if (!_idxBuilt) { buildIndexes(); _idxBuilt = true; } };
-    let _popBuilt = false;
     window._ensurePop = () => { if (!_popBuilt) { POP_STATS = buildPopulationStats(); _popBuilt = true; } };
+
+    // 과거 데이터 백그라운드 로드
+    const defer = window.requestIdleCallback || (fn => setTimeout(fn, 500));
+    defer(async () => {
+      try {
+        const r = await fetch('data.archive.min.json?ts=' + ts);
+        if (!r.ok) return;
+        const arcRows = await expandCompact(await r.json());
+        DATA = DATA.concat(arcRows);
+        invalidate();
+      } catch (e) {}
+    });
   } catch (e) {
     document.getElementById('result').innerHTML = '<div class="empty">데이터를 불러올 수 없습니다.</div>';
     return;

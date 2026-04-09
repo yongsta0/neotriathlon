@@ -643,9 +643,39 @@ function ensureIndexes() {
   buildIndexes();
   _idxBuilt = true;
 }
+function invalidateCaches() { _idxBuilt = false; POP_STATS = {}; }
 function getPopStats() {
   if (Object.keys(POP_STATS).length === 0) POP_STATS = buildPopulationStats();
   return POP_STATS;
+}
+
+function updateNameList() {
+  const nameCounts = {};
+  for (const r of DATA) nameCounts[r.name] = (nameCounts[r.name] || 0) + 1;
+  const topNames = Object.keys(nameCounts)
+    .sort((a,b) => nameCounts[b] - nameCounts[a]).slice(0, 1500);
+  const dl = document.getElementById('nameList');
+  if (dl) dl.innerHTML = topNames.map(n => `<option value="${escapeAttr(n)}">`).join('');
+}
+
+async function expandCompact(compact, startIdx) {
+  const { t: tours, p: parts, c: clubs, r: rows } = compact;
+  const out = new Array(rows.length);
+  const CHUNK = 8000;
+  const yieldFrame = () => new Promise(r => setTimeout(r, 0));
+  for (let start = 0; start < rows.length; start += CHUNK) {
+    const end = Math.min(start + CHUNK, rows.length);
+    for (let i = start; i < end; i++) {
+      const row = rows[i];
+      out[i] = {
+        tour: tours[row[0]], part: parts[row[1]], club: clubs[row[2]],
+        rank: row[3], name: row[4], date: row[5],
+        swim: row[6], t1: row[7], bike: row[8], t2: row[9], run: row[10], total: row[11],
+      };
+    }
+    if (end < rows.length) await yieldFrame();
+  }
+  return out;
 }
 
 async function load() {
@@ -653,46 +683,39 @@ async function load() {
   sub.textContent = '데이터 로딩 중…';
   try {
     const ts = Date.now();
+    // 1단계: 최근 데이터(2022+)와 거리 정보만 우선 로드 — 첫 화면 빠르게
     const [dataRes, distRes] = await Promise.all([
       fetch('data.min.json?ts=' + ts),
       fetch('distances.json?ts=' + ts).catch(() => null),
     ]);
     sub.textContent = '데이터 파싱 중…';
     const compact = await dataRes.json();
-    const { t: tours, p: parts, c: clubs, r: rows } = compact;
-
-    // 행 확장: 청크 단위로 setTimeout 양보하여 UI 프리즈 방지
-    DATA = new Array(rows.length);
-    const CHUNK = 8000;
-    const yieldFrame = () => new Promise(r => setTimeout(r, 0));
-    for (let start = 0; start < rows.length; start += CHUNK) {
-      const end = Math.min(start + CHUNK, rows.length);
-      for (let i = start; i < end; i++) {
-        const row = rows[i];
-        DATA[i] = {
-          tour: tours[row[0]], part: parts[row[1]], club: clubs[row[2]],
-          rank: row[3], name: row[4], date: row[5],
-          swim: row[6], t1: row[7], bike: row[8], t2: row[9], run: row[10], total: row[11],
-        };
-      }
-      sub.textContent = `데이터 로딩 중… ${Math.round(100 * end / rows.length)}%`;
-      if (end < rows.length) await yieldFrame();
-    }
+    DATA = await expandCompact(compact);
 
     if (distRes && distRes.ok) {
       try { DISTANCES = await distRes.json(); } catch (e) { DISTANCES = {}; }
     }
 
     const distCnt = Object.keys(DISTANCES).length;
-    sub.textContent = `${DATA.length.toLocaleString()}개 기록 · ${distCnt}개 부문`;
+    sub.textContent = `${DATA.length.toLocaleString()}개 기록 (2022~) · ${distCnt}개 부문 · 전체 기록 로드 중…`;
 
-    // datalist (자동완성) — 한번만
-    const nameCounts = {};
-    for (const r of DATA) nameCounts[r.name] = (nameCounts[r.name] || 0) + 1;
-    const topNames = Object.keys(nameCounts)
-      .sort((a,b) => nameCounts[b] - nameCounts[a]).slice(0, 1500);
-    document.getElementById('nameList').innerHTML =
-      topNames.map(n => `<option value="${escapeAttr(n)}">`).join('');
+    // datalist (자동완성) — 1차
+    updateNameList();
+
+    // 2단계: 과거 데이터(2018-2021)를 백그라운드로 로드, 메인 UI는 이미 사용 가능
+    const defer = window.requestIdleCallback || (fn => setTimeout(fn, 500));
+    defer(async () => {
+      try {
+        const r = await fetch('data.archive.min.json?ts=' + ts);
+        if (!r.ok) return;
+        const arc = await r.json();
+        const arcRows = await expandCompact(arc);
+        DATA = DATA.concat(arcRows);
+        invalidateCaches();
+        updateNameList();
+        sub.textContent = `${DATA.length.toLocaleString()}개 기록 (2018~) · ${distCnt}개 부문`;
+      } catch (e) { /* 실패해도 최근 데이터로 동작 */ }
+    });
   } catch (e) {
     sub.textContent = '데이터를 불러올 수 없습니다.';
     document.getElementById('result').innerHTML =

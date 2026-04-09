@@ -296,21 +296,41 @@ function distCat(r) { return classifyDistance(distInfo(r)) || 'other'; }
 async function load() {
   try {
     const ts = Date.now();
+    const expand = async (compact) => {
+      const { t: tours, p: parts, c: clubs, r: rows } = compact;
+      const out = new Array(rows.length);
+      const CHUNK = 8000;
+      const yf = () => new Promise(rs => setTimeout(rs, 0));
+      for (let s = 0; s < rows.length; s += CHUNK) {
+        const e = Math.min(s + CHUNK, rows.length);
+        for (let i = s; i < e; i++) {
+          const row = rows[i];
+          out[i] = {
+            tour: tours[row[0]], part: parts[row[1]], club: clubs[row[2]],
+            rank: row[3], name: row[4], date: row[5],
+            swim: row[6], t1: row[7], bike: row[8], t2: row[9], run: row[10], total: row[11],
+          };
+        }
+        if (e < rows.length) await yf();
+      }
+      return out;
+    };
     const [d1, d2] = await Promise.all([
       fetch('data.min.json?ts=' + ts),
       fetch('distances.json?ts=' + ts).catch(() => null),
     ]);
-    const compact = await d1.json();
-    const { t: tours, p: parts, c: clubs, r: rows } = compact;
-    DATA = new Array(rows.length);
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      DATA[i] = {
-        tour: tours[row[0]], part: parts[row[1]], club: clubs[row[2]],
-        rank: row[3], name: row[4], date: row[5],
-        swim: row[6], t1: row[7], bike: row[8], t2: row[9], run: row[10], total: row[11],
-      };
-    }
+    DATA = await expand(await d1.json());
+    // 과거 데이터 백그라운드
+    const defer = window.requestIdleCallback || (fn => setTimeout(fn, 500));
+    defer(async () => {
+      try {
+        const r = await fetch('data.archive.min.json?ts=' + ts);
+        if (!r.ok) return;
+        const arcRows = await expand(await r.json());
+        DATA = DATA.concat(arcRows);
+        POP_STATS = buildPopulationStats();
+      } catch (e) {}
+    });
     if (d2 && d2.ok) {
       try { DISTANCES = await d2.json(); } catch(e){}
     }
