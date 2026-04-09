@@ -291,10 +291,20 @@ async function load() {
   try {
     const ts = Date.now();
     const [d1, d2] = await Promise.all([
-      fetch('data.json?ts=' + ts),
+      fetch('data.min.json?ts=' + ts),
       fetch('distances.json?ts=' + ts).catch(() => null),
     ]);
-    DATA = await d1.json();
+    const compact = await d1.json();
+    const { t: tours, p: parts, c: clubs, r: rows } = compact;
+    DATA = new Array(rows.length);
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      DATA[i] = {
+        tour: tours[row[0]], part: parts[row[1]], club: clubs[row[2]],
+        rank: row[3], name: row[4], date: row[5],
+        swim: row[6], t1: row[7], bike: row[8], t2: row[9], run: row[10], total: row[11],
+      };
+    }
     if (d2 && d2.ok) {
       try { DISTANCES = await d2.json(); } catch (e) {}
     }

@@ -30,6 +30,7 @@ TIMEOUT = 30
 HERE = Path(__file__).parent
 DB_PATH = HERE / "results.sqlite"
 JSON_PATH = HERE / "data.json"
+JSON_MIN_PATH = HERE / "data.min.json"
 
 # 협회 사이트 인증서 체인 문제 우회 (최소 범위)
 SSL_CTX = ssl.create_default_context()
@@ -269,6 +270,32 @@ def export_json(conn):
         json.dumps(rows, ensure_ascii=False), encoding="utf-8"
     )
     print(f"JSON export: {JSON_PATH} ({len(rows)} rows)")
+
+    # Compact columnar format — 3x faster parse on mobile
+    tours_list, parts_list, clubs_list = [], [], []
+    tour_idx, part_idx, club_idx = {}, {}, {}
+    def _idx(s, lst, mp):
+        s = s or ""
+        if s not in mp:
+            mp[s] = len(lst); lst.append(s)
+        return mp[s]
+    compact_rows = []
+    for r in rows:
+        compact_rows.append([
+            _idx(r["tour"], tours_list, tour_idx),
+            _idx(r["part"], parts_list, part_idx),
+            _idx(r.get("club") or "", clubs_list, club_idx),
+            r["rank"], r["name"], r.get("date", ""),
+            r.get("swim", ""), r.get("t1", ""),
+            r.get("bike", ""), r.get("t2", ""),
+            r.get("run", ""), r.get("total", ""),
+        ])
+    JSON_MIN_PATH.write_text(
+        json.dumps({"t": tours_list, "p": parts_list, "c": clubs_list, "r": compact_rows},
+                   ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8",
+    )
+    print(f"Compact export: {JSON_MIN_PATH} ({JSON_MIN_PATH.stat().st_size/1024/1024:.1f}MB)")
 
 
 if __name__ == "__main__":

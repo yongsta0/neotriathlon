@@ -8,7 +8,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+// Lazy-load Chart.js — only when charts are actually rendered.
+// Saves ~250KB initial download + parse time on mobile first load.
+let __chartJsPromise = null;
+function ensureChartJs() {
+  if (window.Chart) return Promise.resolve();
+  if (__chartJsPromise) return __chartJsPromise;
+  __chartJsPromise = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+    s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+  return __chartJsPromise;
+}
+</script>
 <style>
   :root {
     --bg: #fafaf8;
@@ -625,10 +640,30 @@ async function load() {
   try {
     const ts = Date.now();
     const [dataRes, distRes] = await Promise.all([
-      fetch('data.json?ts=' + ts),
+      fetch('data.min.json?ts=' + ts),
       fetch('distances.json?ts=' + ts).catch(() => null),
     ]);
-    DATA = await dataRes.json();
+    const compact = await dataRes.json();
+    // Expand compact columnar format: {t:[tours],p:[parts],c:[clubs],r:[[tIdx,pIdx,cIdx,rank,name,date,swim,t1,bike,t2,run,total],..]}
+    const { t: tours, p: parts, c: clubs, r: rows } = compact;
+    DATA = new Array(rows.length);
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      DATA[i] = {
+        tour: tours[row[0]],
+        part: parts[row[1]],
+        club: clubs[row[2]],
+        rank: row[3],
+        name: row[4],
+        date: row[5],
+        swim: row[6],
+        t1:   row[7],
+        bike: row[8],
+        t2:   row[9],
+        run:  row[10],
+        total: row[11],
+      };
+    }
     if (distRes && distRes.ok) {
       try { DISTANCES = await distRes.json(); } catch (e) { DISTANCES = {}; }
     }
@@ -787,7 +822,7 @@ function render() {
   const vsName = document.getElementById('vs').value.trim();
   renderProfile(q, clubF, filtered, document.getElementById('profile'), vsName);
   renderStats(filtered, statsDiv);
-  renderCharts(filtered, chartsDiv);
+  ensureChartJs().then(() => renderCharts(filtered, chartsDiv));
   renderTable(filtered, resDiv);
   recHead.style.display = '';
 }
