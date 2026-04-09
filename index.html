@@ -168,12 +168,20 @@
   .insight-basis b { color: var(--text); font-weight: 600; }
   .insight-basis .basis-parts { margin: 0; padding-left: 16px; font-size: 12px; color: var(--text); }
   .insight-basis .basis-parts li { margin: 2px 0; }
+  .insight-basis .elite-badge { display: inline-block; font-size: 9px; padding: 1px 6px; background: #fff4e6; color: #8a4a1a; border: 1px solid #f5d9b8; border-radius: 8px; font-weight: 700; letter-spacing: 0.04em; }
+  .insight-basis .basis-elite-note { margin-top: 8px; padding: 8px 11px; background: #fff4e6; border: 1px solid #f5d9b8; border-left: 3px solid #c78344; border-radius: 6px; color: #8a4a1a; font-size: 11px; line-height: 1.55; }
   .insight-basis .basis-note-pure { margin-top: 8px; padding: 7px 10px; background: var(--accent-soft); border-radius: 6px; color: var(--accent); font-size: 11px; line-height: 1.5; }
   .insight-basis .basis-note-pure b { color: var(--accent); font-weight: 700; }
   .insight-basis .basis-warn { margin-top: 8px; padding: 8px 10px; background: #fdf8ea; border: 1px solid #f0e1b8; border-radius: 6px; color: var(--warning); font-size: 11px; line-height: 1.5; }
   .insight-basis .basis-warn b { color: var(--warning); }
   .insight-tip { margin-top: 12px; padding: 12px 14px; background: var(--accent-soft); border-radius: var(--radius); font-size: 12px; line-height: 1.6; color: var(--text); border-left: 3px solid var(--accent); }
   .insight-tip b { color: var(--accent); font-weight: 700; display: inline-block; margin-bottom: 3px; }
+  .part-chip { display: inline-block; font-size: 10px; padding: 3px 9px; background: var(--bg); color: var(--muted); border: 1px solid var(--border); border-radius: 10px; margin: 2px 3px 2px 0; font-weight: 500; white-space: nowrap; }
+  .part-chip.elite { background: #fff4e6; color: #8a4a1a; border-color: #f5d9b8; font-weight: 600; }
+  .strength-parts { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
+  .strength-parts b { color: var(--text); font-weight: 600; margin-right: 4px; }
+  .elite-note { margin-top: 10px; padding: 8px 11px; background: #fff4e6; border: 1px solid #f5d9b8; border-left: 3px solid #c78344; border-radius: 6px; color: #8a4a1a; font-size: 11px; line-height: 1.55; }
+  .rivals-parts { font-size: 11px; color: var(--muted); margin: 0 0 10px 0; line-height: 1.7; }
   .rivals-card { grid-column: 1 / -1; }
   .rival-row { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 12px; align-items: center; padding: 9px 10px; border-bottom: 1px solid var(--border-soft); font-size: 12px; border-radius: 8px; }
   .rival-row:last-child { border-bottom: none; }
@@ -674,10 +682,12 @@ function renderProfile(name, clubF, filtered, div) {
   //    백분위가 낮을수록 강점. 수영/사이클/런 비교 → 상대적으로 가장 강한 구간 찾기
   //    ※ 표준 변형(듀애슬론·단축)은 수영/런 의미가 달라 강점 분석에서 제외
   const segPcts = { s: [], b: [], r: [] };
+  const strengthParts = {}; // part → count (강점 분석에 사용된 부문)
   all.forEach(rec => {
     if (isVariantStandard(rec)) return; // 변형 제외
     const same = DATA.filter(x => x.tour === rec.tour && x.part === rec.part);
     if (same.length < 3) return;
+    strengthParts[rec.part] = (strengthParts[rec.part] || 0) + 1;
     const mySwim = cleanSec(rec.swim, 'swim');
     const myBike = cleanSec(rec.bike, 'bike');
     const myRun  = cleanSec(rec.run, 'run');
@@ -907,8 +917,15 @@ function renderProfile(name, clubF, filtered, div) {
         <div class="rv-strength">${escapeHtml(meStrength)}</div>
       </div>`;
 
+      // 부문(소속그룹) 표기 — 상위그룹/엘리트 등 그룹 레벨을 명시
+      const rivalPartsUsed = Array.from(new Set(fairPool.map(r => r.part))).sort();
+      const partsChipHtml = rivalPartsUsed.map(p => {
+        const isElite = /상위그룹|엘리트/.test(p);
+        return `<span class="part-chip ${isElite ? 'elite' : ''}">${escapeHtml(p)}</span>`;
+      }).join(' ');
       rivalsHtml = `<div class="pf-card rivals-card">
         <h3>비슷한 경쟁 선수 · ${DIST_LABEL[primaryCat] || primaryCat} 기준</h3>
+        <div class="rivals-parts">비교 대상 소속그룹 (같은 부문만): ${partsChipHtml}</div>
         ${aboveHtml}
         ${meHtml}
         ${belowHtml}
@@ -1013,9 +1030,17 @@ function renderProfile(name, clubF, filtered, div) {
       para3 = `만약 <b>${SEG_NAME[weakest]}</b>을(를) <b>${SEG_NAME[strongest]}</b>과 같은 상위 ${sp.toFixed(0)}% 수준(${partsLabel} 내 목표 시간 ${fmtSec(savingsTarget)})으로 끌어올리면, 총기록이 약 <b class="ins-gain">${fmtSec(savings)}</b> 단축될 것으로 기대됩니다.`;
     }
 
-    // 분석 기준 명시 배너 — 정확한 부문명을 모두 나열
+    // 분석 기준 명시 배너 — 정확한 부문명을 모두 나열 (소속그룹 강조)
     const partsDetailList = myParts
-      .map(p => `<li><b>${escapeHtml(p)}</b> · ${partCount[p]}회</li>`).join('');
+      .map(p => {
+        const isElite = /상위그룹|엘리트/.test(p);
+        const badge = isElite ? ' <span class="elite-badge">ELITE</span>' : '';
+        return `<li><b>${escapeHtml(p)}</b> · ${partCount[p]}회${badge}</li>`;
+      }).join('');
+    const hasElite = myParts.some(p => /상위그룹|엘리트/.test(p));
+    const eliteNote = hasElite
+      ? `<div class="basis-elite-note">⚡ 상위그룹/엘리트 부문: 이 부문은 사전 선발된 빠른 선수들만 참가하므로, 부문 내 "상위 50%"가 전체 선수 풀 대비하면 상위권입니다. 절대적 기록이 그룹 내 백분위보다 더 중요한 지표입니다.</div>`
+      : '';
     const multiWarn = myParts.length > 1
       ? `<div class="basis-warn">⚠ 여러 부문이 섞여 있습니다. 부문별 경쟁 수준(엘리트/동호인/연령대)이 달라 해석에 주의가 필요합니다. 정확한 분석을 원하시면 <b>부문</b> 필터에서 하나만 선택해주세요.</div>`
       : '';
@@ -1023,8 +1048,9 @@ function renderProfile(name, clubF, filtered, div) {
       ? `<div class="basis-note-pure">※ 표준 코스는 <b>순수 1.5km·40km·10km 대회</b>만 라이벌·단축시간 계산에 사용됩니다 (듀애슬론·수영 단축 등 변형 제외).</div>`
       : '';
     const basisNote = `<div class="insight-basis">
-      <div class="basis-title">※ 분석 기준 부문 ${partPoolN ? `(같은 부문 내 표본 n=${partPoolN.toLocaleString()})` : ''}</div>
+      <div class="basis-title">※ 분석 기준 부문 · 소속그룹 ${partPoolN ? `(같은 부문 내 표본 n=${partPoolN.toLocaleString()})` : ''}</div>
       <ul class="basis-parts">${partsDetailList}</ul>
+      ${eliteNote}
       ${pureNote}
       ${multiWarn}
     </div>`;
@@ -1128,10 +1154,20 @@ function renderProfile(name, clubF, filtered, div) {
         <div class="pf-card">
           <h3>강점 구간 · 같은 부문 내 평균 순위</h3>
           ${strengthTag}
+          ${(() => {
+            const parts = Object.entries(strengthParts).sort((a,b) => b[1] - a[1]);
+            if (parts.length === 0) return '';
+            const chips = parts.map(([p, n]) => {
+              const isElite = /상위그룹|엘리트/.test(p);
+              return `<span class="part-chip ${isElite ? 'elite' : ''}">${escapeHtml(p)} · ${n}</span>`;
+            }).join(' ');
+            return `<div class="strength-parts"><b>비교 소속그룹:</b> ${chips}</div>`;
+          })()}
           <div style="margin-top: 12px;">
             ${['s','b','r'].map(strengthBar).join('')}
           </div>
           ${valid.length === 0 ? '<div class="muted" style="margin-top:8px">비교 가능한 구간 기록 부족</div>' : ''}
+          ${Object.keys(strengthParts).some(p => /상위그룹|엘리트/.test(p)) ? '<div class="elite-note">※ 상위그룹/엘리트 부문 포함 — 이 그룹은 기본적으로 빠른 선수들만 모이므로, 상위 %가 높아 보여도 전체 풀 대비하면 상위권입니다.</div>' : ''}
         </div>
         <div class="pf-card">
           <h3>거리별 베스트</h3>
