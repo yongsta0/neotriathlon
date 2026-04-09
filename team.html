@@ -170,6 +170,17 @@
 let DATA = [];
 let DISTANCES = {};
 let POP_STATS = {};
+let IDX_BY_CLUB = {}; // club → rec[]
+let IDX_BY_NAME_CLUB = {}; // "name||club" → rec[]
+function buildIndexes() {
+  IDX_BY_CLUB = {}; IDX_BY_NAME_CLUB = {};
+  for (const r of DATA) {
+    const cl = r.club || '';
+    (IDX_BY_CLUB[cl] || (IDX_BY_CLUB[cl] = [])).push(r);
+    const k = r.name + '||' + cl;
+    (IDX_BY_NAME_CLUB[k] || (IDX_BY_NAME_CLUB[k] = [])).push(r);
+  }
+}
 
 function toSec(s) {
   if (!s || s === '-' || s === '00:00:00') return null;
@@ -287,6 +298,7 @@ async function load() {
     if (d2 && d2.ok) {
       try { DISTANCES = await d2.json(); } catch (e) {}
     }
+    buildIndexes();
     POP_STATS = buildPopulationStats();
   } catch (e) {
     document.getElementById('result').innerHTML = '<div class="empty">데이터를 불러올 수 없습니다.</div>';
@@ -331,7 +343,7 @@ function onClubChange() {
     return;
   }
 
-  const teamRows = DATA.filter(r => (r.club || '') === club);
+  const teamRows = IDX_BY_CLUB[club] || [];
   if (teamRows.length === 0) {
     distSel.innerHTML = '<option value="">— 없음 —</option>';
     summary.innerHTML = '<span class="muted">해당 소속 기록이 없습니다.</span>';
@@ -500,7 +512,7 @@ function render() {
   }
   const SEG_NAME = { swim: '수영', bike: '사이클', run: '런' };
   function computeStrength(name) {
-    const mine = DATA.filter(r => r.name === name && (r.club || '') === club && distCat(r) === selCat);
+    const mine = (IDX_BY_NAME_CLUB[name + '||' + club] || []).filter(r => distCat(r) === selCat);
     const pcts = { swim: [], bike: [], run: [] };
     for (const rec of mine) {
       const idx = raceIdx[rec.tour + '||' + rec.part];

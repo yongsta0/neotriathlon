@@ -310,6 +310,23 @@
 let DATA = [];
 let DISTANCES = {}; // 'tour||part' → {swim_km, bike_km, run_km}
 let POP_STATS = {}; // dist_cat → {swim:{arr,sorted}, bike, run, total, ratios}
+let IDX_BY_RACE = {};    // "tour||part" → rec[]
+let IDX_BY_NAME = {};    // name → rec[]
+function sameRaceRecords(r) {
+  return IDX_BY_RACE[r.tour + '||' + r.part] || [];
+}
+function byName(name) {
+  return IDX_BY_NAME[name] || [];
+}
+function buildIndexes() {
+  IDX_BY_RACE = {};
+  IDX_BY_NAME = {};
+  for (const r of DATA) {
+    const k = r.tour + '||' + r.part;
+    (IDX_BY_RACE[k] || (IDX_BY_RACE[k] = [])).push(r);
+    (IDX_BY_NAME[r.name] || (IDX_BY_NAME[r.name] = [])).push(r);
+  }
+}
 let charts = {};
 let lastAutoDistKey = ''; // 'name||club' 조합이 바뀔 때만 auto-select 재적용
 
@@ -609,6 +626,7 @@ async function load() {
     if (distRes && distRes.ok) {
       try { DISTANCES = await distRes.json(); } catch (e) { DISTANCES = {}; }
     }
+    buildIndexes();
     POP_STATS = buildPopulationStats();
     const distCnt = Object.keys(DISTANCES).length;
     document.getElementById('datasub').textContent =
@@ -626,11 +644,16 @@ async function load() {
       '<div class="empty">data.json 을 불러올 수 없습니다.<br>먼저 <code>python3 scraper.py</code> 를 실행하세요.</div>';
     return;
   }
-  document.getElementById('q').addEventListener('input', render);
+  const debounce = (fn, ms) => {
+    let t;
+    return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+  };
+  const renderDebounced = debounce(render, 200);
+  document.getElementById('q').addEventListener('input', renderDebounced);
   document.getElementById('club').addEventListener('change', render);
   document.getElementById('dist').addEventListener('change', render);
   document.getElementById('part').addEventListener('change', render);
-  document.getElementById('vs').addEventListener('input', render);
+  document.getElementById('vs').addEventListener('input', renderDebounced);
 }
 
 function uniq(arr) { return [...new Set(arr)].sort(); }
@@ -658,7 +681,7 @@ function render() {
   }
 
   // 1. 이름 일치 행
-  const nameMatches = DATA.filter(r => r.name === q);
+  const nameMatches = byName(q);
   if (nameMatches.length === 0) {
     candDiv.innerHTML = ''; sumDiv.innerHTML = '';
     profileDiv.innerHTML = '';
@@ -760,7 +783,7 @@ function render() {
 function renderProfile(name, clubF, filtered, div, vsName) {
   // 프로필 분석은 거리 필터와 무관하게 그 선수의 '전체 기록'을 분석
   // 소속까지만 반영 (동명이인 구분용)
-  let all = DATA.filter(r => r.name === name);
+  let all = byName(name).slice();
   if (clubF) all = all.filter(r => (r.club || '(소속없음)') === clubF);
 
   // 1) 강점 구간 분석: 같은 (대회, 부문) 안에서 선수의 구간별 백분위 계산
@@ -771,7 +794,7 @@ function renderProfile(name, clubF, filtered, div, vsName) {
   all.forEach(rec => {
     if (isVariantStandard(rec)) return; // 변형 제외
     if (isAquathlon(rec)) return; // 아쿠아슬론 제외
-    const same = DATA.filter(x => x.tour === rec.tour && x.part === rec.part);
+    const same = sameRaceRecords(rec);
     if (same.length < 3) return;
     strengthParts[rec.part] = (strengthParts[rec.part] || 0) + 1;
     const mySwim = cleanSec(rec.swim, 'swim');
@@ -987,7 +1010,7 @@ function renderProfile(name, clubF, filtered, div, vsName) {
       }
 
       const rivalStrength = (rec) => {
-        const same = DATA.filter(x => x.tour === rec.tour && x.part === rec.part);
+        const same = sameRaceRecords(rec);
         if (same.length < 3) return null;
         const arr = (k) => same.map(x => cleanSec(x[k], k)).filter(v => v != null).sort((a,b)=>a-b);
         const pct = (me, a) => {
@@ -1251,7 +1274,7 @@ function renderProfile(name, clubF, filtered, div, vsName) {
     // 평균 부문 순위 백분위
     let pctSum = 0, pctN = 0;
     all.forEach(r => {
-      const same = DATA.filter(x => x.tour === r.tour && x.part === r.part);
+      const same = sameRaceRecords(r);
       if (same.length > 1 && r.rank) {
         pctSum += (r.rank / same.length) * 100;
         pctN++;
@@ -1287,7 +1310,7 @@ function renderProfile(name, clubF, filtered, div, vsName) {
   // 8) Head-to-head 맞대결 카드 (vsName 입력 시)
   let h2hHtml = '';
   if (vsName && vsName !== name) {
-    const vsRecs = DATA.filter(r => r.name === vsName);
+    const vsRecs = byName(vsName);
     // 같은 (tour, part)에서 둘 다 참가한 경기 매칭
     const myKeyMap = {};
     for (const r of all) {
@@ -1407,7 +1430,7 @@ function renderStats(filtered, div) {
   // 평균 백분위 (해당 부문/대회 안에서)
   let pctSum = 0, pctN = 0;
   statsRows.forEach(r => {
-    const same = DATA.filter(x => x.tour === r.tour && x.part === r.part);
+    const same = sameRaceRecords(r);
     if (same.length > 1 && r.rank) {
       const topPct = (r.rank / same.length) * 100;
       pctSum += topPct; pctN++;
@@ -1563,7 +1586,7 @@ function renderCharts(filtered, div) {
   const drawDist = () => {
     if (charts.dist) charts.dist.destroy();
     const r = filtered[Number(select.value)];
-    const same = DATA.filter(x => x.tour === r.tour && x.part === r.part)
+    const same = sameRaceRecords(r)
                      .map(x => ({ name: x.name, sec: toSec(x.total), rank: x.rank }))
                      .filter(x => x.sec != null);
     if (same.length === 0) return;
@@ -1646,7 +1669,7 @@ function renderTable(filtered, div) {
     '<th class="r">사이클</th><th class="r">T2</th><th class="r">런</th><th class="r">총기록</th>' +
     '</tr></thead><tbody>' +
     filtered.map(r => {
-      const same = DATA.filter(x => x.tour === r.tour && x.part === r.part);
+      const same = sameRaceRecords(r);
       const totalN = same.length;
       const rankStr = totalN > 0 ? `${r.rank}/${totalN}` : String(r.rank);
       return '<tr><td>' + escapeHtml(r.date) + '</td>' +
