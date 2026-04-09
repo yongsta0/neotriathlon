@@ -7,6 +7,9 @@
 <title>TRI · Performance Explorer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="data.min.json" as="fetch" crossorigin>
+<link rel="preload" href="distances.json" as="fetch" crossorigin>
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
 // Lazy-load Chart.js — only when charts are actually rendered.
@@ -678,23 +681,42 @@ async function expandCompact(compact, startIdx) {
   return out;
 }
 
+// 세션 캐시: 재방문/다른 페이지 이동 시 파싱된 compact 데이터를 즉시 복구
+const CACHE_KEY_DATA = 'tri_data_min_v1';
+const CACHE_KEY_DIST = 'tri_dist_v1';
+const CACHE_KEY_ARCHIVE = 'tri_arc_min_v1';
+function cacheGet(k) {
+  try { const s = sessionStorage.getItem(k); return s ? JSON.parse(s) : null; } catch (e) { return null; }
+}
+function cacheSet(k, v) {
+  try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* quota */ }
+}
+
 async function load() {
   const sub = document.getElementById('datasub');
   sub.textContent = '데이터 로딩 중…';
   try {
     const ts = Date.now();
-    // 1단계: 최근 데이터(2022+)와 거리 정보만 우선 로드 — 첫 화면 빠르게
-    const [dataRes, distRes] = await Promise.all([
-      fetch('data.min.json?ts=' + ts),
-      fetch('distances.json?ts=' + ts).catch(() => null),
-    ]);
-    sub.textContent = '데이터 파싱 중…';
-    const compact = await dataRes.json();
-    DATA = await expandCompact(compact);
 
-    if (distRes && distRes.ok) {
-      try { DISTANCES = await distRes.json(); } catch (e) { DISTANCES = {}; }
+    // 1차: 세션 캐시 먼저 확인 — 재방문이면 즉시 사용 (fetch/parse 스킵)
+    let compact = cacheGet(CACHE_KEY_DATA);
+    let fromCache = !!compact;
+    let distObj = cacheGet(CACHE_KEY_DIST);
+
+    if (!compact) {
+      const [dataRes, distRes] = await Promise.all([
+        fetch('data.min.json?ts=' + ts),
+        fetch('distances.json?ts=' + ts).catch(() => null),
+      ]);
+      sub.textContent = '데이터 파싱 중…';
+      compact = await dataRes.json();
+      cacheSet(CACHE_KEY_DATA, compact);
+      if (distRes && distRes.ok) {
+        try { distObj = await distRes.json(); cacheSet(CACHE_KEY_DIST, distObj); } catch (e) {}
+      }
     }
+    DATA = await expandCompact(compact);
+    if (distObj) DISTANCES = distObj;
 
     const distCnt = Object.keys(DISTANCES).length;
     sub.textContent = `${DATA.length.toLocaleString()}개 기록 (2022~) · ${distCnt}개 부문 · 전체 기록 로드 중…`;
@@ -702,13 +724,17 @@ async function load() {
     // datalist (자동완성) — 1차
     updateNameList();
 
-    // 2단계: 과거 데이터(2018-2021)를 백그라운드로 로드, 메인 UI는 이미 사용 가능
+    // 2단계: 과거 데이터(2018-2021)를 백그라운드로 로드
     const defer = window.requestIdleCallback || (fn => setTimeout(fn, 500));
     defer(async () => {
       try {
-        const r = await fetch('data.archive.min.json?ts=' + ts);
-        if (!r.ok) return;
-        const arc = await r.json();
+        let arc = cacheGet(CACHE_KEY_ARCHIVE);
+        if (!arc) {
+          const r = await fetch('data.archive.min.json?ts=' + ts);
+          if (!r.ok) return;
+          arc = await r.json();
+          cacheSet(CACHE_KEY_ARCHIVE, arc);
+        }
         const arcRows = await expandCompact(arc);
         DATA = DATA.concat(arcRows);
         invalidateCaches();

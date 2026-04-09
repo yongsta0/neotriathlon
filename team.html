@@ -7,6 +7,8 @@
 <title>TRI · Club Rankings</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="data.min.json" as="fetch" crossorigin>
+<link rel="preload" href="distances.json" as="fetch" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -290,6 +292,8 @@ function percentileRank(sorted, v) {
 async function load() {
   try {
     const ts = Date.now();
+    const cacheGet = k => { try { const s = sessionStorage.getItem(k); return s ? JSON.parse(s) : null; } catch(e){ return null; } };
+    const cacheSet = (k,v) => { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
     const expandCompact = async (compact) => {
       const { t: tours, p: parts, c: clubs, r: rows } = compact;
       const out = new Array(rows.length);
@@ -310,14 +314,21 @@ async function load() {
       return out;
     };
 
-    const [d1, d2] = await Promise.all([
-      fetch('data.min.json?ts=' + ts),
-      fetch('distances.json?ts=' + ts).catch(() => null),
-    ]);
-    DATA = await expandCompact(await d1.json());
-    if (d2 && d2.ok) {
-      try { DISTANCES = await d2.json(); } catch (e) {}
+    let compact = cacheGet('tri_data_min_v1');
+    let distObj = cacheGet('tri_dist_v1');
+    if (!compact) {
+      const [d1, d2] = await Promise.all([
+        fetch('data.min.json?ts=' + ts),
+        fetch('distances.json?ts=' + ts).catch(() => null),
+      ]);
+      compact = await d1.json();
+      cacheSet('tri_data_min_v1', compact);
+      if (d2 && d2.ok) {
+        try { distObj = await d2.json(); cacheSet('tri_dist_v1', distObj); } catch (e) {}
+      }
     }
+    DATA = await expandCompact(compact);
+    if (distObj) DISTANCES = distObj;
 
     // 인덱스·POP_STATS lazy
     let _idxBuilt = false, _popBuilt = false;
@@ -329,9 +340,14 @@ async function load() {
     const defer = window.requestIdleCallback || (fn => setTimeout(fn, 500));
     defer(async () => {
       try {
-        const r = await fetch('data.archive.min.json?ts=' + ts);
-        if (!r.ok) return;
-        const arcRows = await expandCompact(await r.json());
+        let arc = cacheGet('tri_arc_min_v1');
+        if (!arc) {
+          const r = await fetch('data.archive.min.json?ts=' + ts);
+          if (!r.ok) return;
+          arc = await r.json();
+          cacheSet('tri_arc_min_v1', arc);
+        }
+        const arcRows = await expandCompact(arc);
         DATA = DATA.concat(arcRows);
         invalidate();
       } catch (e) {}
