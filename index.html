@@ -555,11 +555,12 @@ function paceOf(sec, km, kind) {
   }
   return '';
 }
-// (거리 카테고리, 구간) 별 본인 PB 계산
+// (거리 카테고리, 구간) 별 본인 PB 계산 — 아쿠아슬론·변형 제외
 function computePBMap(records) {
   const pbs = {};
   for (const r of records) {
     if (isAquathlon(r)) continue;
+    if (isVariantStandard(r)) continue;
     const cat = distCat(r);
     if (!pbs[cat]) pbs[cat] = {};
     for (const k of ['swim','bike','run','total']) {
@@ -572,6 +573,7 @@ function computePBMap(records) {
 }
 function isPB(r, kind, pbMap) {
   if (isAquathlon(r)) return false;
+  if (isVariantStandard(r)) return false;
   const cat = distCat(r);
   const v = cleanSec(r[kind], kind);
   if (v == null || !pbMap[cat]) return false;
@@ -804,10 +806,11 @@ function renderProfile(name, clubF, filtered, div, vsName) {
   }
   const SEG_NAME = { s: '수영', b: '사이클', r: '런' };
 
-  // 2) 거리 카테고리별 베스트 (아쿠아슬론 제외 — 2종목 경기는 비교 부적절)
+  // 2) 거리 카테고리별 베스트 — 아쿠아슬론, 표준 변형(듀애슬론/단축) 제외
   const byCat = {};
   all.forEach(r => {
     if (isAquathlon(r)) return;
+    if (isVariantStandard(r)) return; // 2024 충주 듀애슬론 같은 케이스 제외
     const cat = distCat(r);
     const tot = cleanSec(r.total, 'total');
     if (tot == null) return;
@@ -1233,11 +1236,11 @@ function renderProfile(name, clubF, filtered, div, vsName) {
     ).join(', ');
     const primaryCatLabel = topCats[0] ? (DIST_LABEL[topCats[0][0]] || labelOfCat(topCats[0][0])) : '';
 
-    // 주력 거리의 베스트 총기록
+    // 주력 거리의 베스트 총기록 (변형·아쿠아슬론 제외)
     const primaryCat = topCats[0] ? topCats[0][0] : null;
     let bestLine = '';
     if (primaryCat) {
-      const tots = all.filter(r => distCat(r) === primaryCat)
+      const tots = all.filter(r => distCat(r) === primaryCat && !isAquathlon(r) && !isVariantStandard(r))
                       .map(r => cleanSec(r.total, 'total')).filter(v => v != null);
       if (tots.length > 0) {
         const bestT = Math.min(...tots);
@@ -1395,8 +1398,8 @@ function renderProfile(name, clubF, filtered, div, vsName) {
 }
 
 function renderStats(filtered, div) {
-  // 통계(베스트/평균순위)는 아쿠아슬론·듀애슬론 등 2종목 경기 제외
-  const statsRows = filtered.filter(r => !isAquathlon(r));
+  // 통계(베스트/평균순위)는 아쿠아슬론·듀애슬론·단축 변형 모두 제외
+  const statsRows = filtered.filter(r => !isAquathlon(r) && !isVariantStandard(r));
   const totals = statsRows.map(r => toSec(r.total)).filter(v => v != null);
   const best = totals.length ? Math.min(...totals) : null;
   const bestRow = statsRows.find(r => toSec(r.total) === best);
