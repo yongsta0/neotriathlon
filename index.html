@@ -281,6 +281,8 @@ function buildPopulationStats() {
   const buckets = {}; // cat → {s:[], b:[], r:[], t:[], rows:[]}
   for (const rec of DATA) {
     const cat = classifyDistance(distInfo(rec)) || 'other';
+    // 표준은 순수 표준(1.5/40/10, 듀애슬론·단축 제외)만 전체 풀 통계에 반영
+    if (cat === 'standard' && !isPureStandard(rec)) continue;
     if (!buckets[cat]) buckets[cat] = { s:[], b:[], r:[], t:[], t1:[], t2:[] };
     const s = cleanSec(rec.swim, 'swim');
     const b = cleanSec(rec.bike, 'bike');
@@ -670,8 +672,10 @@ function renderProfile(name, clubF, filtered, div) {
 
   // 1) 강점 구간 분석: 같은 (대회, 부문) 안에서 선수의 구간별 백분위 계산
   //    백분위가 낮을수록 강점. 수영/사이클/런 비교 → 상대적으로 가장 강한 구간 찾기
+  //    ※ 표준 변형(듀애슬론·단축)은 수영/런 의미가 달라 강점 분석에서 제외
   const segPcts = { s: [], b: [], r: [] };
   all.forEach(rec => {
+    if (isVariantStandard(rec)) return; // 변형 제외
     const same = DATA.filter(x => x.tour === rec.tour && x.part === rec.part);
     if (same.length < 3) return;
     const mySwim = cleanSec(rec.swim, 'swim');
@@ -925,6 +929,8 @@ function renderProfile(name, clubF, filtered, div) {
     for (const r of DATA) {
       if (distCat(r) !== sharedPrimaryCat) continue;
       if (!myParts.includes(r.part)) continue;
+      // 표준은 순수 표준만 풀에 포함 (변형/듀애슬론 제외)
+      if (sharedPrimaryCat === 'standard' && !isPureStandard(r)) continue;
       const sw = cleanSec(r.swim, 'swim');
       const bk = cleanSec(r.bike, 'bike');
       const rn = cleanSec(r.run,  'run');
