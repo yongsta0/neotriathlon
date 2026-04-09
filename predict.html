@@ -296,8 +296,6 @@ function distCat(r) { return classifyDistance(distInfo(r)) || 'other'; }
 async function load() {
   try {
     const ts = Date.now();
-    const cacheGet = k => { try { const s = sessionStorage.getItem(k); return s ? JSON.parse(s) : null; } catch(e){ return null; } };
-    const cacheSet = (k,v) => { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
     const expand = async (compact) => {
       const { t: tours, p: parts, c: clubs, r: rows } = compact;
       const out = new Array(rows.length);
@@ -317,31 +315,18 @@ async function load() {
       }
       return out;
     };
-    let compact = cacheGet('tri_data_min_v1');
-    let distObj = cacheGet('tri_dist_v1');
-    if (!compact) {
-      const [d1, d2] = await Promise.all([
-        fetch('data.min.json?ts=' + ts),
-        fetch('distances.json?ts=' + ts).catch(() => null),
-      ]);
-      compact = await d1.json();
-      cacheSet('tri_data_min_v1', compact);
-      if (d2 && d2.ok) { try { distObj = await d2.json(); cacheSet('tri_dist_v1', distObj); } catch(e){} }
-    }
-    DATA = await expand(compact);
-    if (distObj) DISTANCES = distObj;
-    // 과거 데이터 백그라운드
+    const [d1, d2] = await Promise.all([
+      fetch('data.min.json?ts=' + ts),
+      fetch('distances.json?ts=' + ts).catch(() => null),
+    ]);
+    DATA = await expand(await d1.json());
+    if (d2 && d2.ok) { try { DISTANCES = await d2.json(); } catch(e){} }
     const defer = window.requestIdleCallback || (fn => setTimeout(fn, 500));
     defer(async () => {
       try {
-        let arc = cacheGet('tri_arc_min_v1');
-        if (!arc) {
-          const r = await fetch('data.archive.min.json?ts=' + ts);
-          if (!r.ok) return;
-          arc = await r.json();
-          cacheSet('tri_arc_min_v1', arc);
-        }
-        const arcRows = await expand(arc);
+        const r = await fetch('data.archive.min.json?ts=' + ts);
+        if (!r.ok) return;
+        const arcRows = await expand(await r.json());
         DATA = DATA.concat(arcRows);
         POP_STATS = buildPopulationStats();
       } catch (e) {}

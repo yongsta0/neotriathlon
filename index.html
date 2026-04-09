@@ -681,66 +681,42 @@ async function expandCompact(compact, startIdx) {
   return out;
 }
 
-// 세션 캐시: 재방문/다른 페이지 이동 시 파싱된 compact 데이터를 즉시 복구
-const CACHE_KEY_DATA = 'tri_data_min_v1';
-const CACHE_KEY_DIST = 'tri_dist_v1';
-const CACHE_KEY_ARCHIVE = 'tri_arc_min_v1';
-function cacheGet(k) {
-  try { const s = sessionStorage.getItem(k); return s ? JSON.parse(s) : null; } catch (e) { return null; }
-}
-function cacheSet(k, v) {
-  try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* quota */ }
-}
-
 async function load() {
   const sub = document.getElementById('datasub');
   sub.textContent = '데이터 로딩 중…';
+  // 이전 세션 캐시 정리 (모바일 Safari에서 느리게 만들던 원인)
+  try {
+    ['tri_data_min_v1','tri_dist_v1','tri_arc_min_v1'].forEach(k => sessionStorage.removeItem(k));
+  } catch (e) {}
   try {
     const ts = Date.now();
-
-    // 1차: 세션 캐시 먼저 확인 — 재방문이면 즉시 사용 (fetch/parse 스킵)
-    let compact = cacheGet(CACHE_KEY_DATA);
-    let fromCache = !!compact;
-    let distObj = cacheGet(CACHE_KEY_DIST);
-
-    if (!compact) {
-      const [dataRes, distRes] = await Promise.all([
-        fetch('data.min.json?ts=' + ts),
-        fetch('distances.json?ts=' + ts).catch(() => null),
-      ]);
-      sub.textContent = '데이터 파싱 중…';
-      compact = await dataRes.json();
-      cacheSet(CACHE_KEY_DATA, compact);
-      if (distRes && distRes.ok) {
-        try { distObj = await distRes.json(); cacheSet(CACHE_KEY_DIST, distObj); } catch (e) {}
-      }
-    }
+    const [dataRes, distRes] = await Promise.all([
+      fetch('data.min.json?ts=' + ts),
+      fetch('distances.json?ts=' + ts).catch(() => null),
+    ]);
+    sub.textContent = '데이터 파싱 중…';
+    const compact = await dataRes.json();
     DATA = await expandCompact(compact);
-    if (distObj) DISTANCES = distObj;
-
+    if (distRes && distRes.ok) {
+      try { DISTANCES = await distRes.json(); } catch (e) {}
+    }
     const distCnt = Object.keys(DISTANCES).length;
-    sub.textContent = `${DATA.length.toLocaleString()}개 기록 (2022~) · ${distCnt}개 부문 · 전체 기록 로드 중…`;
-
-    // datalist (자동완성) — 1차
+    sub.textContent = `${DATA.length.toLocaleString()}개 기록 · ${distCnt}개 부문`;
     updateNameList();
 
-    // 2단계: 과거 데이터(2018-2021)를 백그라운드로 로드
+    // 과거 데이터 백그라운드 병합
     const defer = window.requestIdleCallback || (fn => setTimeout(fn, 500));
     defer(async () => {
       try {
-        let arc = cacheGet(CACHE_KEY_ARCHIVE);
-        if (!arc) {
-          const r = await fetch('data.archive.min.json?ts=' + ts);
-          if (!r.ok) return;
-          arc = await r.json();
-          cacheSet(CACHE_KEY_ARCHIVE, arc);
-        }
+        const r = await fetch('data.archive.min.json?ts=' + ts);
+        if (!r.ok) return;
+        const arc = await r.json();
         const arcRows = await expandCompact(arc);
         DATA = DATA.concat(arcRows);
         invalidateCaches();
         updateNameList();
-        sub.textContent = `${DATA.length.toLocaleString()}개 기록 (2018~) · ${distCnt}개 부문`;
-      } catch (e) { /* 실패해도 최근 데이터로 동작 */ }
+        sub.textContent = `${DATA.length.toLocaleString()}개 기록 · ${distCnt}개 부문`;
+      } catch (e) {}
     });
   } catch (e) {
     sub.textContent = '데이터를 불러올 수 없습니다.';
