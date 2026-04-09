@@ -176,6 +176,7 @@
   .insight-basis .basis-warn b { color: var(--warning); }
   .insight-tip { margin-top: 12px; padding: 12px 14px; background: var(--accent-soft); border-radius: var(--radius); font-size: 12px; line-height: 1.6; color: var(--text); border-left: 3px solid var(--accent); }
   .insight-tip b { color: var(--accent); font-weight: 700; display: inline-block; margin-bottom: 3px; }
+  .stats-note { font-size: 10px; color: var(--subtle); margin-top: 8px; text-align: right; }
   .part-chip { display: inline-block; font-size: 10px; padding: 3px 9px; background: var(--bg); color: var(--muted); border: 1px solid var(--border); border-radius: 10px; margin: 2px 3px 2px 0; font-weight: 500; white-space: nowrap; }
   .part-chip.elite { background: #fff4e6; color: #8a4a1a; border-color: #f5d9b8; font-weight: 600; }
   .strength-parts { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
@@ -289,8 +290,9 @@ function buildPopulationStats() {
   const buckets = {}; // cat → {s:[], b:[], r:[], t:[], rows:[]}
   for (const rec of DATA) {
     const cat = classifyDistance(distInfo(rec)) || 'other';
-    // 표준은 순수 표준(1.5/40/10, 듀애슬론·단축 제외)만 전체 풀 통계에 반영
+    // 표준은 순수 표준만, 아쿠아슬론은 전면 제외
     if (cat === 'standard' && !isPureStandard(rec)) continue;
+    if (isAquathlon(rec)) continue;
     if (!buckets[cat]) buckets[cat] = { s:[], b:[], r:[], t:[], t1:[], t2:[] };
     const s = cleanSec(rec.swim, 'swim');
     const b = cleanSec(rec.bike, 'bike');
@@ -429,6 +431,11 @@ function isPureStandard(r) {
 // 표준 분류이지만 순수 표준이 아닌 변형인지 — 개인 분석 표식용
 function isVariantStandard(r) {
   return distCat(r) === 'standard' && !isPureStandard(r);
+}
+// 아쿠아슬론(수영+런만, 사이클 없음)은 통계/베스트에서 제외
+function isAquathlon(r) {
+  const d = distInfo(r);
+  return !!(d && d.sport_type === 'aquathlon');
 }
 function fmtKm(v) {
   if (v == null) return '?';
@@ -685,6 +692,7 @@ function renderProfile(name, clubF, filtered, div) {
   const strengthParts = {}; // part → count (강점 분석에 사용된 부문)
   all.forEach(rec => {
     if (isVariantStandard(rec)) return; // 변형 제외
+    if (isAquathlon(rec)) return; // 아쿠아슬론 제외
     const same = DATA.filter(x => x.tour === rec.tour && x.part === rec.part);
     if (same.length < 3) return;
     strengthParts[rec.part] = (strengthParts[rec.part] || 0) + 1;
@@ -720,9 +728,10 @@ function renderProfile(name, clubF, filtered, div) {
   }
   const SEG_NAME = { s: '수영', b: '사이클', r: '런' };
 
-  // 2) 거리 카테고리별 베스트
+  // 2) 거리 카테고리별 베스트 (아쿠아슬론 제외 — 2종목 경기는 비교 부적절)
   const byCat = {};
   all.forEach(r => {
+    if (isAquathlon(r)) return;
     const cat = distCat(r);
     const tot = cleanSec(r.total, 'total');
     if (tot == null) return;
@@ -853,6 +862,7 @@ function renderProfile(name, clubF, filtered, div) {
         if (distCat(r) !== primaryCat) continue;
         if (!myParts.has(r.part)) continue;  // 같은 부문만
         if (requirePure && !isPureStandard(r)) continue;
+        if (isAquathlon(r)) continue;
         const tot = cleanSec(r.total, 'total');
         const sw  = cleanSec(r.swim, 'swim');
         const bk  = cleanSec(r.bike, 'bike');
@@ -948,6 +958,7 @@ function renderProfile(name, clubF, filtered, div) {
       if (!myParts.includes(r.part)) continue;
       // 표준은 순수 표준만 풀에 포함 (변형/듀애슬론 제외)
       if (sharedPrimaryCat === 'standard' && !isPureStandard(r)) continue;
+      if (isAquathlon(r)) continue;
       const sw = cleanSec(r.swim, 'swim');
       const bk = cleanSec(r.bike, 'bike');
       const rn = cleanSec(r.run,  'run');
@@ -1184,28 +1195,33 @@ function renderProfile(name, clubF, filtered, div) {
 }
 
 function renderStats(filtered, div) {
-  const totals = filtered.map(r => toSec(r.total)).filter(v => v != null);
+  // 통계(베스트/평균순위)는 아쿠아슬론·듀애슬론 등 2종목 경기 제외
+  const statsRows = filtered.filter(r => !isAquathlon(r));
+  const totals = statsRows.map(r => toSec(r.total)).filter(v => v != null);
   const best = totals.length ? Math.min(...totals) : null;
-  const bestRow = filtered.find(r => toSec(r.total) === best);
+  const bestRow = statsRows.find(r => toSec(r.total) === best);
 
   // 평균 백분위 (해당 부문/대회 안에서)
   let pctSum = 0, pctN = 0;
-  filtered.forEach(r => {
+  statsRows.forEach(r => {
     const same = DATA.filter(x => x.tour === r.tour && x.part === r.part);
     if (same.length > 1 && r.rank) {
-      // (전체 - 본인순위 + 1) / 전체 * 100  → 상위%로 환산: 본인 순위/전체*100
       const topPct = (r.rank / same.length) * 100;
       pctSum += topPct; pctN++;
     }
   });
   const avgPct = pctN ? (pctSum / pctN) : null;
 
+  const excluded = filtered.length - statsRows.length;
+  const noteFoot = excluded > 0
+    ? `<div class="stats-note">※ 통계 집계에서 아쿠아슬론 등 ${excluded}건 제외</div>`
+    : '';
   div.innerHTML =
     '<div class="stat-grid">' +
     statCard('출전 횟수', filtered.length + '회', filtered[0].date.slice(0,4) + ' ~ ' + filtered[filtered.length-1].date.slice(0,4)) +
     statCard('베스트 기록', fmtSec(best), bestRow ? bestRow.tour : '') +
     statCard('평균 상위 %', avgPct != null ? avgPct.toFixed(1) + '%' : '-', '같은 부문 내 평균 순위 백분위') +
-    '</div>';
+    '</div>' + noteFoot;
 }
 function statCard(label, value, sub) {
   return '<div class="stat-card"><div class="stat-label">' + escapeHtml(label) + '</div>' +

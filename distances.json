@@ -201,7 +201,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제21회 문화체육관광부장관배 철인3종 선수권 대회 겸 제50회 전국소년체육대회||아쿠아슬론 초등 1-2학년 남": {
     "swim_km": 0.3,
@@ -213,7 +214,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제21회 문화체육관광부장관배 철인3종 선수권 대회 겸 제50회 전국소년체육대회||아쿠아슬론 초등 3-4학년 남": {
     "swim_km": 0.3,
@@ -225,7 +227,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제21회 문화체육관광부장관배 철인3종 선수권 대회 겸 제50회 전국소년체육대회||엘리트 단체전 엘리트 남자 단체전": {
     "swim_km": 0.75,
@@ -353,7 +356,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제21회 문화체육관광부장관배 철인3종 선수권 대회 겸 제50회 전국소년체육대회||스프린트 파라(엘리트) 남": {
     "swim_km": 0.75,
@@ -377,7 +381,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제21회 문화체육관광부장관배 철인3종 선수권 대회 겸 제50회 전국소년체육대회||엘리트 단체전 엘리트 여자 단체전": {
     "swim_km": 1.5,
@@ -1193,7 +1198,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 대한철인3종협회장배 철인3종 선수권 대회||스프린트 U23 남": {
     "swim_km": 0.75,
@@ -1217,7 +1223,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 대한철인3종협회장배 철인3종 선수권 대회||아쿠아슬론 초등 5학년 여": {
     "swim_km": 0.3,
@@ -1229,7 +1236,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 대한철인3종협회장배 철인3종 선수권 대회||스프린트 주니어 여": {
     "swim_km": 0.75,
@@ -1253,7 +1261,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 대한철인3종협회장배 철인3종 선수권 대회||아쿠아슬론 초등 6학년 여": {
     "swim_km": 0.3,
@@ -1265,7 +1274,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 대한철인3종협회장배 철인3종 선수권 대회||아쿠아슬론 초등 3학년 여": {
     "swim_km": 0.3,
@@ -1277,7 +1287,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 대한철인3종협회장배 철인3종 선수권 대회||아쿠아슬론 초등 6학년 남": {
     "swim_km": 0.3,
@@ -1289,7 +1300,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 대한철인3종협회장배 철인3종 선수권 대회||스프린트 U23 여": {
     "swim_km": 0.75,
@@ -1313,7 +1325,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 대한철인3종협회장배 철인3종 선수권 대회||스프린트 엘리트 남": {
     "swim_km": 0.75,
@@ -1337,7 +1350,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제18회 대구광역시장배 전국 철인3종 대회||스탠다드 동호인 50-54세 남": {
     "swim_km": 1.5,
@@ -2045,7 +2059,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 충청북도지사배 충주탄금호 철인3종경기 대회||스탠다드 동호인 55-59세 여": {
     "swim_km": 1.5,
@@ -2081,7 +2096,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 표준거리 남자": {
     "swim_km": 0.75,
@@ -2093,7 +2109,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 충청북도지사배 충주탄금호 철인3종경기 대회||스탠다드 동호인 50-54세 여": {
     "swim_km": 1.5,
@@ -2117,7 +2134,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 충청북도지사배 충주탄금호 철인3종경기 대회||스탠다드 동호인 35-39세 여": {
     "swim_km": 1.5,
@@ -2141,7 +2159,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 초1 남": {
     "swim_km": 0.3,
@@ -2153,7 +2172,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 초5 여": {
     "swim_km": 0.3,
@@ -2165,7 +2185,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 충청북도지사배 충주탄금호 철인3종경기 대회||스탠다드 동호인 65-69세 남": {
     "swim_km": 1.5,
@@ -2189,7 +2210,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 U23 남": {
     "swim_km": 0.3,
@@ -2201,7 +2223,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 표준거리 여자": {
     "swim_km": 0.75,
@@ -2213,7 +2236,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 초5 남": {
     "swim_km": 0.3,
@@ -2225,7 +2249,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 초6 여": {
     "swim_km": 0.3,
@@ -2237,7 +2262,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 충청북도지사배 충주탄금호 철인3종경기 대회||스탠다드 동호인 60-64세 여": {
     "swim_km": 1.5,
@@ -2273,7 +2299,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 충청북도지사배 충주탄금호 철인3종경기 대회||스탠다드 동호인 40-44세 여": {
     "swim_km": 1.5,
@@ -2297,7 +2324,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 주니어 여": {
     "swim_km": 0.3,
@@ -2309,7 +2337,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 중등부 남": {
     "swim_km": 0.3,
@@ -2321,7 +2350,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 U23 여": {
     "swim_km": 0.3,
@@ -2333,7 +2363,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(전북협회장배) Ⅰ||아쿠아슬론 1차 중등부 여": {
     "swim_km": 0.3,
@@ -2345,7 +2376,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 충청북도지사배 충주탄금호 철인3종경기 대회||스탠다드 동호인 70대이상 남": {
     "swim_km": 1.5,
@@ -2381,7 +2413,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 충청북도지사배 충주탄금호 철인3종경기 대회||스탠다드 동호인 18-24세 남": {
     "swim_km": 1.5,
@@ -2405,7 +2438,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 표준거리 남자": {
     "swim_km": 0.75,
@@ -2417,7 +2451,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 표준거리 여자": {
     "swim_km": 0.75,
@@ -2429,7 +2464,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 스프린트 여자": {
     "swim_km": 0.75,
@@ -2441,7 +2477,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 U23 남": {
     "swim_km": 0.3,
@@ -2453,7 +2490,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 초6 남": {
     "swim_km": 0.3,
@@ -2465,7 +2503,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 중등부 남": {
     "swim_km": 0.3,
@@ -2477,7 +2516,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 초5 여": {
     "swim_km": 0.3,
@@ -2489,7 +2529,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 스프린트 남자": {
     "swim_km": 0.75,
@@ -2501,7 +2542,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 초5 남": {
     "swim_km": 0.3,
@@ -2513,7 +2555,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 초6 여": {
     "swim_km": 0.3,
@@ -2525,7 +2568,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 엘리트 여": {
     "swim_km": 0.3,
@@ -2537,7 +2581,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 주니어 여": {
     "swim_km": 0.3,
@@ -2549,7 +2594,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 중등부 여": {
     "swim_km": 0.3,
@@ -2561,7 +2607,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 엘리트 남": {
     "swim_km": 0.3,
@@ -2573,7 +2620,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 초1 남": {
     "swim_km": 0.3,
@@ -2585,7 +2633,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 U23 여": {
     "swim_km": 0.3,
@@ -2597,7 +2646,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(익산협회장배) Ⅱ||아쿠아슬론 2차 초2 남": {
     "swim_km": 0.3,
@@ -2609,7 +2659,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제15회 전국해양스포츠제전||스탠다드 동호인 30-34세 여": {
     "swim_km": 0.0,
@@ -2757,7 +2808,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제15회 전국해양스포츠제전||스탠다드 동호인 25-29세 여": {
     "swim_km": 0.0,
@@ -2783,7 +2835,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제15회 전국해양스포츠제전||아쿠아슬론 초등부 1-2학년 여": {
     "swim_km": 0.3,
@@ -2795,7 +2848,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제15회 전국해양스포츠제전||스프린트 U23 여": {
     "swim_km": 0.75,
@@ -2893,7 +2947,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제15회 전국해양스포츠제전||슈퍼스프린트 중등부 여": {
     "swim_km": 0.3,
@@ -2959,7 +3014,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제15회 전국해양스포츠제전||슈퍼스프린트 고등부 여": {
     "swim_km": 0.3,
@@ -3011,7 +3067,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제15회 전국해양스포츠제전||스탠다드 동호인 40-44세 여": {
     "swim_km": 0.0,
@@ -3239,7 +3296,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제6회 경기도철인3종협회장배 전국 철인3종 그레이트맨 하프 대회||하프코스 동호인 50-54세 여": {
     "swim_km": 2.0,
@@ -3287,7 +3345,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(대한협회장배) Ⅲ||아쿠아슬론 3차 초1 남": {
     "swim_km": 0.3,
@@ -3299,7 +3358,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제6회 경기도철인3종협회장배 전국 철인3종 그레이트맨 하프 대회||하프코스 동호인 45-49세 여": {
     "swim_km": 2.0,
@@ -3347,7 +3407,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 대회(대한협회장배) Ⅲ||아쿠아슬론 3차 스프린트 남자": {
     "swim_km": 0.75,
@@ -3359,7 +3420,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제6회 경기도철인3종협회장배 전국 철인3종 그레이트맨 하프 대회||하프코스 동호인 25-29세 남": {
     "swim_km": 2.0,
@@ -3407,7 +3469,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제6회 경기도철인3종협회장배 전국 철인3종 그레이트맨 하프 대회||하프코스 동호인 18-24세 남": {
     "swim_km": 2.0,
@@ -3443,7 +3506,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제22회 문화체육관광부장관배 전국 트라이애슬론 선수권 대회||스탠다드 동호인 40-44세 남": {
     "swim_km": 1.5,
@@ -4247,7 +4311,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 창원특례시 마산만 전국 트라이애슬론 대회 겸 2022 전국생활체육대축전||스탠다드 동호인 35-39세 남": {
     "swim_km": 0.75,
@@ -4271,7 +4336,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 창원특례시 마산만 전국 트라이애슬론 대회 겸 2022 전국생활체육대축전||스탠다드 동호인 40-44세 남": {
     "swim_km": 0.75,
@@ -4307,7 +4373,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 창원특례시 마산만 전국 트라이애슬론 대회 겸 2022 전국생활체육대축전||스탠다드 동호인 45-49세 남": {
     "swim_km": 0.75,
@@ -4367,7 +4434,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 창원특례시 마산만 전국 트라이애슬론 대회 겸 2022 전국생활체육대축전||생활체육대축전 50대 이상 남": {
     "swim_km": 0.75,
@@ -4511,7 +4579,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 창원특례시 마산만 전국 트라이애슬론 대회 겸 2022 전국생활체육대축전||스탠다드 동호인 65-69세 남": {
     "swim_km": 0.75,
@@ -4535,7 +4604,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 창원특례시 마산만 전국 트라이애슬론 대회 겸 2022 전국생활체육대축전||생활체육대축전 20대 남": {
     "swim_km": 0.75,
@@ -4559,7 +4629,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": null
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 창원특례시 마산만 전국 트라이애슬론 대회 겸 2022 전국생활체육대축전||스탠다드 동호인 25-29세 남": {
     "swim_km": 0.75,
@@ -4583,7 +4654,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": null
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 파이널 대회(익산시장배) Ⅳ||아쿠아슬론 파이널 중등부 남": {
     "swim_km": 0.3,
@@ -4595,7 +4667,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 창원특례시 마산만 전국 트라이애슬론 대회 겸 2022 전국생활체육대축전||스탠다드 동호인 70대이상 남": {
     "swim_km": 0.75,
@@ -4619,7 +4692,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 파이널 대회(익산시장배) Ⅳ||아쿠아슬론 파이널 초2 남": {
     "swim_km": 0.3,
@@ -4631,7 +4705,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 파이널 대회(익산시장배) Ⅳ||아쿠아슬론 파이널 초1 남": {
     "swim_km": 0.3,
@@ -4643,7 +4718,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 파이널 대회(익산시장배) Ⅳ||아쿠아슬론 파이널 초4 남": {
     "swim_km": 0.3,
@@ -4655,7 +4731,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 창원특례시 마산만 전국 트라이애슬론 대회 겸 2022 전국생활체육대축전||스탠다드 동호인 18-24세 남": {
     "swim_km": 0.75,
@@ -4679,7 +4756,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 파이널 대회(익산시장배) Ⅳ||아쿠아슬론 파이널 표준거리 여자": {
     "swim_km": 0.75,
@@ -4691,7 +4769,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 창원특례시 마산만 전국 트라이애슬론 대회 겸 2022 전국생활체육대축전||스탠다드 동호인 60-64세 여": {
     "swim_km": 0.75,
@@ -4727,7 +4806,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2022 익산 아쿠아BOOM 챔피언십 시리즈 파이널 대회(익산시장배) Ⅳ||아쿠아슬론 파이널 초4 여": {
     "swim_km": 0.3,
@@ -4739,7 +4819,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제103회 전국체육대회||슈퍼스프린트 고등부 개인전": {
     "swim_km": 0.3,
@@ -6155,7 +6236,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 동호인 60-69세 남": {
     "swim_km": 0.75,
@@ -6167,7 +6249,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 초2 여": {
     "swim_km": 0.3,
@@ -6179,7 +6262,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 동호인 70대이상 남": {
     "swim_km": 0.75,
@@ -6191,7 +6275,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 스프린트 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -6203,7 +6288,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 스프린트 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -6215,7 +6301,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -6227,7 +6314,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -6239,7 +6327,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 스프린트 동호인 18-29세 여": {
     "swim_km": 0.75,
@@ -6251,7 +6340,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 초6 여": {
     "swim_km": 0.3,
@@ -6263,7 +6353,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 중등부 여": {
     "swim_km": 0.3,
@@ -6275,7 +6366,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 초6 남": {
     "swim_km": 0.3,
@@ -6287,7 +6379,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 스프린트 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -6299,7 +6392,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 초5 남": {
     "swim_km": 0.3,
@@ -6311,7 +6405,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -6323,7 +6418,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 중등부 남": {
     "swim_km": 0.3,
@@ -6335,7 +6431,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 스프린트 동호인 50-59세 여": {
     "swim_km": 0.75,
@@ -6347,7 +6444,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM)||아쿠아슬론 1차 스프린트 동호인 18-29세 남": {
     "swim_km": 0.75,
@@ -6359,7 +6457,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 세종 아시아 트라이애슬론 컵(2023 Asia Triathlon Cup Sejong)||스프린트 엘리트 남": {
     "swim_km": 0.75,
@@ -6647,7 +6746,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 35-39세 남": {
     "swim_km": 0.75,
@@ -6659,7 +6759,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 45-49세 남": {
     "swim_km": 0.75,
@@ -6671,7 +6772,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 35-39세 여": {
     "swim_km": 0.75,
@@ -6683,7 +6785,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 50-54세 여": {
     "swim_km": 0.75,
@@ -6695,7 +6798,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 50-54세 남": {
     "swim_km": 0.75,
@@ -6707,7 +6811,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 30-34세 여": {
     "swim_km": 1.5,
@@ -6731,7 +6836,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 30-34세 남": {
     "swim_km": 0.75,
@@ -6743,7 +6849,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 40-44세 남": {
     "swim_km": 0.75,
@@ -6755,7 +6862,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 45-49세 남": {
     "swim_km": 1.5,
@@ -6791,7 +6899,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 50-54세 남": {
     "swim_km": 1.5,
@@ -6815,7 +6924,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 65-69세 남": {
     "swim_km": 1.5,
@@ -6851,7 +6961,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 60-64세 남": {
     "swim_km": 0.75,
@@ -6863,7 +6974,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 25-29세 여": {
     "swim_km": 1.5,
@@ -6887,7 +6999,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 70대이상 남": {
     "swim_km": 0.75,
@@ -6899,7 +7012,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 35-39세 남": {
     "swim_km": 1.5,
@@ -6923,7 +7037,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 40-44세 남": {
     "swim_km": 1.5,
@@ -6947,7 +7062,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 25-29세 남": {
     "swim_km": 0.75,
@@ -6959,7 +7075,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 30-34세 남": {
     "swim_km": 1.5,
@@ -6983,7 +7100,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 55-59세 남": {
     "swim_km": 1.5,
@@ -7007,7 +7125,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 25-29세 남": {
     "swim_km": 1.5,
@@ -7043,7 +7162,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론(중등부) 중등부 여": {
     "swim_km": 0.75,
@@ -7055,7 +7175,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 45-49세 여": {
     "swim_km": 1.5,
@@ -7103,7 +7224,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 40-44세 여": {
     "swim_km": 1.5,
@@ -7127,7 +7249,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제26회 설봉 철인3종 대회||스탠다드 동호인 65세이상 여": {
     "swim_km": 1.5,
@@ -7667,7 +7790,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 스프린트 30-39세 남": {
     "swim_km": 0.75,
@@ -7679,7 +7803,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 표준거리 60-69세 남": {
     "swim_km": 0.75,
@@ -7691,7 +7816,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 표준거리 40-49세 남": {
     "swim_km": 0.75,
@@ -7703,7 +7829,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 표준거리 50-59세 남": {
     "swim_km": 0.75,
@@ -7715,7 +7842,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 스프린트 20-29세 여": {
     "swim_km": 0.75,
@@ -7727,7 +7855,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 표준거리 40-49세 여": {
     "swim_km": 0.75,
@@ -7739,7 +7868,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 동호인 70대이상 남": {
     "swim_km": 0.75,
@@ -7751,7 +7881,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 표준거리 30-39세 남": {
     "swim_km": 0.75,
@@ -7763,7 +7894,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 스프린트 50-59세 남": {
     "swim_km": 0.75,
@@ -7775,7 +7907,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 스프린트 60-69세 남": {
     "swim_km": 0.75,
@@ -7787,7 +7920,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 스프린트 40-49세 남": {
     "swim_km": 0.75,
@@ -7799,7 +7933,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 스프린트 30-39세 여": {
     "swim_km": 0.75,
@@ -7811,7 +7946,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 표준거리 20-29세 여": {
     "swim_km": 0.75,
@@ -7823,7 +7959,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 엘리트 남": {
     "swim_km": 0.75,
@@ -7835,7 +7972,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 초3 남": {
     "swim_km": 0.3,
@@ -7847,7 +7985,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 초1 남": {
     "swim_km": 0.3,
@@ -7859,7 +7998,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 표준거리 20-29세 남": {
     "swim_km": 0.75,
@@ -7871,7 +8011,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ(아쿠아BOOM)||아쿠아슬론 3차 중등부 남": {
     "swim_km": 0.3,
@@ -7883,7 +8024,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제7회 경기도지사배 전국 철인3종 그레이트맨 하프 대회||하프코스 릴레이": {
     "swim_km": 2.0,
@@ -8903,7 +9045,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 스프린트 남자 50대": {
     "swim_km": 0.75,
@@ -8915,7 +9058,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 스프린트 여자 50대": {
     "swim_km": 0.75,
@@ -8927,7 +9071,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 스프린트 남자 40대": {
     "swim_km": 0.3,
@@ -8939,7 +9084,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 주니어 여": {
     "swim_km": 0.75,
@@ -8951,7 +9097,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 표준거리 남자 30대": {
     "swim_km": 0.75,
@@ -8963,7 +9110,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 스프린트 여자 40대": {
     "swim_km": 0.75,
@@ -8975,7 +9123,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 초1 남": {
     "swim_km": 0.3,
@@ -8987,7 +9136,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 하프 남자 30대": {
     "swim_km": 1.5,
@@ -8999,7 +9149,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": null
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 표준거리 여자 20대": {
     "swim_km": 0.75,
@@ -9011,7 +9162,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 하프 남자 50대": {
     "swim_km": 1.5,
@@ -9023,7 +9175,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": null
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 중등부 남": {
     "swim_km": 0.3,
@@ -9035,7 +9188,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 표준거리 남자 50대": {
     "swim_km": 0.75,
@@ -9047,7 +9201,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 하프 남자 40대": {
     "swim_km": 1.5,
@@ -9059,7 +9214,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": null
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 표준거리 남자 20대": {
     "swim_km": 0.75,
@@ -9071,7 +9227,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 스프린트 여자 20대": {
     "swim_km": 0.75,
@@ -9083,7 +9240,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2023 익산시 아쿠아슬론 챔피언십 시리즈 Ⅳ 파이널(아쿠아BOOM)||아쿠아슬론 파이널 초6 여": {
     "swim_km": 0.3,
@@ -9095,7 +9253,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제104회 전국체육대회||스프린트 U18 개인전": {
     "swim_km": 0.75,
@@ -10653,7 +10812,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 18-24세 남": {
     "swim_km": 1.5,
@@ -10665,7 +10825,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 35-39세 남": {
     "swim_km": 1.5,
@@ -10677,7 +10838,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 25-29세 여": {
     "swim_km": 1.5,
@@ -10689,7 +10851,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 30-34세 남": {
     "swim_km": 1.5,
@@ -10701,7 +10864,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 50-54세 남": {
     "swim_km": 1.5,
@@ -10713,7 +10877,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 40-44세 여": {
     "swim_km": 1.5,
@@ -10725,7 +10890,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 55-59세 남": {
     "swim_km": 1.5,
@@ -10737,7 +10903,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 60-64세 남": {
     "swim_km": 1.5,
@@ -10749,7 +10916,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 30-34세 여": {
     "swim_km": 1.5,
@@ -10761,7 +10929,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 40-44세 남": {
     "swim_km": 1.5,
@@ -10773,7 +10942,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 25-29세 남": {
     "swim_km": 1.5,
@@ -10785,7 +10955,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||상위그룹 상위그룹 남": {
     "swim_km": 1.5,
@@ -10797,7 +10968,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 50-54세 여": {
     "swim_km": 1.5,
@@ -10809,7 +10981,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 45-49세 여": {
     "swim_km": 1.5,
@@ -10821,7 +10994,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 18-24세 여": {
     "swim_km": 1.5,
@@ -10833,7 +11007,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 35-39세 여": {
     "swim_km": 1.5,
@@ -10845,7 +11020,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 70대 이상 남": {
     "swim_km": 1.5,
@@ -10857,7 +11033,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 55-59세 여": {
     "swim_km": 1.5,
@@ -10869,7 +11046,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 65-69세 남": {
     "swim_km": 1.5,
@@ -10881,7 +11059,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||상위그룹 상위그룹 여": {
     "swim_km": 1.5,
@@ -10893,7 +11072,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제4회 창원특례시 마산만 전국 트라이애슬론 대회||동호인부 40-44세 남": {
     "swim_km": 1.5,
@@ -11157,7 +11337,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 30-34세 남": {
     "swim_km": 0.75,
@@ -11169,7 +11350,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 45-49세 남": {
     "swim_km": 0.75,
@@ -11181,7 +11363,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 30-34세 여": {
     "swim_km": 0.75,
@@ -11193,7 +11376,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 40-44세 여": {
     "swim_km": 0.75,
@@ -11205,7 +11389,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 45-49세 여": {
     "swim_km": 0.75,
@@ -11217,7 +11402,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 25-29세 남": {
     "swim_km": 0.75,
@@ -11229,7 +11415,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 55-59세 남": {
     "swim_km": 0.75,
@@ -11241,7 +11428,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 50-54세 남": {
     "swim_km": 0.75,
@@ -11253,7 +11441,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 60-64세 여": {
     "swim_km": 0.75,
@@ -11265,7 +11454,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 60-64세 남": {
     "swim_km": 0.75,
@@ -11277,7 +11467,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 40-44세 남": {
     "swim_km": 0.75,
@@ -11289,7 +11480,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 35-39세 여": {
     "swim_km": 0.75,
@@ -11301,7 +11493,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 65세이상 여": {
     "swim_km": 0.75,
@@ -11313,7 +11506,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 18-24세 남": {
     "swim_km": 0.75,
@@ -11325,7 +11519,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 50-54세 여": {
     "swim_km": 0.75,
@@ -11337,7 +11532,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 55-59세 여": {
     "swim_km": 0.75,
@@ -11349,7 +11545,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 종합(전체) 남": {
     "swim_km": 0.3,
@@ -11361,7 +11558,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론(엘리트,상위그룹) 여": {
     "swim_km": 0.75,
@@ -11373,7 +11571,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 18-24세 여": {
     "swim_km": 0.75,
@@ -11385,7 +11584,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 65-69세 남": {
     "swim_km": 0.75,
@@ -11397,7 +11597,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 25-29세 여": {
     "swim_km": 0.75,
@@ -11409,7 +11610,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 70대이상 남": {
     "swim_km": 0.75,
@@ -11421,7 +11623,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론(엘리트,상위그룹) 남": {
     "swim_km": 0.75,
@@ -11433,7 +11636,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 종합(전체) 여": {
     "swim_km": 0.75,
@@ -11445,7 +11649,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 4학년 남": {
     "swim_km": 0.3,
@@ -11457,7 +11662,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 3학년 남": {
     "swim_km": 0.3,
@@ -11469,7 +11675,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 6학년 여": {
     "swim_km": 0.3,
@@ -11481,7 +11688,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 4학년 여": {
     "swim_km": 0.3,
@@ -11493,7 +11701,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 중등부 남": {
     "swim_km": 0.3,
@@ -11505,7 +11714,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 유치부 여": {
     "swim_km": 0.3,
@@ -11517,7 +11727,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 중등부 여": {
     "swim_km": 0.3,
@@ -11529,7 +11740,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 5학년 남": {
     "swim_km": 0.3,
@@ -11541,7 +11753,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 5학년 여": {
     "swim_km": 0.3,
@@ -11553,7 +11766,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 유치부 남": {
     "swim_km": 0.3,
@@ -11565,7 +11779,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 6학년 남": {
     "swim_km": 0.3,
@@ -11577,7 +11792,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 2학년 남": {
     "swim_km": 0.3,
@@ -11589,7 +11805,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 3학년 여": {
     "swim_km": 0.3,
@@ -11601,7 +11818,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 2학년 여": {
     "swim_km": 0.3,
@@ -11613,7 +11831,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 1학년 여": {
     "swim_km": 0.3,
@@ -11625,7 +11844,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 대한철인3종협회장배 전국 어린이&amp;청소년 아쿠아슬론 대회||아쿠아슬론 초등부 1학년 남": {
     "swim_km": 0.3,
@@ -11637,7 +11857,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -11649,7 +11870,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 스프린트 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -11661,7 +11883,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -11673,7 +11896,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 스프린트 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -11685,7 +11909,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -11697,7 +11922,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 스프린트 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -11709,7 +11935,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 50-59세 여": {
     "swim_km": 0.75,
@@ -11721,7 +11948,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -11733,7 +11961,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 스프린트 동호인 30-39세 여": {
     "swim_km": 0.75,
@@ -11745,7 +11974,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 60-69세 남": {
     "swim_km": 0.75,
@@ -11757,7 +11987,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 스프린트 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -11769,7 +12000,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 스프린트 동호인 18-29세 여": {
     "swim_km": 0.75,
@@ -11781,7 +12013,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 스프린트 동호인 18-29세 남": {
     "swim_km": 0.3,
@@ -11793,7 +12026,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 18-29세 남": {
     "swim_km": 0.75,
@@ -11805,7 +12039,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 30-39세 여": {
     "swim_km": 0.75,
@@ -11817,7 +12052,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 18-29세 여": {
     "swim_km": 0.75,
@@ -11829,7 +12065,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제16회 전국해양스포츠제전||동호인부 동호인 40-44세 남": {
     "swim_km": 1.5,
@@ -12525,7 +12762,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 표준거리 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -12537,7 +12775,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 표준거리 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -12549,7 +12788,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 표준거리 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -12561,7 +12801,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 스프린트 동호인 18-29세 남": {
     "swim_km": 0.75,
@@ -12573,7 +12814,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 스프린트 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -12585,7 +12827,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 표준거리 동호인 18-29세 남": {
     "swim_km": 0.75,
@@ -12597,7 +12840,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 표준거리 동호인 60-69세 남": {
     "swim_km": 0.75,
@@ -12609,7 +12853,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 상위그룹 남": {
     "swim_km": 0.75,
@@ -12621,7 +12866,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 스프린트 동호인 18-29세 여": {
     "swim_km": 0.75,
@@ -12633,7 +12879,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 스프린트 동호인 30-39세 여": {
     "swim_km": 0.75,
@@ -12645,7 +12892,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 스프린트 동호인 70대이상 남": {
     "swim_km": 0.75,
@@ -12657,7 +12905,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 스프린트 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -12669,7 +12918,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 스프린트 동호인 60-69세 남": {
     "swim_km": 0.75,
@@ -12681,7 +12931,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 스프린트 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -12693,7 +12944,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 스프린트 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -12705,7 +12957,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 표준거리 동호인 50-59세 여": {
     "swim_km": 0.75,
@@ -12717,7 +12970,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 표준거리 동호인 30-39세 여": {
     "swim_km": 0.75,
@@ -12729,7 +12983,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅱ(아쿠아BOOM)||아쿠아슬론 2차 상위그룹 여": {
     "swim_km": 0.75,
@@ -12741,7 +12996,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제24회 문화체육관광부장관배 전국 트라이애슬론 선수권 대회||동호인부 동호인 40-44세 남": {
     "swim_km": 1.5,
@@ -13308,7 +13564,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 스프린트 40-49세 남": {
     "swim_km": 0.75,
@@ -13320,7 +13577,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 표준거리 30-39세 남": {
     "swim_km": 0.75,
@@ -13332,7 +13590,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 스프린트 40-49세 여": {
     "swim_km": 0.75,
@@ -13344,7 +13603,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 스프린트 20-29세 여": {
     "swim_km": 0.75,
@@ -13356,7 +13616,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 표준거리 40-49세 남": {
     "swim_km": 0.75,
@@ -13368,7 +13629,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 표준거리 50-59세 남": {
     "swim_km": 0.75,
@@ -13380,7 +13642,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 표준거리 50-59세 여": {
     "swim_km": 0.75,
@@ -13392,7 +13655,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 스프린트 50-59세 남": {
     "swim_km": 0.75,
@@ -13404,7 +13668,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 표준거리 20-29세 남": {
     "swim_km": 0.75,
@@ -13416,7 +13681,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 스프린트 20-29세 남": {
     "swim_km": 0.75,
@@ -13428,7 +13694,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 표준거리 40-49세 여": {
     "swim_km": 0.75,
@@ -13440,7 +13707,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 표준거리 30-39세 여": {
     "swim_km": 0.75,
@@ -13452,7 +13720,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 상위그룹 여": {
     "swim_km": 0.75,
@@ -13464,7 +13733,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 스프린트 30-39세 남": {
     "swim_km": 0.75,
@@ -13476,7 +13746,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 상위그룹 남": {
     "swim_km": 0.75,
@@ -13488,7 +13759,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||동호인부 50-54세 남": {
     "swim_km": 1.5,
@@ -13596,7 +13868,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||동호인부 60-64세 남": {
     "swim_km": 1.5,
@@ -13620,7 +13893,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||동호인부 55-59세 남": {
     "swim_km": 1.5,
@@ -13680,7 +13954,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||동호인부 18-24세 남": {
     "swim_km": 1.5,
@@ -13704,7 +13979,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||아쿠아슬론 초등부 5학년 남": {
     "swim_km": 0.3,
@@ -13716,7 +13992,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||아쿠아슬론 초등부 3학년 남": {
     "swim_km": 0.3,
@@ -13728,7 +14005,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||동호인부 40-44세 여": {
     "swim_km": 1.5,
@@ -13764,7 +14042,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||아쿠아슬론 초등부 6학년 남": {
     "swim_km": 0.3,
@@ -13776,7 +14055,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||동호인부 25-29세 여": {
     "swim_km": 1.5,
@@ -13836,7 +14116,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||아쿠아슬론 초등부 3학년 여(B)": {
     "swim_km": 0.3,
@@ -13848,7 +14129,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||아쿠아슬론 초등부 5학년 여": {
     "swim_km": 0.3,
@@ -13860,7 +14142,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||동호인부 65세 이상 여": {
     "swim_km": 1.5,
@@ -13884,7 +14167,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||아쿠아슬론 초등부 1학년 여": {
     "swim_km": 0.3,
@@ -13896,7 +14180,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "「시화호30주년」 기념 거북섬 철인3종 대회 / 어린이 아쿠아슬론 대회||상위그룹 상위그룹 여": {
     "swim_km": 1.5,
@@ -13920,7 +14205,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제105회 전국체육대회||엘리트 엘리트 남 개인전": {
     "swim_km": 1.5,
@@ -15310,7 +15596,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 표준거리 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -15322,7 +15609,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 표준거리 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -15334,7 +15622,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 30-39세 남": {
     "swim_km": 0.3,
@@ -15346,7 +15635,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 표준거리 동호인 30-39세 여": {
     "swim_km": 0.75,
@@ -15358,7 +15648,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -15370,7 +15661,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -15382,7 +15674,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 표준거리 동호인 60-69세 남": {
     "swim_km": 0.75,
@@ -15394,7 +15687,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -15406,7 +15700,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 60-69세 남": {
     "swim_km": 0.75,
@@ -15418,7 +15713,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 표준거리 동호인 18-29세 여": {
     "swim_km": 0.75,
@@ -15430,7 +15726,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 표준거리 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -15442,7 +15739,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 표준거리 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -15454,7 +15752,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 30-39세 남": {
     "swim_km": 0.3,
@@ -15466,7 +15765,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 표준거리 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -15478,7 +15778,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 표준거리 동호인 50-59세 여": {
     "swim_km": 0.75,
@@ -15490,7 +15791,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 표준거리 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -15502,7 +15804,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 18-29세 남": {
     "swim_km": 0.75,
@@ -15514,7 +15817,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -15526,7 +15830,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 40-49세 남": {
     "swim_km": 0.3,
@@ -15538,7 +15843,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제54회 전국소년체육대회||U15 개인전 U15 개인전 여": {
     "swim_km": 0.3,
@@ -15892,7 +16198,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -15904,7 +16211,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -15916,7 +16224,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -15928,7 +16237,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 70대이상 남": {
     "swim_km": 0.75,
@@ -15940,7 +16250,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 70대이상 남": {
     "swim_km": 0.75,
@@ -15952,7 +16263,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 50-59세 여": {
     "swim_km": 0.75,
@@ -15964,7 +16276,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 50-59세 여": {
     "swim_km": 0.75,
@@ -15976,7 +16289,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 스프린트 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -15988,7 +16302,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 스프린트 동호인 40-49세 남": {
     "swim_km": 0.75,
@@ -16000,7 +16315,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -16012,7 +16328,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -16024,7 +16341,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 스프린트 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -16036,7 +16354,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 스프린트 동호인 30-39세 남": {
     "swim_km": 0.75,
@@ -16048,7 +16367,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 60-69세 남": {
     "swim_km": 0.75,
@@ -16060,7 +16380,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 60-69세 남": {
     "swim_km": 0.75,
@@ -16072,7 +16393,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 스프린트 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -16084,7 +16406,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 스프린트 동호인 50-59세 남": {
     "swim_km": 0.75,
@@ -16096,7 +16419,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 스프린트 동호인 18-29세 남": {
     "swim_km": 0.75,
@@ -16108,7 +16432,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 스프린트 동호인 18-29세 남": {
     "swim_km": 0.75,
@@ -16120,7 +16445,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 30-39세 여": {
     "swim_km": 0.75,
@@ -16132,7 +16458,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 30-39세 여": {
     "swim_km": 0.75,
@@ -16144,7 +16471,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 스프린트 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -16156,7 +16484,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 스프린트 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -16168,7 +16497,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.21 토요일) -29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -16180,7 +16510,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅱ(6.22 일요일)-29일 일요일 연기||아쿠아슬론 2차 표준거리 동호인 40-49세 여": {
     "swim_km": 0.75,
@@ -16192,7 +16523,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 50-54세 남": {
     "swim_km": 0.75,
@@ -16204,7 +16536,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 60-64세 남": {
     "swim_km": 0.75,
@@ -16216,7 +16549,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 30-34세 남": {
     "swim_km": 0.75,
@@ -16228,7 +16562,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 55-59세 남": {
     "swim_km": 0.75,
@@ -16240,7 +16575,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 40-44세 남": {
     "swim_km": 0.75,
@@ -16252,7 +16588,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 65-69세 남": {
     "swim_km": 0.75,
@@ -16264,7 +16601,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 45-49세 남": {
     "swim_km": 0.75,
@@ -16276,7 +16614,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 35-39세 남": {
     "swim_km": 0.75,
@@ -16288,7 +16627,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 70대이상 남": {
     "swim_km": 0.75,
@@ -16300,7 +16640,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 18-24세 남": {
     "swim_km": 0.75,
@@ -16312,7 +16653,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 30-34세 여": {
     "swim_km": 0.75,
@@ -16324,7 +16666,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 45-49세 여": {
     "swim_km": 0.75,
@@ -16336,7 +16679,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 25-29세 남": {
     "swim_km": 0.75,
@@ -16348,7 +16692,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 60-64세 여": {
     "swim_km": 0.75,
@@ -16360,7 +16705,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 55-59세 여": {
     "swim_km": 0.75,
@@ -16372,7 +16718,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 35-39세 여": {
     "swim_km": 0.75,
@@ -16384,7 +16731,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 50-54세 여": {
     "swim_km": 0.75,
@@ -16396,7 +16744,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 40-44세 여": {
     "swim_km": 0.75,
@@ -16408,7 +16757,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론(상위그룹) 남": {
     "swim_km": 0.75,
@@ -16420,7 +16770,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 종합(전체) 남": {
     "swim_km": 0.75,
@@ -16432,7 +16783,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 25-29세 여": {
     "swim_km": 0.75,
@@ -16444,7 +16796,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 65세이상 여": {
     "swim_km": 0.75,
@@ -16456,7 +16809,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론(상위그룹) 여": {
     "swim_km": 0.75,
@@ -16468,7 +16822,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 18-24세 여": {
     "swim_km": 0.75,
@@ -16480,7 +16835,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2025 LOTTE AQUATHLON 롯데 아쿠아슬론 대회||아쿠아슬론 종합(전체) 여": {
     "swim_km": 0.75,
@@ -16492,7 +16848,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 표준거리 40-49세 남": {
     "swim_km": 0.75,
@@ -16504,7 +16861,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 스프린트 40-49세 남": {
     "swim_km": 0.75,
@@ -16516,7 +16874,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 표준거리 50-59세 여": {
     "swim_km": 0.75,
@@ -16528,7 +16887,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 표준거리 30-39세 남": {
     "swim_km": 0.75,
@@ -16540,7 +16900,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 스프린트 60-69세 남": {
     "swim_km": 0.75,
@@ -16552,7 +16913,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 표준거리 18-29세 남": {
     "swim_km": 0.75,
@@ -16564,7 +16926,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 표준거리 50-59세 남": {
     "swim_km": 0.75,
@@ -16576,7 +16939,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 스프린트 30-39세 여": {
     "swim_km": 0.75,
@@ -16588,7 +16952,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 스프린트 30-39세 남": {
     "swim_km": 0.75,
@@ -16600,7 +16965,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 스프린트 40-49세 여": {
     "swim_km": 0.75,
@@ -16612,7 +16978,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 표준거리 30-39세 여": {
     "swim_km": 0.75,
@@ -16624,7 +16991,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 표준거리 60-69세 남": {
     "swim_km": 0.75,
@@ -16636,7 +17004,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.26 토요일로 변경)||아쿠아슬론 3차 스프린트 18-29세 남": {
     "swim_km": 0.75,
@@ -16648,7 +17017,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 표준거리 50-59세 남": {
     "swim_km": 0.75,
@@ -16660,7 +17030,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 표준거리 40-49세 남": {
     "swim_km": 0.75,
@@ -16672,7 +17043,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 스프린트 40-49세 여": {
     "swim_km": 0.75,
@@ -16684,7 +17056,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 스프린트 30-39세 남": {
     "swim_km": 0.75,
@@ -16696,7 +17069,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 표준거리 30-39세 남": {
     "swim_km": 0.75,
@@ -16708,7 +17082,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 표준거리 60-69세 남": {
     "swim_km": 0.75,
@@ -16720,7 +17095,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 표준거리 50-59세 여": {
     "swim_km": 0.75,
@@ -16732,7 +17108,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 스프린트 40-49세 남": {
     "swim_km": 0.75,
@@ -16744,7 +17121,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 상위그룹 남": {
     "swim_km": 0.75,
@@ -16756,7 +17134,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 스프린트 50-59세 여": {
     "swim_km": 0.75,
@@ -16768,7 +17147,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 스프린트 60세이상 여": {
     "swim_km": 0.75,
@@ -16780,7 +17160,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 표준거리 18-29세 여": {
     "swim_km": 0.75,
@@ -16792,7 +17173,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 스프린트 18-29세 여": {
     "swim_km": 0.75,
@@ -16804,7 +17186,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 표준거리 18-29세 남": {
     "swim_km": 0.75,
@@ -16816,7 +17199,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 표준거리 40-49세 여": {
     "swim_km": 0.75,
@@ -16828,7 +17212,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅲ (7.27 일요일로 변경)||아쿠아슬론 3차 스프린트 18-29세 남": {
     "swim_km": 0.3,
@@ -16840,7 +17225,8 @@
       "Run"
     ],
     "src": "time_inferred",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제17회 전국해양스포츠제전||동호인부 동호인 25-29세 여": {
     "swim_km": 1.5,
@@ -19332,7 +19718,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 표준거리 20-29세 여": {
     "swim_km": null,
@@ -19344,7 +19731,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 스프린트 30-39세 여": {
     "swim_km": null,
@@ -19356,7 +19744,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 스프린트 50-59세 여": {
     "swim_km": null,
@@ -19368,7 +19757,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 표준거리 60대이상 여": {
     "swim_km": null,
@@ -19380,7 +19770,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 스프린트 60세이상 여": {
     "swim_km": null,
@@ -19392,7 +19783,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 스프린트 70대이상 남": {
     "swim_km": null,
@@ -19404,7 +19796,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅲ 파이널(아쿠아BOOM) / 선착순 110명||아쿠아슬론 3차 표준거리 70세이상 남": {
     "swim_km": null,
@@ -19416,7 +19809,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제27회 설봉 철인3종 대회||스탠다드 동호인 65세이상 여": {
     "swim_km": 1.5,
@@ -19452,7 +19846,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 스프린트 동호인 70대이상 남": {
     "swim_km": null,
@@ -19464,7 +19859,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 70대이상 남": {
     "swim_km": null,
@@ -19476,7 +19872,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 스프린트 동호인 50-59세 여": {
     "swim_km": null,
@@ -19488,7 +19885,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 스프린트 동호인 60대 이상 여": {
     "swim_km": null,
@@ -19500,7 +19898,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 3회 익산시 아쿠아슬론 챔피언십 시리즈 Ⅰ(아쿠아BOOM) / 추가모집(40명)||아쿠아슬론 1차 표준거리 동호인 60대 이상": {
     "swim_km": null,
@@ -19512,7 +19911,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 60-64세 여": {
     "swim_km": 1.5,
@@ -19524,7 +19924,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2024 세종특별자치시 전국 아쿠아슬론 대회||동호인부 동호인 65세 이상 여": {
     "swim_km": 1.5,
@@ -19536,7 +19937,8 @@
       "Run 10km"
     ],
     "src": "header_partial",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제5회 양산시장배 황산 전국 철인3종 대회 겸 꿈나무대표 선발전||동호인부 동호인 18-24세 여": {
     "swim_km": 1.5,
@@ -19620,7 +20022,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 50-59세 남": {
     "swim_km": null,
@@ -19632,7 +20035,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 60-69세 남": {
     "swim_km": null,
@@ -19644,7 +20048,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 표준거리 동호인 60-69세 남": {
     "swim_km": null,
@@ -19656,7 +20061,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 70대이상 남": {
     "swim_km": null,
@@ -19668,7 +20074,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 표준거리 동호인 70대이상 남": {
     "swim_km": null,
@@ -19680,7 +20087,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 18-29세 여": {
     "swim_km": null,
@@ -19692,7 +20100,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 표준거리 동호인 18-29세 여": {
     "swim_km": null,
@@ -19704,7 +20113,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 30-39세 여": {
     "swim_km": null,
@@ -19716,7 +20126,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 표준거리 동호인 30-39세 여": {
     "swim_km": null,
@@ -19728,7 +20139,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 50-59세 여": {
     "swim_km": null,
@@ -19740,7 +20152,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 스프린트 동호인 60대 이상 여": {
     "swim_km": null,
@@ -19752,7 +20165,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.18 일요일)||아쿠아슬론 1차 표준거리 동호인 60대 이상 여": {
     "swim_km": null,
@@ -19764,7 +20178,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 18-29세 남": {
     "swim_km": null,
@@ -19776,7 +20191,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 표준거리 동호인 18-29세 남": {
     "swim_km": null,
@@ -19788,7 +20204,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 70대이상 남": {
     "swim_km": null,
@@ -19800,7 +20217,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 표준거리 동호인 70대이상 남": {
     "swim_km": null,
@@ -19812,7 +20230,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 18-29세 여": {
     "swim_km": null,
@@ -19824,7 +20243,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 30-39세 여": {
     "swim_km": null,
@@ -19836,7 +20256,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 표준거리 동호인 40-49세 여": {
     "swim_km": null,
@@ -19848,7 +20269,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 50-59세 여": {
     "swim_km": null,
@@ -19860,7 +20282,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 표준거리 동호인 50-59세 여": {
     "swim_km": null,
@@ -19872,7 +20295,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 스프린트 동호인 60대 이상 여": {
     "swim_km": null,
@@ -19884,7 +20308,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제 4회 익산 챌린지 아쿠아슬론 챔피언십 시리즈대회 Ⅰ(5.17 토요일)||아쿠아슬론 1차 표준거리 동호인 60대 이상 여": {
     "swim_km": null,
@@ -19896,7 +20321,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제21회 대구광역시장배 전국 철인3종 대회||파라부 장애인 남": {
     "swim_km": null,
@@ -21468,7 +21894,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 엘리트 여자": {
     "swim_km": null,
@@ -21480,7 +21907,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 주니어부 남자": {
     "swim_km": null,
@@ -21492,7 +21920,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 주니어부 여자": {
     "swim_km": null,
@@ -21504,7 +21933,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 중등부 남자": {
     "swim_km": null,
@@ -21516,7 +21946,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 중등부 여자": {
     "swim_km": null,
@@ -21528,7 +21959,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 초등부(5-6학년) 남자": {
     "swim_km": null,
@@ -21540,7 +21972,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 초등부(5-6학년) 여자": {
     "swim_km": null,
@@ -21552,7 +21985,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 초등부(3-4학년) 남자": {
     "swim_km": null,
@@ -21564,7 +21998,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 초등부(3-4학년) 여자": {
     "swim_km": null,
@@ -21576,7 +22011,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 초등부(1-2학년) 남자": {
     "swim_km": null,
@@ -21588,7 +22024,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||아쿠아슬론 초등부(1-2학년) 여자": {
     "swim_km": null,
@@ -21600,7 +22037,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||O2 아쿠아 동호인 25-29세 남": {
     "swim_km": null,
@@ -21612,7 +22050,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||O2 아쿠아 동호인 30-34세 남": {
     "swim_km": null,
@@ -21624,7 +22063,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||O2 아쿠아 동호인 35-39세 남": {
     "swim_km": null,
@@ -21636,7 +22076,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||O2 아쿠아 동호인 40-44세 남": {
     "swim_km": null,
@@ -21648,7 +22089,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||O2 아쿠아 동호인 45-49세 남": {
     "swim_km": null,
@@ -21660,7 +22102,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||O2 아쿠아 동호인 50-54세 남": {
     "swim_km": null,
@@ -21672,7 +22115,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||O2 아쿠아 동호인 55-59세 남": {
     "swim_km": null,
@@ -21684,7 +22128,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||O2 아쿠아 동호인 60-64세 남": {
     "swim_km": null,
@@ -21696,7 +22141,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||O2 아쿠아 동호인 40-49세 여": {
     "swim_km": null,
@@ -21708,7 +22154,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||O2 아쿠아 동호인 50-59세 여": {
     "swim_km": null,
@@ -21720,7 +22167,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 18-24세 남": {
     "swim_km": null,
@@ -21732,7 +22180,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 25-29세 남": {
     "swim_km": null,
@@ -21744,7 +22193,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 30-34세 남": {
     "swim_km": null,
@@ -21756,7 +22206,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 35-39세 남": {
     "swim_km": null,
@@ -21768,7 +22219,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 40-44세 남": {
     "swim_km": null,
@@ -21780,7 +22232,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 45-49세 남": {
     "swim_km": null,
@@ -21792,7 +22245,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 50-54세 남": {
     "swim_km": null,
@@ -21804,7 +22258,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 55-59세 남": {
     "swim_km": null,
@@ -21816,7 +22271,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 60-64세 남": {
     "swim_km": null,
@@ -21828,7 +22284,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 18-29세 여": {
     "swim_km": null,
@@ -21840,7 +22297,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 30-39세 여": {
     "swim_km": null,
@@ -21852,7 +22310,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 40-49세 여": {
     "swim_km": null,
@@ -21864,7 +22323,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제1회 익산시장배 웅포 금강변 전국 장거리 아쿠아슬론 대회||올림픽 아쿠아 동호인 50-59세 여": {
     "swim_km": null,
@@ -21876,7 +22336,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제2회 경기도지사배 전국 철인3종 그레이트맨 하프 대회 / KTF시리즈 장거리||엘리트부 엘리트 남": {
     "swim_km": 1.9,
@@ -22272,7 +22733,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2018 Sokcho ASTC Triathlon Asian Cup / 제13회 전국해양스포츠제전 / KTF시리즈 표준거리||아쿠아슬론 초등4-6년 여자": {
     "swim_km": null,
@@ -22284,7 +22746,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2018 Sokcho ASTC Triathlon Asian Cup / 제13회 전국해양스포츠제전 / KTF시리즈 표준거리||스탠다드 동호인부 18-24세 남": {
     "swim_km": null,
@@ -23364,7 +23827,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제18회 문화체육관광부장관배 전국 트라이애슬론 대회 겸 제8회 장애인 트라이애슬론 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등부 5-6학년 여": {
     "swim_km": null,
@@ -23376,7 +23840,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제18회 문화체육관광부장관배 전국 트라이애슬론 대회 겸 제8회 장애인 트라이애슬론 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등부 3-4학년 남": {
     "swim_km": null,
@@ -23388,7 +23853,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제18회 문화체육관광부장관배 전국 트라이애슬론 대회 겸 제8회 장애인 트라이애슬론 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등부 3-4학년 여": {
     "swim_km": null,
@@ -23400,7 +23866,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제18회 문화체육관광부장관배 전국 트라이애슬론 대회 겸 제8회 장애인 트라이애슬론 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등부 1-2학년 남": {
     "swim_km": null,
@@ -23412,7 +23879,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제18회 문화체육관광부장관배 전국 트라이애슬론 대회 겸 제8회 장애인 트라이애슬론 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등부 1-2학년 여": {
     "swim_km": null,
@@ -23424,7 +23892,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제18회 문화체육관광부장관배 전국 트라이애슬론 대회 겸 제8회 장애인 트라이애슬론 선수권 대회 / KTF시리즈 표준거리||스탠다드 동호인부 18-24세 남": {
     "swim_km": null,
@@ -23904,7 +24373,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 유치부 여": {
     "swim_km": null,
@@ -23916,7 +24386,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등1학년 남": {
     "swim_km": null,
@@ -23928,7 +24399,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등1학년 여": {
     "swim_km": null,
@@ -23940,7 +24412,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등2학년 남": {
     "swim_km": null,
@@ -23952,7 +24425,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등2학년 여": {
     "swim_km": null,
@@ -23964,7 +24438,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등3학년 남": {
     "swim_km": null,
@@ -23976,7 +24451,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등3학년 여": {
     "swim_km": null,
@@ -23988,7 +24464,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등4학년 남": {
     "swim_km": null,
@@ -24000,7 +24477,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등4학년 여": {
     "swim_km": null,
@@ -24012,7 +24490,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등5학년 남": {
     "swim_km": null,
@@ -24024,7 +24503,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등5학년 여": {
     "swim_km": null,
@@ -24036,7 +24516,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등6학년 남": {
     "swim_km": null,
@@ -24048,7 +24529,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 초등6학년 여": {
     "swim_km": null,
@@ -24060,7 +24542,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 중등부 남": {
     "swim_km": null,
@@ -24072,7 +24555,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 중등부 여": {
     "swim_km": null,
@@ -24084,7 +24568,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 삼성출판사배 어린이/청소년 트라이애슬론/아쿠아슬론 대회||트라이애슬론 4학년 남": {
     "swim_km": null,
@@ -27624,7 +28109,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 엘리트 초등 1-2학년 여": {
     "swim_km": null,
@@ -27636,7 +28122,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 엘리트 초등 3-4학년 남": {
     "swim_km": null,
@@ -27648,7 +28135,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 엘리트 초등 3-4학년 여": {
     "swim_km": null,
@@ -27660,7 +28148,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 엘리트 초등 5-6학년 남": {
     "swim_km": null,
@@ -27672,7 +28161,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 엘리트 초등 5-6학년 여": {
     "swim_km": null,
@@ -27684,7 +28174,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 동호인 초등 1-2학년 남": {
     "swim_km": null,
@@ -27696,7 +28187,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 동호인 초등 1-2학년 여": {
     "swim_km": null,
@@ -27708,7 +28200,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 동호인 초등 3-4학년 남": {
     "swim_km": null,
@@ -27720,7 +28213,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 동호인 초등 3-4학년 여": {
     "swim_km": null,
@@ -27732,7 +28226,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 동호인 초등 5-6학년 남": {
     "swim_km": null,
@@ -27744,7 +28239,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 동호인 초등 5-6학년 여": {
     "swim_km": null,
@@ -27756,7 +28252,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등 1-2학년 남": {
     "swim_km": null,
@@ -27768,7 +28265,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등 1-2학년 여": {
     "swim_km": null,
@@ -27780,7 +28278,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등 3-4학년 남": {
     "swim_km": null,
@@ -27792,7 +28291,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등 3-4학년 여": {
     "swim_km": null,
@@ -27804,7 +28304,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등 5-6학년 남": {
     "swim_km": null,
@@ -27816,7 +28317,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제19회 문화체육관광부장관배 전국 철인3종 선수권 대회 겸 제9회 장애인 철인3종 선수권 대회 / KTF시리즈 표준거리||아쿠아슬론 초등 5-6학년 여": {
     "swim_km": null,
@@ -27828,7 +28330,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제3회 경기도지사배 전국 철인3종 그레이트맨 하프 대회 / KTF시리즈 장거리||엘리트부 엘리트 남": {
     "swim_km": 1.9,
@@ -28728,7 +29231,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 전국해양스포츠제전||아쿠아슬론 초등4-6학년 여자": {
     "swim_km": null,
@@ -28740,7 +29244,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "제14회 전국해양스포츠제전||혼성릴레이 혼성릴레이": {
     "swim_km": null,
@@ -30768,7 +31273,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 유치부 여": {
     "swim_km": null,
@@ -30780,7 +31286,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등1학년 남": {
     "swim_km": null,
@@ -30792,7 +31299,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등1학년 여": {
     "swim_km": null,
@@ -30804,7 +31312,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등2학년 남": {
     "swim_km": null,
@@ -30816,7 +31325,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등2학년 여": {
     "swim_km": null,
@@ -30828,7 +31338,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등3학년 남": {
     "swim_km": null,
@@ -30840,7 +31351,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등3학년 여": {
     "swim_km": null,
@@ -30852,7 +31364,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등4학년 남": {
     "swim_km": null,
@@ -30864,7 +31377,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등4학년 여": {
     "swim_km": null,
@@ -30876,7 +31390,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등5학년 남": {
     "swim_km": null,
@@ -30888,7 +31403,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등5학년 여": {
     "swim_km": null,
@@ -30900,7 +31416,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등6학년 남": {
     "swim_km": null,
@@ -30912,7 +31429,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 초등6학년 여": {
     "swim_km": null,
@@ -30924,7 +31442,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 중등부 남": {
     "swim_km": null,
@@ -30936,7 +31455,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||아쿠아슬론 아쿠아슬론 중등부 여": {
     "swim_km": null,
@@ -30948,7 +31468,8 @@
       "Run"
     ],
     "src": "unknown",
-    "pure_standard": false
+    "pure_standard": false,
+    "sport_type": "aquathlon"
   },
   "2019 서울컵 전국 어린이/청소년 트라이애슬론/아쿠아슬론 대회||트라이애슬론 트라이애슬론 초등4학년 남": {
     "swim_km": null,

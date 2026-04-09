@@ -241,6 +241,10 @@ function isPureStandard(r) {
   const d = distInfo(r);
   return !!(d && d.pure_standard === true);
 }
+function isAquathlon(r) {
+  const d = distInfo(r);
+  return !!(d && d.sport_type === 'aquathlon');
+}
 function distSummary(r) {
   const d = distInfo(r);
   if (!d) return '';
@@ -339,6 +343,7 @@ function onClubChange() {
   const members = new Set(teamRows.map(r => r.name));
   const catCounts = {};
   teamRows.forEach(r => {
+    if (isAquathlon(r)) return;
     const c = distCat(r);
     // 표준 대회는 순수 표준만 카운트 (랭킹과 일관성 유지)
     if (c === 'standard' && !isPureStandard(r)) return;
@@ -368,6 +373,7 @@ function renderLeaderboard() {
   const byCat = {};
   for (const r of DATA) {
     if (!r.club) continue;
+    if (isAquathlon(r)) continue;
     const cat = distCat(r);
     if (!cat || cat === 'other' || cat.startsWith('custom:')) continue;
     // 표준 대회는 순수 표준(단축/듀애슬론 제외)만 랭킹에 반영
@@ -434,6 +440,7 @@ function render() {
   const teamRows = DATA.filter(r => {
     if ((r.club || '') !== club) return false;
     if (distCat(r) !== selCat) return false;
+    if (isAquathlon(r)) return false;
     // 표준은 순수 표준만
     if (selCat === 'standard' && !isPureStandard(r)) return false;
     return true;
