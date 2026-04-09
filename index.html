@@ -636,44 +636,57 @@ function fmtSec(s) {
          String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
 }
 
+// 인덱스와 POP_STATS는 최초 사용 시 lazy 구축 (load 블로킹 제거)
+let _idxBuilt = false;
+function ensureIndexes() {
+  if (_idxBuilt) return;
+  buildIndexes();
+  _idxBuilt = true;
+}
+function getPopStats() {
+  if (Object.keys(POP_STATS).length === 0) POP_STATS = buildPopulationStats();
+  return POP_STATS;
+}
+
 async function load() {
+  const sub = document.getElementById('datasub');
+  sub.textContent = '데이터 로딩 중…';
   try {
     const ts = Date.now();
     const [dataRes, distRes] = await Promise.all([
       fetch('data.min.json?ts=' + ts),
       fetch('distances.json?ts=' + ts).catch(() => null),
     ]);
+    sub.textContent = '데이터 파싱 중…';
     const compact = await dataRes.json();
-    // Expand compact columnar format: {t:[tours],p:[parts],c:[clubs],r:[[tIdx,pIdx,cIdx,rank,name,date,swim,t1,bike,t2,run,total],..]}
     const { t: tours, p: parts, c: clubs, r: rows } = compact;
+
+    // 행 확장: 청크 단위로 setTimeout 양보하여 UI 프리즈 방지
     DATA = new Array(rows.length);
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      DATA[i] = {
-        tour: tours[row[0]],
-        part: parts[row[1]],
-        club: clubs[row[2]],
-        rank: row[3],
-        name: row[4],
-        date: row[5],
-        swim: row[6],
-        t1:   row[7],
-        bike: row[8],
-        t2:   row[9],
-        run:  row[10],
-        total: row[11],
-      };
+    const CHUNK = 8000;
+    const yieldFrame = () => new Promise(r => setTimeout(r, 0));
+    for (let start = 0; start < rows.length; start += CHUNK) {
+      const end = Math.min(start + CHUNK, rows.length);
+      for (let i = start; i < end; i++) {
+        const row = rows[i];
+        DATA[i] = {
+          tour: tours[row[0]], part: parts[row[1]], club: clubs[row[2]],
+          rank: row[3], name: row[4], date: row[5],
+          swim: row[6], t1: row[7], bike: row[8], t2: row[9], run: row[10], total: row[11],
+        };
+      }
+      sub.textContent = `데이터 로딩 중… ${Math.round(100 * end / rows.length)}%`;
+      if (end < rows.length) await yieldFrame();
     }
+
     if (distRes && distRes.ok) {
       try { DISTANCES = await distRes.json(); } catch (e) { DISTANCES = {}; }
     }
-    buildIndexes();
-    POP_STATS = buildPopulationStats();
-    const distCnt = Object.keys(DISTANCES).length;
-    document.getElementById('datasub').textContent =
-      `${DATA.length.toLocaleString()}개 기록 · ${distCnt}개 부문 · ${Object.keys(POP_STATS).length}개 거리 카테고리`;
 
-    // 이름 datalist (자동완성 상위 1500명)
+    const distCnt = Object.keys(DISTANCES).length;
+    sub.textContent = `${DATA.length.toLocaleString()}개 기록 · ${distCnt}개 부문`;
+
+    // datalist (자동완성) — 한번만
     const nameCounts = {};
     for (const r of DATA) nameCounts[r.name] = (nameCounts[r.name] || 0) + 1;
     const topNames = Object.keys(nameCounts)
@@ -681,8 +694,9 @@ async function load() {
     document.getElementById('nameList').innerHTML =
       topNames.map(n => `<option value="${escapeAttr(n)}">`).join('');
   } catch (e) {
+    sub.textContent = '데이터를 불러올 수 없습니다.';
     document.getElementById('result').innerHTML =
-      '<div class="empty">data.json 을 불러올 수 없습니다.<br>먼저 <code>python3 scraper.py</code> 를 실행하세요.</div>';
+      '<div class="empty">data.min.json 을 불러올 수 없습니다.</div>';
     return;
   }
   const debounce = (fn, ms) => {
@@ -706,6 +720,7 @@ async function load() {
 function uniq(arr) { return [...new Set(arr)].sort(); }
 
 function render() {
+  ensureIndexes();
   const q = document.getElementById('q').value.trim();
   const clubF = document.getElementById('club').value;
   const distF = document.getElementById('dist').value;
@@ -948,7 +963,7 @@ function renderProfile(name, clubF, filtered, div, vsName) {
   let popHtml = '';
   if (filtered.length > 0) {
     const primaryCat = distCat(filtered[0]);
-    const pop = POP_STATS[primaryCat];
+    const pop = getPopStats()[primaryCat];
     if (pop && pop.n > 0) {
       const myBest = {
         swim: Math.min(...filtered.map(r => cleanSec(r.swim,'swim')).filter(v => v != null), Infinity),
