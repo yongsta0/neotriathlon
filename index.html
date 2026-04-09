@@ -445,8 +445,17 @@ function distBadge(r) {
   let variantTag = '';
   if (cat === 'standard' && d && d.pure_standard === false) {
     const reason = d.variant_reason || '';
-    const tip = reason === 'duathlon' ? '수영 없음 (듀애슬론)' : ('실제 구간 시간 기준 변형 — ' + reason);
-    variantTag = `<span class="variant-tag" title="${escapeAttr(tip)}">변형</span>`;
+    let tip = '';
+    let short = '변형';
+    if (reason.includes('duathlon_no_swim'))                tip = '수영 없음 (듀애슬론)', short = '듀애슬론';
+    else if (reason.includes('manual:duathlon_run_first'))  tip = '듀애슬론 · 1구간이 수영이 아닌 런', short = '듀애슬론';
+    else if (reason.includes('manual:swim_shortened'))      tip = '수영 코스 단축 (1.5km 미만)', short = '수영 단축';
+    else if (reason.includes('manual:bike_shortened'))      tip = '사이클 코스 단축 (40km 미만)', short = '사이클 단축';
+    else if (reason.includes('swim_too_fast'))              tip = '수영 시간이 1.5km 기준보다 빠름 — 코스 단축 가능성', short = '수영 단축';
+    else if (reason.includes('yoy'))                        tip = '같은 대회 이전 연도 대비 수영 시간이 크게 감소 — 코스 변경 가능성', short = '변형';
+    else if (reason.includes('range'))                      tip = '구간 시간이 표준 범위를 벗어남', short = '변형';
+    else                                                    tip = '표준 코스 변형 — ' + reason;
+    variantTag = `<span class="variant-tag" title="${escapeAttr(tip)}">${short}</span>`;
   }
   return `<span class="dist-pill ${cls}" title="${escapeAttr(title)}">${label}${extra}</span>${variantTag}`;
 }
