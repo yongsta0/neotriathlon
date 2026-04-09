@@ -60,7 +60,7 @@
   }
 
   /* 검색바 */
-  .controls { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+  .controls { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr 1.3fr; gap: 10px; margin-bottom: 8px; }
   @media (max-width: 720px) { .controls { grid-template-columns: 1fr 1fr; } .controls input[type=text] { grid-column: 1 / -1; } }
   input, select { font-family: inherit; font-size: 14px; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); outline: none; transition: border-color .15s; width: 100%; }
   input::placeholder { color: var(--subtle); }
@@ -80,6 +80,8 @@
   tbody tr:hover { background: var(--accent-soft); }
   td.r { text-align: right; font-variant-numeric: tabular-nums; }
   .pill { display:inline-block; background: var(--accent-soft); color: var(--accent); padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 500; margin-right: 4px; }
+  .pace { display: block; font-size: 10px; color: var(--subtle); font-weight: 400; font-variant-numeric: tabular-nums; margin-top: 1px; white-space: nowrap; }
+  .pb-star { display: inline-block; color: #d4a017; font-size: 11px; margin-left: 3px; font-weight: 700; cursor: help; }
   .empty { color: var(--subtle); padding: 40px 0; text-align: center; font-size: 13px; }
 
   /* 동명이인 후보 */
@@ -184,6 +186,30 @@
   .elite-note { margin-top: 10px; padding: 8px 11px; background: #fff4e6; border: 1px solid #f5d9b8; border-left: 3px solid #c78344; border-radius: 6px; color: #8a4a1a; font-size: 11px; line-height: 1.55; }
   .rivals-parts { font-size: 11px; color: var(--muted); margin: 0 0 10px 0; line-height: 1.7; }
   .rivals-card { grid-column: 1 / -1; }
+  .rival-row.target { background: #eef7ee; border: 1px solid #c9e3cd; margin: 3px 0; }
+  .rival-row.target .rv-diff { color: var(--success); font-weight: 700; }
+  .rivals-divider-block { margin: 14px 0 6px; padding-top: 10px; border-top: 1px dashed var(--border); font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+  .h2h-card { grid-column: 1 / -1; background: #fff; }
+  .h2h-card h3 b { font-weight: 700; }
+  .h2h-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0 14px; }
+  @media (max-width: 700px) { .h2h-grid { grid-template-columns: 1fr 1fr; } }
+  .h2h-seg { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .h2h-label { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .h2h-wl { font-size: 15px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .h2h-delta { font-size: 11px; font-variant-numeric: tabular-nums; margin-top: 2px; color: var(--muted); }
+  .h2h-delta.win { color: var(--success); font-weight: 600; }
+  .h2h-delta.loss { color: var(--danger); font-weight: 600; }
+  .h2h-matches { margin-top: 8px; }
+  .h2h-match { display: grid; grid-template-columns: 90px 1fr auto; gap: 10px; padding: 7px 10px; border-bottom: 1px solid var(--border-soft); font-size: 11px; align-items: center; }
+  .h2h-match:last-child { border-bottom: none; }
+  .h2h-match.win { background: rgba(240,247,241,0.5); }
+  .h2h-match.loss { background: rgba(253,242,240,0.5); }
+  .h2h-m-date { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .h2h-m-tour { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .h2h-m-time { font-variant-numeric: tabular-nums; color: var(--muted); }
+  .h2h-m-time b { font-weight: 700; margin-left: 4px; }
+  .h2h-match.win .h2h-m-time b { color: var(--success); }
+  .h2h-match.loss .h2h-m-time b { color: var(--danger); }
   .rival-row { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 12px; align-items: center; padding: 9px 10px; border-bottom: 1px solid var(--border-soft); font-size: 12px; border-radius: 8px; }
   .rival-row:last-child { border-bottom: none; }
   .rival-row.me { background: var(--accent-soft); border: 1px solid #d9e0e9; margin: 4px 0; }
@@ -260,10 +286,12 @@
 </header>
 
 <div class="controls">
-  <input id="q" type="text" placeholder="이름을 입력하세요 (예: 김철수)" autofocus>
+  <input id="q" type="text" placeholder="이름을 입력하세요 (예: 김철수)" list="nameList" autofocus>
   <select id="club"><option value="">소속 전체</option></select>
   <select id="dist"><option value="">거리 전체</option></select>
   <select id="part"><option value="">부문 전체</option></select>
+  <input id="vs" type="text" placeholder="맞대결 상대 (선택)" list="nameList">
+  <datalist id="nameList"></datalist>
 </div>
 
 <div id="candidates"></div>
@@ -505,11 +533,49 @@ function fmtCell(raw, kind) {
   if (isOutlier(kind, sec)) {
     return `<span class="bad" title="원본 데이터 오류로 추정 (${escapeHtml(raw)})">—</span>`;
   }
-  // ms 포함이거나 비정규 포맷 → 정규화
   if (raw.split(':').length !== 3 || raw.length < 8) {
     return escapeHtml(fmtSec(sec));
   }
   return escapeHtml(raw);
+}
+// 구간 페이스 계산: swim → /100m, bike → km/h, run → /km
+function paceOf(sec, km, kind) {
+  if (sec == null || km == null || km <= 0 || sec <= 0) return '';
+  if (kind === 'swim') {
+    const per100 = sec / (km * 10);
+    return `${Math.floor(per100/60)}:${String(Math.round(per100%60)).padStart(2,'0')}/100m`;
+  }
+  if (kind === 'bike') {
+    const kmh = km / (sec/3600);
+    return `${kmh.toFixed(1)} km/h`;
+  }
+  if (kind === 'run') {
+    const perKm = sec / km;
+    return `${Math.floor(perKm/60)}:${String(Math.round(perKm%60)).padStart(2,'0')}/km`;
+  }
+  return '';
+}
+// (거리 카테고리, 구간) 별 본인 PB 계산
+function computePBMap(records) {
+  const pbs = {};
+  for (const r of records) {
+    if (isAquathlon(r)) continue;
+    const cat = distCat(r);
+    if (!pbs[cat]) pbs[cat] = {};
+    for (const k of ['swim','bike','run','total']) {
+      const v = cleanSec(r[k], k);
+      if (v == null) continue;
+      if (pbs[cat][k] == null || v < pbs[cat][k]) pbs[cat][k] = v;
+    }
+  }
+  return pbs;
+}
+function isPB(r, kind, pbMap) {
+  if (isAquathlon(r)) return false;
+  const cat = distCat(r);
+  const v = cleanSec(r[kind], kind);
+  if (v == null || !pbMap[cat]) return false;
+  return v === pbMap[cat][kind];
 }
 // 차트용 정제: t1/t2 outlier는 null로
 function cleanSec(raw, kind) {
@@ -545,6 +611,14 @@ async function load() {
     const distCnt = Object.keys(DISTANCES).length;
     document.getElementById('datasub').textContent =
       `${DATA.length.toLocaleString()}개 기록 · ${distCnt}개 부문 · ${Object.keys(POP_STATS).length}개 거리 카테고리`;
+
+    // 이름 datalist (자동완성 상위 1500명)
+    const nameCounts = {};
+    for (const r of DATA) nameCounts[r.name] = (nameCounts[r.name] || 0) + 1;
+    const topNames = Object.keys(nameCounts)
+      .sort((a,b) => nameCounts[b] - nameCounts[a]).slice(0, 1500);
+    document.getElementById('nameList').innerHTML =
+      topNames.map(n => `<option value="${escapeAttr(n)}">`).join('');
   } catch (e) {
     document.getElementById('result').innerHTML =
       '<div class="empty">data.json 을 불러올 수 없습니다.<br>먼저 <code>python3 scraper.py</code> 를 실행하세요.</div>';
@@ -554,6 +628,7 @@ async function load() {
   document.getElementById('club').addEventListener('change', render);
   document.getElementById('dist').addEventListener('change', render);
   document.getElementById('part').addEventListener('change', render);
+  document.getElementById('vs').addEventListener('input', render);
 }
 
 function uniq(arr) { return [...new Set(arr)].sort(); }
@@ -672,14 +747,15 @@ function render() {
     return;
   }
 
-  renderProfile(q, clubF, filtered, document.getElementById('profile'));
+  const vsName = document.getElementById('vs').value.trim();
+  renderProfile(q, clubF, filtered, document.getElementById('profile'), vsName);
   renderStats(filtered, statsDiv);
   renderCharts(filtered, chartsDiv);
   renderTable(filtered, resDiv);
   recHead.style.display = '';
 }
 
-function renderProfile(name, clubF, filtered, div) {
+function renderProfile(name, clubF, filtered, div, vsName) {
   // 프로필 분석은 거리 필터와 무관하게 그 선수의 '전체 기록'을 분석
   // 소속까지만 반영 (동명이인 구분용)
   let all = DATA.filter(r => r.name === name);
@@ -879,6 +955,34 @@ function renderProfile(name, clubF, filtered, div) {
       const below = rivals.slice(idx, idx + 3);
       sharedAbove = above; sharedBelow = below;
 
+      // 7) 다음 목표 라이벌 — 본인보다 2-8분 빠른 선수 중 구간 밸런스가 가장 비슷한 3명
+      const myPaceRatio = () => {
+        const sw = sharedMyBestSeg.swim, bk = sharedMyBestSeg.bike, rn = sharedMyBestSeg.run;
+        if (sw === Infinity || bk === Infinity || rn === Infinity) return null;
+        const sum = sw + bk + rn;
+        return [sw/sum, bk/sum, rn/sum];
+      };
+      const myRatio = myPaceRatio();
+      if (myRatio) {
+        const candidates = rivals.filter(rv => {
+          const gap = myBestTot - rv.tot;
+          return gap >= 120 && gap <= 480; // 2-8분 빠른
+        }).map(rv => {
+          const sw = cleanSec(rv.rec.swim,'swim');
+          const bk = cleanSec(rv.rec.bike,'bike');
+          const rn = cleanSec(rv.rec.run,'run');
+          const sum = sw + bk + rn;
+          const theirRatio = [sw/sum, bk/sum, rn/sum];
+          const dist = Math.sqrt(
+            Math.pow(theirRatio[0]-myRatio[0],2) +
+            Math.pow(theirRatio[1]-myRatio[1],2) +
+            Math.pow(theirRatio[2]-myRatio[2],2)
+          );
+          return { ...rv, similarity: dist };
+        }).sort((a,b) => a.similarity - b.similarity).slice(0, 3);
+        sharedAbove.nextTargets = candidates;
+      }
+
       const rivalStrength = (rec) => {
         const same = DATA.filter(x => x.tour === rec.tour && x.part === rec.part);
         if (same.length < 3) return null;
@@ -933,12 +1037,33 @@ function renderProfile(name, clubF, filtered, div) {
         const isElite = /상위그룹|엘리트/.test(p);
         return `<span class="part-chip ${isElite ? 'elite' : ''}">${escapeHtml(p)}</span>`;
       }).join(' ');
+      // 다음 목표 라이벌 렌더
+      let nextTargetHtml = '';
+      const nt = sharedAbove.nextTargets || [];
+      if (nt.length > 0) {
+        const ntRows = nt.map(rv => {
+          const [nm, cl] = rv.k.split('||');
+          const href = './?q=' + encodeURIComponent(nm) +
+            (cl && cl !== '(소속없음)' ? '&club=' + encodeURIComponent(cl) : '');
+          const st = rivalStrength(rv.rec) || '-';
+          const gap = myBestTot - rv.tot;
+          return `<div class="rival-row target">
+            <div class="rv-name"><a href="${href}">${escapeHtml(nm)}</a>
+              <span class="rv-club">${escapeHtml(cl)}</span></div>
+            <div class="rv-time">${fmtSec(rv.tot)}<span class="rv-diff">−${fmtSec(gap)}</span></div>
+            <div class="rv-strength">${escapeHtml(st)}</div>
+          </div>`;
+        }).join('');
+        nextTargetHtml = `<div class="rivals-divider-block">다음 목표 · 본인과 구간 밸런스가 비슷하면서 2-8분 빠른 선수</div>${ntRows}`;
+      }
+
       rivalsHtml = `<div class="pf-card rivals-card">
         <h3>비슷한 경쟁 선수 · ${DIST_LABEL[primaryCat] || primaryCat} 기준</h3>
         <div class="rivals-parts">비교 대상 소속그룹 (같은 부문만): ${partsChipHtml}</div>
         ${aboveHtml}
         ${meHtml}
         ${belowHtml}
+        ${nextTargetHtml}
       </div>`;
     }
   }
@@ -1156,11 +1281,86 @@ function renderProfile(name, clubF, filtered, div) {
     overviewHtml = `<div class="profile-overview">${sentences.join(' ')}</div>`;
   }
 
+  // 8) Head-to-head 맞대결 카드 (vsName 입력 시)
+  let h2hHtml = '';
+  if (vsName && vsName !== name) {
+    const vsRecs = DATA.filter(r => r.name === vsName);
+    // 같은 (tour, part)에서 둘 다 참가한 경기 매칭
+    const myKeyMap = {};
+    for (const r of all) {
+      const k = r.tour + '||' + r.part;
+      if (!myKeyMap[k]) myKeyMap[k] = r;
+      else if (cleanSec(r.total,'total') < cleanSec(myKeyMap[k].total,'total')) myKeyMap[k] = r;
+    }
+    const matches = [];
+    for (const vr of vsRecs) {
+      const k = vr.tour + '||' + vr.part;
+      if (myKeyMap[k]) matches.push({ me: myKeyMap[k], them: vr });
+    }
+    if (matches.length === 0) {
+      h2hHtml = `<div class="pf-card h2h-card">
+        <h3>1:1 맞대결 · vs ${escapeHtml(vsName)}</h3>
+        <div class="muted" style="font-size:12px">같은 대회·부문에서 함께 출전한 기록이 없습니다.</div>
+      </div>`;
+    } else {
+      matches.sort((a,b) => (a.me.date > b.me.date ? -1 : 1));
+      let wins = { swim:0, bike:0, run:0, total:0 };
+      let losses = { swim:0, bike:0, run:0, total:0 };
+      let deltaSum = { swim:0, bike:0, run:0, total:0 };
+      let deltaN = { swim:0, bike:0, run:0, total:0 };
+      for (const { me, them } of matches) {
+        for (const k of ['swim','bike','run','total']) {
+          const a = cleanSec(me[k], k), b = cleanSec(them[k], k);
+          if (a == null || b == null) continue;
+          if (a < b) wins[k]++; else if (a > b) losses[k]++;
+          deltaSum[k] += (a - b); deltaN[k]++;
+        }
+      }
+      const avgDelta = k => deltaN[k] ? deltaSum[k]/deltaN[k] : null;
+      const deltaFmt = (v) => {
+        if (v == null) return '-';
+        const sign = v < 0 ? '−' : '+';
+        return `${sign}${fmtSec(Math.abs(v))}`;
+      };
+      const segLine = (label, k) => {
+        const d = avgDelta(k);
+        const cls = d == null ? '' : (d < 0 ? 'win' : (d > 0 ? 'loss' : ''));
+        return `<div class="h2h-seg">
+          <div class="h2h-label">${label}</div>
+          <div class="h2h-wl">${wins[k]}승 ${losses[k]}패</div>
+          <div class="h2h-delta ${cls}">평균 ${deltaFmt(d)}</div>
+        </div>`;
+      };
+      const matchRows = matches.slice(0, 10).map(({ me, them }) => {
+        const d = cleanSec(me.total,'total') - cleanSec(them.total,'total');
+        const cls = d == null ? '' : (d < 0 ? 'win' : (d > 0 ? 'loss' : ''));
+        return `<div class="h2h-match ${cls}">
+          <div class="h2h-m-date">${escapeHtml((me.date||'').slice(0,10))}</div>
+          <div class="h2h-m-tour">${escapeHtml(me.tour.slice(0,40))} · ${escapeHtml(me.part)}</div>
+          <div class="h2h-m-time">${fmtSec(cleanSec(me.total,'total'))} vs ${fmtSec(cleanSec(them.total,'total'))} <b>${deltaFmt(d)}</b></div>
+        </div>`;
+      }).join('');
+      const extraNote = matches.length > 10 ? `<div class="muted" style="font-size:11px;margin-top:6px">최근 10경기만 표시 (총 ${matches.length}회 대결)</div>` : '';
+
+      h2hHtml = `<div class="pf-card h2h-card">
+        <h3>1:1 맞대결 · <b>${escapeHtml(name)}</b> vs <b>${escapeHtml(vsName)}</b> · ${matches.length}회</h3>
+        <div class="h2h-grid">
+          ${segLine('수영', 'swim')}
+          ${segLine('사이클', 'bike')}
+          ${segLine('런', 'run')}
+          ${segLine('총기록', 'total')}
+        </div>
+        <div class="h2h-matches">${matchRows}${extraNote}</div>
+      </div>`;
+    }
+  }
+
   div.innerHTML =
     `<div class="profile-section">
       <h2>프로필 분석 <span style="font-size:11px;color:var(--muted);font-weight:500;margin-left:6px">${escapeHtml(name)}${clubF?' · '+escapeHtml(clubF):''}</span></h2>
       ${overviewHtml}
       <div class="profile-grid">
+        ${h2hHtml}
         ${insightHtml}
         <div class="pf-card">
           <h3>강점 구간 · 같은 부문 내 평균 순위</h3>
@@ -1416,6 +1616,16 @@ function renderCharts(filtered, div) {
 }
 
 function renderTable(filtered, div) {
+  const pbMap = computePBMap(filtered);
+  const cell = (r, kind, isPbFlag) => {
+    const sec = cleanSec(r[kind], kind);
+    const d = distInfo(r);
+    const km = d ? d[kind + '_km'] : null;
+    const pace = (sec != null && km != null && ['swim','bike','run'].includes(kind))
+      ? `<span class="pace">${paceOf(sec, km, kind)}</span>` : '';
+    const star = isPbFlag ? '<span class="pb-star" title="개인 베스트">★</span>' : '';
+    return fmtCell(r[kind], kind) + pace + star;
+  };
   div.innerHTML =
     '<div class="table-wrap"><table><thead><tr>' +
     '<th>날짜</th><th>대회</th><th>부문</th><th>소속</th>' +
@@ -1431,12 +1641,13 @@ function renderTable(filtered, div) {
         '<td>' + distBadge(r) + '<span class="pill">' + escapeHtml(r.part) + '</span></td>' +
         '<td>' + escapeHtml(r.club || '-') + '</td>' +
         '<td class="r">' + rankStr + '</td>' +
-        '<td class="r">' + fmtCell(r.swim, 'swim') + '</td>' +
+        '<td class="r">' + cell(r, 'swim',  isPB(r,'swim', pbMap)) + '</td>' +
         '<td class="r">' + fmtCell(r.t1, 't1') + '</td>' +
-        '<td class="r">' + fmtCell(r.bike, 'bike') + '</td>' +
+        '<td class="r">' + cell(r, 'bike',  isPB(r,'bike', pbMap)) + '</td>' +
         '<td class="r">' + fmtCell(r.t2, 't2') + '</td>' +
-        '<td class="r">' + fmtCell(r.run, 'run') + '</td>' +
-        '<td class="r"><b>' + fmtCell(r.total, 'total') + '</b></td></tr>';
+        '<td class="r">' + cell(r, 'run',   isPB(r,'run',  pbMap)) + '</td>' +
+        '<td class="r"><b>' + fmtCell(r.total, 'total') + '</b>' +
+          (isPB(r,'total',pbMap) ? '<span class="pb-star" title="개인 베스트 총기록">★</span>' : '') + '</td></tr>';
     }).join('') +
     '</tbody></table></div>';
 }
