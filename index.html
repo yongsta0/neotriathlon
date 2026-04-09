@@ -191,6 +191,12 @@
   .rivals-divider-block { margin: 14px 0 6px; padding-top: 10px; border-top: 1px dashed var(--border); font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
   .h2h-card { grid-column: 1 / -1; background: #fff; }
   .h2h-card h3 b { font-weight: 700; }
+  .h2h-sub { display: inline-block; font-size: 10px; color: var(--muted); font-weight: 500; margin-left: 4px; padding: 1px 6px; background: var(--bg); border-radius: 8px; }
+  .vs-candidates { margin: 6px 0 12px; padding: 10px 12px; background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; font-size: 11px; line-height: 1.7; }
+  .vs-candidates b { color: var(--text); font-weight: 600; margin-right: 6px; }
+  .vs-cand-btn { display: inline-block; padding: 3px 10px; margin: 2px 3px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; color: var(--muted); font-weight: 500; transition: all .15s; }
+  .vs-cand-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .vs-cand-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
   .h2h-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0 14px; }
   @media (max-width: 700px) { .h2h-grid { grid-template-columns: 1fr 1fr; } }
   .h2h-seg { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
@@ -653,7 +659,13 @@ async function load() {
   document.getElementById('club').addEventListener('change', render);
   document.getElementById('dist').addEventListener('change', render);
   document.getElementById('part').addEventListener('change', render);
-  document.getElementById('vs').addEventListener('input', renderDebounced);
+  document.getElementById('vs').addEventListener('input', () => {
+    // vs 이름이 바뀌면 vsclub 파라미터 초기화
+    const u = new URL(location.href);
+    u.searchParams.delete('vsclub');
+    history.replaceState({}, '', u.toString());
+    renderDebounced();
+  });
 }
 
 function uniq(arr) { return [...new Set(arr)].sort(); }
@@ -1310,7 +1322,39 @@ function renderProfile(name, clubF, filtered, div, vsName) {
   // 8) Head-to-head 맞대결 카드 (vsName 입력 시)
   let h2hHtml = '';
   if (vsName && vsName !== name) {
-    const vsRecs = byName(vsName);
+    const vsAll = byName(vsName);
+    // vs 선수 소속 후보 — 동명이인이면 선택 유도
+    const vsClubs = uniq(vsAll.map(r => r.club || '(소속없음)'));
+    const urlVsClub = new URLSearchParams(location.search).get('vsclub') || '';
+    let vsClub = urlVsClub;
+    if (vsClubs.length > 1 && !vsClub) {
+      // 자동 선택: 본인(name)과 같이 뛴 대회가 가장 많은 소속을 기본값으로
+      const myKeys = new Set(all.map(r => r.tour + '||' + r.part));
+      const clubOverlap = {};
+      for (const vr of vsAll) {
+        const ck = vr.club || '(소속없음)';
+        if (myKeys.has(vr.tour + '||' + vr.part)) {
+          clubOverlap[ck] = (clubOverlap[ck] || 0) + 1;
+        }
+      }
+      if (Object.keys(clubOverlap).length > 0) {
+        vsClub = Object.entries(clubOverlap).sort((a,b) => b[1] - a[1])[0][0];
+      }
+    }
+    // 소속 후보 UI (동명이인)
+    let vsCandidateHtml = '';
+    if (vsClubs.length > 1) {
+      vsCandidateHtml = `<div class="vs-candidates">
+        <b>동명이인 ${vsClubs.length}명 — 상대 소속 선택:</b>
+        ${vsClubs.map(c => {
+          const active = c === vsClub ? 'active' : '';
+          return `<span class="vs-cand-btn ${active}" onclick="pickVsClub(${JSON.stringify(c).replace(/"/g,'&quot;')})">${escapeHtml(c)}</span>`;
+        }).join('')}
+      </div>`;
+    }
+    const vsRecs = vsClub
+      ? vsAll.filter(r => (r.club || '(소속없음)') === vsClub)
+      : vsAll;
     // 같은 (tour, part)에서 둘 다 참가한 경기 매칭
     const myKeyMap = {};
     for (const r of all) {
@@ -1325,7 +1369,8 @@ function renderProfile(name, clubF, filtered, div, vsName) {
     }
     if (matches.length === 0) {
       h2hHtml = `<div class="pf-card h2h-card">
-        <h3>1:1 맞대결 · vs ${escapeHtml(vsName)}</h3>
+        <h3>1:1 맞대결 · vs ${escapeHtml(vsName)}${vsClub ? ' · ' + escapeHtml(vsClub) : ''}</h3>
+        ${vsCandidateHtml}
         <div class="muted" style="font-size:12px">같은 대회·부문에서 함께 출전한 기록이 없습니다.</div>
       </div>`;
     } else {
@@ -1369,7 +1414,8 @@ function renderProfile(name, clubF, filtered, div, vsName) {
       const extraNote = matches.length > 10 ? `<div class="muted" style="font-size:11px;margin-top:6px">최근 10경기만 표시 (총 ${matches.length}회 대결)</div>` : '';
 
       h2hHtml = `<div class="pf-card h2h-card">
-        <h3>1:1 맞대결 · <b>${escapeHtml(name)}</b> vs <b>${escapeHtml(vsName)}</b> · ${matches.length}회</h3>
+        <h3>1:1 맞대결 · <b>${escapeHtml(name)}</b>${clubF ? `<span class="h2h-sub">${escapeHtml(clubF)}</span>` : ''} vs <b>${escapeHtml(vsName)}</b>${vsClub ? `<span class="h2h-sub">${escapeHtml(vsClub)}</span>` : ''} · ${matches.length}회</h3>
+        ${vsCandidateHtml}
         <div class="h2h-grid">
           ${segLine('수영', 'swim')}
           ${segLine('사이클', 'bike')}
@@ -1710,6 +1756,12 @@ function fillDistSelect(cats, counts, current) {
     }).join('');
 }
 function pickClub(c) { document.getElementById('club').value = c; render(); }
+function pickVsClub(c) {
+  const u = new URL(location.href);
+  u.searchParams.set('vsclub', c);
+  history.replaceState({}, '', u.toString());
+  render();
+}
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
