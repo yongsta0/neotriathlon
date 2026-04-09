@@ -1621,8 +1621,18 @@ function renderCharts(filtered, div) {
 function renderTable(filtered, div) {
   const pbMap = computePBMap(filtered);
   const cell = (r, kind, isPbFlag) => {
-    const sec = cleanSec(r[kind], kind);
     const d = distInfo(r);
+    const vt = d ? d.variant_type : null;
+    const sport = d ? d.sport_type : null;
+    // 듀애슬론: 수영 칼럼에 실제로 1구간 런이 들어있음 → 수영으로 표기하지 않음
+    if (kind === 'swim' && vt === 'duathlon') {
+      return '<span class="na" title="듀애슬론 · 1구간이 런">—</span>';
+    }
+    // 아쿠아슬론: 사이클 없음
+    if (kind === 'bike' && sport === 'aquathlon') {
+      return '<span class="na" title="아쿠아슬론 · 사이클 없음">—</span>';
+    }
+    const sec = cleanSec(r[kind], kind);
     const km = d ? d[kind + '_km'] : null;
     const pace = (sec != null && km != null && ['swim','bike','run'].includes(kind))
       ? `<span class="pace">${paceOf(sec, km, kind)}</span>` : '';
