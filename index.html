@@ -7,8 +7,7 @@
 <title>TRI · Performance Explorer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="data.min.json" as="fetch" crossorigin>
-<link rel="preload" href="distances.json" as="fetch" crossorigin>
+<link rel="preload" href="names.json" as="fetch" crossorigin>
 <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
@@ -681,49 +680,56 @@ async function expandCompact(compact, startIdx) {
   return out;
 }
 
-async function load() {
+// 데이터 로드 상태 — 검색 시 최초 1회만 fetch
+let _dataLoaded = false;
+let _dataLoading = false;
+async function ensureData() {
+  if (_dataLoaded) return true;
+  if (_dataLoading) return false; // 이미 진행 중이면 대기
+  _dataLoading = true;
   const sub = document.getElementById('datasub');
-  sub.textContent = '데이터 로딩 중…';
-  // 이전 세션 캐시 정리 (모바일 Safari에서 느리게 만들던 원인)
-  try {
-    ['tri_data_min_v1','tri_dist_v1','tri_arc_min_v1'].forEach(k => sessionStorage.removeItem(k));
-  } catch (e) {}
+  sub.textContent = '기록 데이터 로드 중…';
   try {
     const ts = Date.now();
     const [dataRes, distRes] = await Promise.all([
       fetch('data.min.json?ts=' + ts),
       fetch('distances.json?ts=' + ts).catch(() => null),
     ]);
-    sub.textContent = '데이터 파싱 중…';
-    const compact = await dataRes.json();
-    DATA = await expandCompact(compact);
+    DATA = await expandCompact(await dataRes.json());
     if (distRes && distRes.ok) {
       try { DISTANCES = await distRes.json(); } catch (e) {}
     }
-    const distCnt = Object.keys(DISTANCES).length;
-    sub.textContent = `${DATA.length.toLocaleString()}개 기록 · ${distCnt}개 부문`;
-    updateNameList();
-
-    // 과거 데이터 백그라운드 병합
-    const defer = window.requestIdleCallback || (fn => setTimeout(fn, 500));
+    _dataLoaded = true;
+    sub.textContent = `${DATA.length.toLocaleString()}개 기록 · 검색 가능`;
+    // 과거 데이터 백그라운드
+    const defer = window.requestIdleCallback || (fn => setTimeout(fn, 800));
     defer(async () => {
       try {
         const r = await fetch('data.archive.min.json?ts=' + ts);
         if (!r.ok) return;
-        const arc = await r.json();
-        const arcRows = await expandCompact(arc);
-        DATA = DATA.concat(arcRows);
+        DATA = DATA.concat(await expandCompact(await r.json()));
         invalidateCaches();
-        updateNameList();
-        sub.textContent = `${DATA.length.toLocaleString()}개 기록 · ${distCnt}개 부문`;
+        sub.textContent = `${DATA.length.toLocaleString()}개 기록`;
       } catch (e) {}
     });
+    return true;
   } catch (e) {
     sub.textContent = '데이터를 불러올 수 없습니다.';
-    document.getElementById('result').innerHTML =
-      '<div class="empty">data.min.json 을 불러올 수 없습니다.</div>';
-    return;
+    _dataLoading = false;
+    return false;
   }
+}
+
+async function load() {
+  // 초기 로드: 이름 자동완성 목록만 (~61KB) — 즉시 완료
+  try {
+    const names = await (await fetch('names.json?ts=' + Date.now())).json();
+    document.getElementById('nameList').innerHTML =
+      names.map(n => `<option value="${escapeAttr(n)}">`).join('');
+    document.getElementById('datasub').textContent = '이름을 입력하면 기록을 불러옵니다.';
+  } catch (e) {}
+  // 이전 세션 캐시 정리
+  try { ['tri_data_min_v1','tri_dist_v1','tri_arc_min_v1'].forEach(k => sessionStorage.removeItem(k)); } catch(e){}
   const debounce = (fn, ms) => {
     let t;
     return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
@@ -744,9 +750,14 @@ async function load() {
 
 function uniq(arr) { return [...new Set(arr)].sort(); }
 
-function render() {
-  ensureIndexes();
+async function render() {
   const q = document.getElementById('q').value.trim();
+  if (q && !_dataLoaded) {
+    const ok = await ensureData();
+    if (!ok) return;
+    ensureIndexes();
+  }
+  if (_dataLoaded) ensureIndexes();
   const clubF = document.getElementById('club').value;
   const distF = document.getElementById('dist').value;
   const partF = document.getElementById('part').value;

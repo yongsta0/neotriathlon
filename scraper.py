@@ -32,6 +32,7 @@ DB_PATH = HERE / "results.sqlite"
 JSON_PATH = HERE / "data.json"
 JSON_MIN_PATH = HERE / "data.min.json"
 JSON_ARCHIVE_PATH = HERE / "data.archive.min.json"
+JSON_NAMES_PATH = HERE / "names.json"
 SPLIT_YEAR_CUTOFF = 2022  # rows with year >= this go in the "recent" file loaded first
 
 # 협회 사이트 인증서 체인 문제 우회 (최소 범위)
@@ -309,6 +310,16 @@ def export_json(conn):
     )
     print(f"Compact export: {JSON_MIN_PATH} ({JSON_MIN_PATH.stat().st_size/1024/1024:.1f}MB, {len(recent)} rows {SPLIT_YEAR_CUTOFF}+)")
     print(f"Archive export: {JSON_ARCHIVE_PATH} ({JSON_ARCHIVE_PATH.stat().st_size/1024/1024:.1f}MB, {len(archive)} rows <{SPLIT_YEAR_CUTOFF})")
+
+    # Lightweight name list for instant autocomplete on mobile
+    from collections import Counter
+    nc = Counter(r["name"] for r in rows)
+    top_names = [n for n, _ in nc.most_common(5000)]
+    JSON_NAMES_PATH.write_text(
+        json.dumps(top_names, ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8",
+    )
+    print(f"Names export: {JSON_NAMES_PATH} ({JSON_NAMES_PATH.stat().st_size//1024}KB, {len(top_names)} names)")
 
 
 if __name__ == "__main__":
