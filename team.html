@@ -314,7 +314,7 @@ async function load() {
 
     const [d1, d2] = await Promise.all([
       fetch('data.min.json?ts=' + ts),
-      fetch('distances.json?ts=' + ts).catch(() => null),
+      fetch('distances.slim.json?ts=' + ts).catch(() => null),
     ]);
     DATA = await expandCompact(await d1.json());
     if (d2 && d2.ok) { try { DISTANCES = await d2.json(); } catch (e) {} }
@@ -325,17 +325,19 @@ async function load() {
     window._ensureIdx = () => { if (!_idxBuilt) { buildIndexes(); _idxBuilt = true; } };
     window._ensurePop = () => { if (!_popBuilt) { POP_STATS = buildPopulationStats(); _popBuilt = true; } };
 
-    // 과거 데이터 백그라운드 로드
-    const defer = window.requestIdleCallback || (fn => setTimeout(fn, 500));
-    defer(async () => {
+    // 2022-2023 → 2018-2021 순차 백그라운드
+    setTimeout(async () => {
       try {
-        const r = await fetch('data.archive.min.json?ts=' + ts);
-        if (!r.ok) return;
-        const arcRows = await expandCompact(await r.json());
-        DATA = DATA.concat(arcRows);
-        invalidate();
-      } catch (e) {}
-    });
+        const r = await fetch('data.warm.min.json?ts=' + ts);
+        if (r.ok) { DATA = DATA.concat(await expandCompact(await r.json())); invalidate(); }
+      } catch(e){}
+      setTimeout(async () => {
+        try {
+          const r = await fetch('data.archive.min.json?ts=' + ts);
+          if (r.ok) { DATA = DATA.concat(await expandCompact(await r.json())); invalidate(); }
+        } catch(e){}
+      }, 300);
+    }, 300);
   } catch (e) {
     document.getElementById('result').innerHTML = '<div class="empty">데이터를 불러올 수 없습니다.</div>';
     return;

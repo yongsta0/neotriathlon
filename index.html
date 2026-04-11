@@ -685,33 +685,42 @@ let _dataLoaded = false;
 let _dataLoading = false;
 async function ensureData() {
   if (_dataLoaded) return true;
-  if (_dataLoading) return false; // 이미 진행 중이면 대기
+  if (_dataLoading) return new Promise(r => { const i = setInterval(() => { if (_dataLoaded) { clearInterval(i); r(true); } }, 100); });
   _dataLoading = true;
   const sub = document.getElementById('datasub');
-  sub.textContent = '기록 데이터 로드 중…';
+  sub.textContent = '기록 로드 중…';
   try {
     const ts = Date.now();
-    const [dataRes, distRes] = await Promise.all([
+    // 1단계: 최신 2년 + 경량 거리정보만 (~400KB gzip) — 빠르게 첫 결과
+    const [d1, d2] = await Promise.all([
       fetch('data.min.json?ts=' + ts),
-      fetch('distances.json?ts=' + ts).catch(() => null),
+      fetch('distances.slim.json?ts=' + ts).catch(() => null),
     ]);
-    DATA = await expandCompact(await dataRes.json());
-    if (distRes && distRes.ok) {
-      try { DISTANCES = await distRes.json(); } catch (e) {}
-    }
+    DATA = await expandCompact(await d1.json());
+    if (d2 && d2.ok) { try { DISTANCES = await d2.json(); } catch(e){} }
     _dataLoaded = true;
-    sub.textContent = `${DATA.length.toLocaleString()}개 기록 · 검색 가능`;
-    // 과거 데이터 백그라운드
-    const defer = window.requestIdleCallback || (fn => setTimeout(fn, 800));
-    defer(async () => {
+    sub.textContent = `${DATA.length.toLocaleString()}개 기록 (최신)`;
+
+    // 2단계: 2022-2023 백그라운드
+    setTimeout(async () => {
       try {
-        const r = await fetch('data.archive.min.json?ts=' + ts);
+        const r = await fetch('data.warm.min.json?ts=' + ts);
         if (!r.ok) return;
         DATA = DATA.concat(await expandCompact(await r.json()));
         invalidateCaches();
         sub.textContent = `${DATA.length.toLocaleString()}개 기록`;
-      } catch (e) {}
-    });
+      } catch(e){}
+      // 3단계: 2018-2021 백그라운드
+      setTimeout(async () => {
+        try {
+          const r = await fetch('data.archive.min.json?ts=' + ts);
+          if (!r.ok) return;
+          DATA = DATA.concat(await expandCompact(await r.json()));
+          invalidateCaches();
+          sub.textContent = `${DATA.length.toLocaleString()}개 기록 (전체)`;
+        } catch(e){}
+      }, 300);
+    }, 300);
     return true;
   } catch (e) {
     sub.textContent = '데이터를 불러올 수 없습니다.';

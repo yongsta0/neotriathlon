@@ -317,20 +317,22 @@ async function load() {
     };
     const [d1, d2] = await Promise.all([
       fetch('data.min.json?ts=' + ts),
-      fetch('distances.json?ts=' + ts).catch(() => null),
+      fetch('distances.slim.json?ts=' + ts).catch(() => null),
     ]);
     DATA = await expand(await d1.json());
     if (d2 && d2.ok) { try { DISTANCES = await d2.json(); } catch(e){} }
-    const defer = window.requestIdleCallback || (fn => setTimeout(fn, 500));
-    defer(async () => {
+    setTimeout(async () => {
       try {
-        const r = await fetch('data.archive.min.json?ts=' + ts);
-        if (!r.ok) return;
-        const arcRows = await expand(await r.json());
-        DATA = DATA.concat(arcRows);
-        POP_STATS = buildPopulationStats();
-      } catch (e) {}
-    });
+        const r = await fetch('data.warm.min.json?ts=' + ts);
+        if (r.ok) { DATA = DATA.concat(await expand(await r.json())); POP_STATS = buildPopulationStats(); }
+      } catch(e){}
+      setTimeout(async () => {
+        try {
+          const r = await fetch('data.archive.min.json?ts=' + ts);
+          if (r.ok) { DATA = DATA.concat(await expand(await r.json())); POP_STATS = buildPopulationStats(); }
+        } catch(e){}
+      }, 300);
+    }, 300);
     if (d2 && d2.ok) {
       try { DISTANCES = await d2.json(); } catch(e){}
     }
