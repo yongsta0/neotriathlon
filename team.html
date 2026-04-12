@@ -437,11 +437,14 @@ function onClubChange() {
   });
   const cats = Object.keys(catCounts).sort((a,b) => catCounts[b] - catCounts[a]);
 
+  // 표준(standard) 우선 기본 선택
+  const defaultCat = cats.includes('standard') ? 'standard' : cats[0];
+  const activeCat = cats.includes(curDist) ? curDist : defaultCat;
   distSel.innerHTML = cats.map(c => {
     const lbl = labelOfCat(c) + ' · ' + catCounts[c] + '건';
-    return `<option value="${escapeAttr(c)}"${c===curDist?' selected':''}>${escapeHtml(lbl)}</option>`;
+    return `<option value="${escapeAttr(c)}"${c===activeCat?' selected':''}>${escapeHtml(lbl)}</option>`;
   }).join('');
-  if (!cats.includes(curDist)) distSel.value = cats[0];
+  distSel.value = activeCat;
 
   summary.innerHTML =
     `<span class="chip">${members.size}명</span>` +
