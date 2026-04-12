@@ -61,9 +61,11 @@
   tr:last-child td{border-bottom:none}
   tr:hover td{background:var(--accent-soft)}
   td.r{text-align:right;font-variant-numeric:tabular-nums}
-  td.rank{font-weight:700;color:var(--accent);width:50px;white-space:nowrap}
+  td.rank{font-weight:700;white-space:nowrap}
+  td.club-rank{color:var(--accent);width:36px;text-align:center}
+  td.part-rank{color:var(--muted);font-size:11px;width:60px;font-variant-numeric:tabular-nums}
   tr.top3 td{background:#fffbe6}
-  tr.top3 td.rank{color:#b8860b}
+  tr.top3 td.part-rank{color:#b8860b;font-weight:700}
   td.part-cell{font-size:11px;color:var(--muted);white-space:normal;max-width:160px}
   td.name a{color:var(--text);font-weight:600}
   td.name a:hover{color:var(--accent)}
@@ -277,17 +279,20 @@ function renderRace() {
 
   let html = '';
   for (const { tour, date, members } of tourEntries) {
-    members.sort((a,b) => (a.rank||9999) - (b.rank||9999));
-    const memberRows = members.map(r => {
+    // 클럽 내 순위: 총기록 빠른 순
+    members.sort((a,b) => (toSec(a.total)||Infinity) - (toSec(b.total)||Infinity));
+    const memberRows = members.map((r, idx) => {
       const href = `./?q=${encodeURIComponent(r.name)}&club=${encodeURIComponent(r.club||'')}`;
-      const total = getPartTotal(r.tour, r.part);
-      const rankStr = r.rank ? `${r.rank}/${total}` : '-';
+      const clubRank = idx + 1;
+      const partTotal = getPartTotal(r.tour, r.part);
+      const partRankStr = r.rank ? `${r.rank}/${partTotal}` : '-';
       const medal = MEDAL[r.rank] || '';
       const topCls = r.rank && r.rank <= 3 ? ' top3' : '';
       return `<tr class="${topCls}">
-        <td class="rank">${medal}${rankStr}</td>
+        <td class="rank club-rank">${clubRank}</td>
         <td class="name"><a href="${href}">${escapeHtml(r.name)}</a></td>
         <td class="part-cell">${escapeHtml(r.part)}</td>
+        <td class="rank part-rank">${medal}${partRankStr}</td>
         <td class="r">${escapeHtml(r.swim||'-')}</td>
         <td class="r">${escapeHtml(r.t1||'-')}</td>
         <td class="r">${escapeHtml(r.bike||'-')}</td>
@@ -307,7 +312,7 @@ function renderRace() {
         <span class="club-count">${escapeHtml((date||'').slice(0,10))} · ${members.length}명${medalNote}</span>
       </div>
       <div class="table-wrap"><table>
-        <thead><tr><th>#</th><th>이름</th><th>부문</th><th>수영</th><th>T1</th><th>사이클</th><th>T2</th><th>런</th><th>총기록</th></tr></thead>
+        <thead><tr><th>클럽</th><th>이름</th><th>부문</th><th>부문 순위</th><th>수영</th><th>T1</th><th>사이클</th><th>T2</th><th>런</th><th>총기록</th></tr></thead>
         <tbody>${memberRows}</tbody>
       </table></div>
     </div>`;
