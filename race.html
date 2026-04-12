@@ -61,7 +61,9 @@
   tr:last-child td{border-bottom:none}
   tr:hover td{background:var(--accent-soft)}
   td.r{text-align:right;font-variant-numeric:tabular-nums}
-  td.rank{font-weight:700;color:var(--accent);width:36px}
+  td.rank{font-weight:700;color:var(--accent);width:50px;white-space:nowrap}
+  tr.top3 td{background:#fffbe6}
+  tr.top3 td.rank{color:#b8860b}
   td.part-cell{font-size:11px;color:var(--muted);white-space:normal;max-width:160px}
   td.name a{color:var(--text);font-weight:600}
   td.name a:hover{color:var(--accent)}
@@ -249,13 +251,41 @@ function renderRace() {
   // 최신 대회순 정렬
   const tourEntries = Object.values(byTour).sort((a,b) => (b.date||'').localeCompare(a.date||''));
 
+  // 부문별 총 인원수 미리 계산 (부문 내 순위 표시용)
+  const partTotals = {};
+  for (const r of DATA) {
+    if (!selectedTour || r.tour === selectedTour) {
+      for (const { tour: t, members: ms } of tourEntries) {
+        if (r.tour === t) {
+          const pk = t + '||' + r.part;
+          partTotals[pk] = (partTotals[pk]||0) + 1;
+        }
+      }
+    }
+  }
+  // 정확한 부문별 인원: 전체 DATA에서 해당 (tour, part)의 총 참가자
+  const partTotalCache = {};
+  function getPartTotal(tour, part) {
+    const k = tour + '||' + part;
+    if (!(k in partTotalCache)) {
+      partTotalCache[k] = DATA.filter(x => x.tour === tour && x.part === part).length;
+    }
+    return partTotalCache[k];
+  }
+
+  const MEDAL = {1:'🥇', 2:'🥈', 3:'🥉'};
+
   let html = '';
   for (const { tour, date, members } of tourEntries) {
     members.sort((a,b) => (a.rank||9999) - (b.rank||9999));
     const memberRows = members.map(r => {
       const href = `./?q=${encodeURIComponent(r.name)}&club=${encodeURIComponent(r.club||'')}`;
-      return `<tr>
-        <td class="rank">${r.rank||'-'}</td>
+      const total = getPartTotal(r.tour, r.part);
+      const rankStr = r.rank ? `${r.rank}/${total}` : '-';
+      const medal = MEDAL[r.rank] || '';
+      const topCls = r.rank && r.rank <= 3 ? ' top3' : '';
+      return `<tr class="${topCls}">
+        <td class="rank">${medal}${rankStr}</td>
         <td class="name"><a href="${href}">${escapeHtml(r.name)}</a></td>
         <td class="part-cell">${escapeHtml(r.part)}</td>
         <td class="r">${escapeHtml(r.swim||'-')}</td>
@@ -267,10 +297,14 @@ function renderRace() {
       </tr>`;
     }).join('');
 
+    // 메달 수 요약
+    const medals = members.filter(r => r.rank && r.rank <= 3).length;
+    const medalNote = medals > 0 ? ` · 🏅 ${medals}` : '';
+
     html += `<div class="club-group">
       <div class="club-header">
         <span class="club-name">${escapeHtml(tour)}</span>
-        <span class="club-count">${escapeHtml((date||'').slice(0,10))} · ${members.length}명</span>
+        <span class="club-count">${escapeHtml((date||'').slice(0,10))} · ${members.length}명${medalNote}</span>
       </div>
       <div class="table-wrap"><table>
         <thead><tr><th>#</th><th>이름</th><th>부문</th><th>수영</th><th>T1</th><th>사이클</th><th>T2</th><th>런</th><th>총기록</th></tr></thead>
