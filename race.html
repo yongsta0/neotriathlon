@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a2540">
+<title>TRI · 대회 결과</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="tours.json" as="fetch" crossorigin>
+<style>
+  :root {
+    --bg:#fafaf8;--surface:#fff;--border:#ececec;--border-soft:#f3f3f1;
+    --text:#0f0f0f;--muted:#6b6b6b;--subtle:#a0a0a0;
+    --accent:#0a2540;--accent-hover:#163a5f;--accent-soft:#eef2f7;
+    --success:#1f6b3a;--warning:#b7790e;--danger:#a8362a;
+    --radius:10px;--radius-lg:14px;
+    font-family:'Inter',-apple-system,"Apple SD Gothic Neo",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;min-width:0}
+  html,body{background:var(--bg);overflow-x:hidden}
+  body{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--text);font-size:14px;line-height:1.5;-webkit-text-size-adjust:100%}
+  a{color:var(--accent);text-decoration:none;font-weight:500}
+  a:hover{text-decoration:underline}
+  .brand{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+  .brand .logo{font-size:20px;font-weight:700;letter-spacing:-0.02em;color:var(--accent)}
+  .brand .logo .dot{color:var(--danger)}
+  .brand .tag{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:0.08em;text-transform:uppercase}
+  .nav-tabs{display:flex;gap:4px;margin:18px 0 22px;border-bottom:1px solid var(--border)}
+  .nav-tabs a{padding:10px 16px;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;transition:all .15s;font-weight:500}
+  .nav-tabs a:hover{color:var(--text);text-decoration:none}
+  .nav-tabs a.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+  h1{font-size:28px;font-weight:700;letter-spacing:-0.02em;margin:8px 0 6px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:24px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px 24px;margin-bottom:14px}
+  label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em}
+  input,select{font-family:inherit;font-size:14px;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius);width:100%;background:var(--surface);color:var(--text);outline:none;transition:border-color .15s}
+  input::placeholder{color:var(--subtle)}
+  input:focus,select:focus{border-color:var(--accent)}
+  .ac-wrap{position:relative}
+  .ac-dropdown{display:none;position:absolute;top:100%;left:0;right:0;z-index:100;background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);box-shadow:0 4px 12px rgba(0,0,0,.1);max-height:260px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .ac-dropdown.open{display:block}
+  .ac-item{padding:10px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--border-soft)}
+  .ac-item:last-child{border-bottom:none}
+  .ac-item:hover,.ac-item.active{background:var(--accent-soft)}
+  .ac-item .ac-date{color:var(--subtle);font-size:11px;margin-left:8px}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+  .tab{font-size:11px;padding:5px 12px;background:var(--bg);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-weight:500;cursor:pointer}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .club-group{margin:18px 0}
+  .club-header{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:2px solid var(--accent);margin-bottom:6px}
+  .club-header .club-name{font-weight:700;font-size:15px;color:var(--accent)}
+  .club-header .club-count{font-size:11px;color:var(--muted)}
+  .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:12px}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{background:var(--bg);color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+  td{padding:9px 12px;border-bottom:1px solid var(--border-soft);white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:var(--accent-soft)}
+  td.r{text-align:right;font-variant-numeric:tabular-nums}
+  td.rank{font-weight:700;color:var(--accent);width:36px}
+  td.name a{color:var(--text);font-weight:600}
+  td.name a:hover{color:var(--accent)}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+  .stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
+  .stat-value{font-size:18px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+  .empty{color:var(--subtle);padding:40px 0;text-align:center}
+  @media(max-width:700px){
+    body{padding:20px 14px 60px}
+    h1{font-size:22px}
+    .card{padding:16px 18px}
+    input,select{font-size:16px}
+    table{font-size:11px}
+    th,td{padding:7px 8px}
+  }
+</style>
+</head>
+<body>
+<div class="brand">
+  <div class="logo">TRI<span class="dot">·</span>PE</div>
+  <div class="tag">Race Results</div>
+</div>
+<nav class="nav-tabs">
+  <a href="./">탐색</a>
+  <a href="predict.html">예상기록</a>
+  <a href="team.html">팀 랭킹</a>
+  <a href="race.html" class="active">대회 결과</a>
+</nav>
+<h1>대회 · 소속별 결과</h1>
+<div class="sub" id="datasub">대회를 선택하면 소속별로 선수 기록을 보여줍니다.</div>
+
+<div class="card">
+  <label>대회 검색</label>
+  <div class="ac-wrap">
+    <input id="tour" type="text" placeholder="대회명을 입력하세요 (예: 충주 탄금호)" autocomplete="off">
+    <div id="tourAc" class="ac-dropdown"></div>
+  </div>
+</div>
+
+<div id="partTabs" class="tabs"></div>
+<div id="stats"></div>
+<div id="result"></div>
+
+<script>
+let DATA = [];
+let DISTANCES = {};
+let TOURS = [];
+let _dataLoaded = false, _dataLoading = false;
+
+function toSec(s) {
+  if (!s || s==='-' || s==='00:00:00') return null;
+  const p = s.split(':').map(Number);
+  if (p.some(isNaN)) return null;
+  if (p.length===4) return p[0]*3600+p[1]*60+p[2]+p[3]/1000;
+  if (p.length===3) return p[0]*3600+p[1]*60+p[2];
+  if (p.length===2) return p[0]*60+p[1];
+  return null;
+}
+function fmtSec(s) {
+  if (s==null) return '-';
+  s=Math.round(s); const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;
+  return (h>0?String(h).padStart(2,'0')+':':'')+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function escapeAttr(s) { return escapeHtml(s); }
+
+async function expandCompact(compact) {
+  const {t:tours,p:parts,c:clubs,r:rows}=compact;
+  const out=new Array(rows.length);
+  for(let i=0;i<rows.length;i++){
+    const row=rows[i];
+    out[i]={tour:tours[row[0]],part:parts[row[1]],club:clubs[row[2]],
+            rank:row[3],name:row[4],date:row[5],
+            swim:row[6],t1:row[7],bike:row[8],t2:row[9],run:row[10],total:row[11]};
+  }
+  return out;
+}
+
+async function ensureData() {
+  if (_dataLoaded) return true;
+  if (_dataLoading) return new Promise(r=>{const i=setInterval(()=>{if(_dataLoaded){clearInterval(i);r(true)}},100)});
+  _dataLoading=true;
+  document.getElementById('datasub').textContent='기록 데이터 로드 중…';
+  try {
+    const ts=Date.now();
+    const [d1,d2]=await Promise.all([
+      fetch('data.min.json?ts='+ts),
+      fetch('distances.slim.json?ts='+ts).catch(()=>null),
+    ]);
+    DATA=await expandCompact(await d1.json());
+    if(d2&&d2.ok){try{DISTANCES=await d2.json()}catch(e){}}
+    _dataLoaded=true;
+    document.getElementById('datasub').textContent='대회를 선택하세요.';
+    // warm + archive 백그라운드
+    setTimeout(async()=>{
+      try{const r=await fetch('data.warm.min.json?ts='+ts);if(r.ok)DATA=DATA.concat(await expandCompact(await r.json()))}catch(e){}
+      setTimeout(async()=>{
+        try{const r=await fetch('data.archive.min.json?ts='+ts);if(r.ok)DATA=DATA.concat(await expandCompact(await r.json()))}catch(e){}
+      },300);
+    },300);
+    return true;
+  } catch(e) {
+    document.getElementById('datasub').textContent='데이터를 불러올 수 없습니다.';
+    _dataLoading=false; return false;
+  }
+}
+
+let selectedTour = '';
+let selectedPart = '';
+
+async function selectTour(tourName) {
+  selectedTour = tourName;
+  document.getElementById('tour').value = tourName;
+  document.getElementById('tourAc').classList.remove('open');
+  const ok = await ensureData();
+  if (!ok) return;
+
+  const rows = DATA.filter(r => r.tour === tourName);
+  if (!rows.length) {
+    document.getElementById('result').innerHTML = '<div class="empty">해당 대회 기록이 없습니다.</div>';
+    return;
+  }
+
+  // 부문 탭
+  const partCounts = {};
+  rows.forEach(r => { partCounts[r.part] = (partCounts[r.part]||0)+1; });
+  const parts = Object.keys(partCounts).sort((a,b) => partCounts[b]-partCounts[a]);
+  selectedPart = parts[0];
+
+  document.getElementById('partTabs').innerHTML = parts.map(p =>
+    `<span class="tab${p===selectedPart?' active':''}" onclick="pickPart(${JSON.stringify(p).replace(/"/g,'&quot;')})">${escapeHtml(p)} · ${partCounts[p]}</span>`
+  ).join('');
+
+  renderRace();
+}
+
+function pickPart(p) {
+  selectedPart = p;
+  document.querySelectorAll('#partTabs .tab').forEach(t => t.classList.toggle('active', t.textContent.startsWith(p)));
+  renderRace();
+}
+
+function renderRace() {
+  const rows = DATA.filter(r => r.tour === selectedTour && r.part === selectedPart);
+  if (!rows.length) {
+    document.getElementById('result').innerHTML = '<div class="empty">해당 부문 기록이 없습니다.</div>';
+    document.getElementById('stats').innerHTML = '';
+    return;
+  }
+
+  rows.sort((a,b) => (a.rank||9999) - (b.rank||9999));
+
+  // 통계
+  const totals = rows.map(r => toSec(r.total)).filter(v => v!=null);
+  const best = totals.length ? Math.min(...totals) : null;
+  const median = totals.length ? totals.sort((a,b)=>a-b)[Math.floor(totals.length/2)] : null;
+  const info = rows[0];
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">참가자</div><div class="stat-value">${rows.length}명</div></div>
+      <div class="stat-card"><div class="stat-label">1위 기록</div><div class="stat-value">${fmtSec(best)}</div></div>
+      <div class="stat-card"><div class="stat-label">중앙값</div><div class="stat-value">${fmtSec(median)}</div></div>
+      <div class="stat-card"><div class="stat-label">날짜</div><div class="stat-value" style="font-size:13px">${escapeHtml((info.date||'').slice(0,10))}</div></div>
+    </div>`;
+
+  // 소속별 그룹
+  const byClub = {};
+  rows.forEach(r => {
+    const c = r.club || '(소속없음)';
+    if (!byClub[c]) byClub[c] = [];
+    byClub[c].push(r);
+  });
+
+  // 소속별 베스트 기준 정렬
+  const clubEntries = Object.entries(byClub).map(([club, members]) => {
+    const bestSec = Math.min(...members.map(r => toSec(r.total) || Infinity));
+    return { club, members, bestSec };
+  }).sort((a,b) => a.bestSec - b.bestSec);
+
+  let html = '';
+  for (const { club, members } of clubEntries) {
+    const memberRows = members.map(r => {
+      const href = `./?q=${encodeURIComponent(r.name)}&club=${encodeURIComponent(r.club||'')}`;
+      return `<tr>
+        <td class="rank">${r.rank||'-'}</td>
+        <td class="name"><a href="${href}">${escapeHtml(r.name)}</a></td>
+        <td class="r">${escapeHtml(r.swim||'-')}</td>
+        <td class="r">${escapeHtml(r.t1||'-')}</td>
+        <td class="r">${escapeHtml(r.bike||'-')}</td>
+        <td class="r">${escapeHtml(r.t2||'-')}</td>
+        <td class="r">${escapeHtml(r.run||'-')}</td>
+        <td class="r"><b>${escapeHtml(r.total||'-')}</b></td>
+      </tr>`;
+    }).join('');
+
+    html += `<div class="club-group">
+      <div class="club-header">
+        <span class="club-name">${escapeHtml(club)}</span>
+        <span class="club-count">${members.length}명</span>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>#</th><th>이름</th><th>수영</th><th>T1</th><th>사이클</th><th>T2</th><th>런</th><th>총기록</th></tr></thead>
+        <tbody>${memberRows}</tbody>
+      </table></div>
+    </div>`;
+  }
+
+  document.getElementById('result').innerHTML = html;
+}
+
+async function load() {
+  try {
+    TOURS = await (await fetch('tours.json?ts='+Date.now())).json();
+  } catch(e){}
+
+  const input = document.getElementById('tour');
+  const dd = document.getElementById('tourAc');
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    if (q.length < 1) { dd.classList.remove('open'); dd.innerHTML=''; return; }
+    const matches = TOURS.filter(([n]) => n.includes(q)).slice(0,10);
+    if (!matches.length) { dd.classList.remove('open'); return; }
+    dd.innerHTML = matches.map(([n,dt]) =>
+      `<div class="ac-item" data-val="${escapeAttr(n)}">${escapeHtml(n)}<span class="ac-date">${escapeHtml(dt)}</span></div>`
+    ).join('');
+    dd.classList.add('open');
+  });
+  dd.addEventListener('click', e => {
+    const it = e.target.closest('.ac-item'); if(!it) return;
+    selectTour(it.dataset.val);
+  });
+  input.addEventListener('blur', () => setTimeout(()=>dd.classList.remove('open'),150));
+  input.addEventListener('keydown', e => {
+    if (e.key==='Enter') {
+      const first = dd.querySelector('.ac-item');
+      if (first) { first.click(); e.preventDefault(); }
+      else if (input.value.trim()) { selectTour(input.value.trim()); e.preventDefault(); }
+    }
+  });
+
+  // URL 파라미터
+  const p = new URLSearchParams(location.search);
+  if (p.get('tour')) selectTour(p.get('tour'));
+}
+
+load();
+</script>
+</body>
+</html>
