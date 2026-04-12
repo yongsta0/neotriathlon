@@ -67,6 +67,7 @@
   tr.top3 td{background:#fffbe6}
   tr.top3 td.part-rank{color:#b8860b;font-weight:700}
   td.part-cell{font-size:11px;color:var(--muted);white-space:normal;max-width:160px}
+  td.name .part-sub{display:none;font-size:10px;color:var(--subtle);font-weight:400;margin-top:1px}
   td.name a{color:var(--text);font-weight:600}
   td.name a:hover{color:var(--accent)}
   .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
@@ -81,6 +82,11 @@
     input,select{font-size:16px}
     table{font-size:11px}
     th,td{padding:7px 8px}
+    /* 모바일: 부문 칼럼 숨기고 이름 아래에 표시 */
+    td.part-cell,th.part-th{display:none}
+    td.name .part-sub{display:block}
+    /* T1/T2도 숨겨서 가로 줄이기 */
+    th.t-th,td.t-cell{display:none}
   }
 </style>
 </head>
@@ -288,15 +294,17 @@ function renderRace() {
       const partRankStr = r.rank ? `${r.rank}/${partTotal}` : '-';
       const medal = MEDAL[r.rank] || '';
       const topCls = r.rank && r.rank <= 3 ? ' top3' : '';
+      // 부문 라벨 축약 (모바일 서브텍스트용)
+      const shortPart = (r.part||'').replace(/동호인부\s*동호인\s*/,'').replace(/스탠다드\s*/,'');
       return `<tr class="${topCls}">
         <td class="rank club-rank">${clubRank}</td>
-        <td class="name"><a href="${href}">${escapeHtml(r.name)}</a></td>
+        <td class="name"><a href="${href}">${escapeHtml(r.name)}</a><div class="part-sub">${escapeHtml(shortPart)}</div></td>
         <td class="part-cell">${escapeHtml(r.part)}</td>
         <td class="rank part-rank">${medal}${partRankStr}</td>
         <td class="r">${escapeHtml(r.swim||'-')}</td>
-        <td class="r">${escapeHtml(r.t1||'-')}</td>
+        <td class="r t-cell">${escapeHtml(r.t1||'-')}</td>
         <td class="r">${escapeHtml(r.bike||'-')}</td>
-        <td class="r">${escapeHtml(r.t2||'-')}</td>
+        <td class="r t-cell">${escapeHtml(r.t2||'-')}</td>
         <td class="r">${escapeHtml(r.run||'-')}</td>
         <td class="r"><b>${escapeHtml(r.total||'-')}</b></td>
       </tr>`;
@@ -312,7 +320,7 @@ function renderRace() {
         <span class="club-count">${escapeHtml((date||'').slice(0,10))} · ${members.length}명${medalNote}</span>
       </div>
       <div class="table-wrap"><table>
-        <thead><tr><th>클럽</th><th>이름</th><th>부문</th><th>부문 순위</th><th>수영</th><th>T1</th><th>사이클</th><th>T2</th><th>런</th><th>총기록</th></tr></thead>
+        <thead><tr><th>클럽</th><th>이름</th><th class="part-th">부문</th><th>부문 순위</th><th>수영</th><th class="t-th">T1</th><th>사이클</th><th class="t-th">T2</th><th>런</th><th>총기록</th></tr></thead>
         <tbody>${memberRows}</tbody>
       </table></div>
     </div>`;
