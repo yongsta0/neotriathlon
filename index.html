@@ -658,7 +658,7 @@ function ensureIndexes() {
   buildIndexes();
   _idxBuilt = true;
 }
-function invalidateCaches() { _idxBuilt = false; POP_STATS = {}; }
+function invalidateCaches() { _idxBuilt = false; POP_STATS = {}; _clubLowerMap = null; }
 function getPopStats() {
   if (Object.keys(POP_STATS).length === 0) POP_STATS = buildPopulationStats();
   return POP_STATS;
@@ -820,6 +820,20 @@ async function load() {
 
 function uniq(arr) { return [...new Set(arr)].sort(); }
 
+// 대소문자 무시 소속 매칭
+let _clubLowerMap = null;
+function resolveClub(input) {
+  if (!input || input === '(소속없음)') return input;
+  if (!_clubLowerMap) {
+    _clubLowerMap = {};
+    for (const r of DATA) {
+      if (r.club && !_clubLowerMap[r.club.toLowerCase()]) _clubLowerMap[r.club.toLowerCase()] = r.club;
+    }
+  }
+  if (_clubLowerMap[input]) return input; // 정확 매칭
+  return _clubLowerMap[input.toLowerCase()] || input;
+}
+
 async function render() {
   const q = document.getElementById('q').value.trim();
   if (q && !_dataLoaded) {
@@ -828,7 +842,8 @@ async function render() {
     ensureIndexes();
   }
   if (_dataLoaded) ensureIndexes();
-  const clubF = document.getElementById('club').value;
+  const rawClubF = document.getElementById('club').value;
+  const clubF = _dataLoaded ? resolveClub(rawClubF) : rawClubF;
   const distF = document.getElementById('dist').value;
   const partF = document.getElementById('part').value;
   const candDiv = document.getElementById('candidates');
