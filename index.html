@@ -802,12 +802,20 @@ async function load() {
   document.getElementById('dist').addEventListener('change', render);
   document.getElementById('part').addEventListener('change', render);
   document.getElementById('vs').addEventListener('input', () => {
-    // vs 이름이 바뀌면 vsclub 파라미터 초기화
     const u = new URL(location.href);
     u.searchParams.delete('vsclub');
     history.replaceState({}, '', u.toString());
     renderDebounced();
   });
+
+  // URL 파라미터로 자동 검색 (?q=이름&club=소속)
+  const p = new URLSearchParams(location.search);
+  if (p.get('q')) {
+    document.getElementById('q').value = p.get('q');
+    if (p.get('club')) document.getElementById('club').value = p.get('club');
+    if (p.get('vs')) document.getElementById('vs').value = p.get('vs');
+    render();
+  }
 }
 
 function uniq(arr) { return [...new Set(arr)].sort(); }
