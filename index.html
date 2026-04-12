@@ -1522,8 +1522,9 @@ function renderProfile(name, clubF, filtered, div, vsName) {
       }
     }
     if (matches.length === 0) {
+      const vsHref0 = './?q=' + encodeURIComponent(vsName) + (vsClub && vsClub !== '(소속없음)' ? '&club=' + encodeURIComponent(vsClub) : '');
       h2hHtml = `<div class="pf-card h2h-card">
-        <h3>1:1 맞대결 · vs ${escapeHtml(vsName)}${vsClub ? ' · ' + escapeHtml(vsClub) : ''}</h3>
+        <h3>1:1 맞대결 · vs <a href="${vsHref0}">${escapeHtml(vsName)}</a>${vsClub ? ' · ' + escapeHtml(vsClub) : ''}</h3>
         ${vsCandidateHtml}
         <div class="muted" style="font-size:12px">같은 대회·부문에서 함께 출전한 기록이 없습니다.</div>
       </div>`;
@@ -1567,8 +1568,9 @@ function renderProfile(name, clubF, filtered, div, vsName) {
       }).join('');
       const extraNote = matches.length > 10 ? `<div class="muted" style="font-size:11px;margin-top:6px">최근 10경기만 표시 (총 ${matches.length}회 대결)</div>` : '';
 
+      const vsHref = './?q=' + encodeURIComponent(vsName) + (vsClub && vsClub !== '(소속없음)' ? '&club=' + encodeURIComponent(vsClub) : '');
       h2hHtml = `<div class="pf-card h2h-card">
-        <h3>1:1 맞대결 · <b>${escapeHtml(name)}</b>${clubF ? `<span class="h2h-sub">${escapeHtml(clubF)}</span>` : ''} vs <b>${escapeHtml(vsName)}</b>${vsClub ? `<span class="h2h-sub">${escapeHtml(vsClub)}</span>` : ''} · ${matches.length}회</h3>
+        <h3>1:1 맞대결 · <b>${escapeHtml(name)}</b>${clubF ? `<span class="h2h-sub">${escapeHtml(clubF)}</span>` : ''} vs <a href="${vsHref}"><b>${escapeHtml(vsName)}</b></a>${vsClub ? `<span class="h2h-sub">${escapeHtml(vsClub)}</span>` : ''} · ${matches.length}회</h3>
         ${vsCandidateHtml}
         <div class="h2h-grid">
           ${segLine('수영', 'swim')}
