@@ -183,14 +183,22 @@ let DISTANCES = {};
 let POP_STATS = {};
 let IDX_BY_CLUB = {}; // club → rec[]
 let IDX_BY_NAME_CLUB = {}; // "name||club" → rec[]
+let CLUB_LOWER_MAP = {}; // lowercase → actual club name
 function buildIndexes() {
-  IDX_BY_CLUB = {}; IDX_BY_NAME_CLUB = {};
+  IDX_BY_CLUB = {}; IDX_BY_NAME_CLUB = {}; CLUB_LOWER_MAP = {};
   for (const r of DATA) {
     const cl = r.club || '';
     (IDX_BY_CLUB[cl] || (IDX_BY_CLUB[cl] = [])).push(r);
     const k = r.name + '||' + cl;
     (IDX_BY_NAME_CLUB[k] || (IDX_BY_NAME_CLUB[k] = [])).push(r);
+    if (cl) CLUB_LOWER_MAP[cl.toLowerCase()] = cl;
   }
+}
+// 대소문자 무시 소속 매칭 — 입력값 → 실제 소속명 변환
+function resolveClub(input) {
+  if (!input) return '';
+  if (IDX_BY_CLUB[input]) return input; // 정확 매칭
+  return CLUB_LOWER_MAP[input.toLowerCase()] || input;
 }
 
 function toSec(s) {
@@ -361,7 +369,8 @@ async function load() {
   clubInput.addEventListener('input', () => {
     const q = clubInput.value.trim();
     if (!q) { clubDd.classList.remove('open'); clubDd.innerHTML = ''; return; }
-    const m = topClubs.filter(c => c.includes(q)).slice(0,8);
+    const ql = q.toLowerCase();
+    const m = topClubs.filter(c => c.toLowerCase().includes(ql)).slice(0,8);
     if (!m.length || (m.length===1 && m[0]===q)) { clubDd.classList.remove('open'); return; }
     clubDd.innerHTML = m.map(c => `<div class="ac-item" data-val="${escapeAttr(c)}">${escapeHtml(c)}</div>`).join('');
     clubDd.classList.add('open');
@@ -395,7 +404,8 @@ async function load() {
 
 function onClubChange() {
   window._ensureIdx && window._ensureIdx();
-  const club = document.getElementById('club').value.trim();
+  const rawClub = document.getElementById('club').value.trim();
+  const club = resolveClub(rawClub);
   const distSel = document.getElementById('dist');
   const curDist = distSel.value;
   const summary = document.getElementById('clubSummary');
@@ -510,7 +520,8 @@ function renderLeaderboard() {
 
 function render() {
   window._ensureIdx && window._ensureIdx();
-  const club = document.getElementById('club').value.trim();
+  const rawClub = document.getElementById('club').value.trim();
+  const club = resolveClub(rawClub);
   const selCat = document.getElementById('dist').value;
   const resDiv = document.getElementById('result');
   if (!club || !selCat) { resDiv.innerHTML = ''; return; }
