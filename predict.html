@@ -96,6 +96,19 @@
   .diff-segs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;font-size:11px}
   .diff-seg{text-align:center;padding:6px;background:rgba(255,255,255,.6);border-radius:6px}
   .diff-seg .val{font-size:15px;font-weight:700;margin-top:2px}
+  .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{background:var(--bg);color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+  td{padding:9px 12px;border-bottom:1px solid var(--border-soft);white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:var(--accent-soft)}
+  td.r{text-align:right;font-variant-numeric:tabular-nums}
+  td.tour-name{font-weight:600;color:var(--text);max-width:200px;overflow:hidden;text-overflow:ellipsis}
+  td.diff{font-weight:600;font-size:11px}
+  tr.hard td{background:#fdf8f7}
+  tr.hard td.diff{color:var(--danger)}
+  tr.easy td{background:#f5faf6}
+  tr.easy td.diff{color:var(--success)}
   .muted { color: var(--subtle); }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .chip { font-size: 11px; padding: 4px 10px; background: var(--bg); color: var(--muted); border: 1px solid var(--border); border-radius: 10px; font-weight: 500; }
@@ -321,7 +334,8 @@ function distCat(r) { return classifyDistance(distInfo(r)) || 'other'; }
 
 let DIFFICULTY = {};
 let TOUR_LIST = [];
-let selectedDiff = null; // 선택된 대회의 난이도 계수
+let RECURRING = {};
+let selectedDiff = null;
 
 function fmtSec(s) {
   if (s==null) return '-';
@@ -413,12 +427,14 @@ async function load() {
 
   // 대회 난이도 + 대회 목록 로드
   try {
-    const [diffRes, tourRes] = await Promise.all([
+    const [diffRes, tourRes, recRes] = await Promise.all([
       fetch('difficulty.json?ts=' + Date.now()).catch(()=>null),
       fetch('tours.json?ts=' + Date.now()).catch(()=>null),
+      fetch('recurring.json?ts=' + Date.now()).catch(()=>null),
     ]);
     if (diffRes && diffRes.ok) DIFFICULTY = await diffRes.json();
     if (tourRes && tourRes.ok) TOUR_LIST = await tourRes.json();
+    if (recRes && recRes.ok) RECURRING = await recRes.json();
   } catch(e){}
 
   // 대회 자동완성
@@ -919,6 +935,41 @@ function calc() {
     </div>`;
   }
 
+  // 정기 대회별 예상 기록 테이블
+  let recurHtml = '';
+  if (out.tot != null && Object.keys(RECURRING).length > 0) {
+    const rows = Object.values(RECURRING)
+      .sort((a,b) => a.factor - b.factor)
+      .map(rc => {
+        const adjTot = out.tot * rc.factor;
+        const adjSwim = out.s != null ? out.s * rc.swim_factor : null;
+        const adjBike = out.b != null ? out.b * rc.bike_factor : null;
+        const adjRun  = out.rn != null ? out.rn * rc.run_factor : null;
+        const diff = adjTot - out.tot;
+        const pct = ((rc.factor - 1) * 100).toFixed(1);
+        const cls = rc.factor > 1.03 ? 'hard' : (rc.factor < 0.97 ? 'easy' : '');
+        const sign = rc.factor >= 1 ? '+' : '';
+        return `<tr class="${cls}">
+          <td class="tour-name">${escapeHtml(rc.name.slice(0,35))}</td>
+          <td class="r">${sign}${pct}%</td>
+          <td class="r">${fmtSec(adjSwim)}</td>
+          <td class="r">${fmtSec(adjBike)}</td>
+          <td class="r">${fmtSec(adjRun)}</td>
+          <td class="r"><b>${fmtSec(adjTot)}</b></td>
+          <td class="r diff">${diff>=0?'+':'−'}${fmtSec(Math.abs(diff))}</td>
+        </tr>`;
+      }).join('');
+
+    recurHtml = `<div class="card">
+      <h2>정기 대회별 예상 기록</h2>
+      <div class="hint" style="margin-bottom:10px">매년 개최되는 ${Object.keys(RECURRING).length}개 대회의 코스 난이도를 반영한 예상 기록입니다. 기준: 시뮬레이션 총기록 ${fmtSec(out.tot)}</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>대회</th><th>난이도</th><th>수영</th><th>사이클</th><th>런</th><th>총기록</th><th>차이</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+    </div>`;
+  }
+
   resDiv.innerHTML = topAlert +
     `<div class="card">
       <h2>시뮬레이션 결과 <span class="badge-mode">${escapeHtml(mode)}</span></h2>
@@ -934,7 +985,7 @@ function calc() {
         과거 ${samples.length}개 기록 평균: 수영 ${fmtSec(pa.s)} · T1 ${fmtSec(pa.t1)} · 사이클 ${fmtSec(pa.b)} · T2 ${fmtSec(pa.t2)} · 런 ${fmtSec(pa.rn)} → 총 ${fmtSec(avgTotal)}
         <br><span class="muted">● 표시 = 사용자 입력값 · 노란 배경 = 입력값 · 빨간 배경 = 베스트보다 5%+ 빠름</span>
       </div>
-    </div>` + diffHtml;
+    </div>` + diffHtml + recurHtml;
 }
 
 const SEG_NAME = { s:'수영', t1:'T1', b:'사이클', t2:'T2', rn:'런' };
