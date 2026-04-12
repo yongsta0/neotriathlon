@@ -599,6 +599,7 @@ function updateSummary() {
 }
 
 function buildSamples(rs) {
+  const now = Date.now();
   const out = [];
   rs.forEach(r => {
     const s = cleanSec(r.swim, 'swim');
@@ -608,7 +609,13 @@ function buildSamples(rs) {
     const rn = cleanSec(r.run, 'run');
     const tot = cleanSec(r.total, 'total');
     if (s == null || b == null || rn == null || tot == null) return;
-    out.push({ s, t1, b, t2, rn, tot, raw: r });
+    // 날짜 → 경과 연수 → 가중치 (최근일수록 높음)
+    const dateStr = (r.date || '').replace(/[^0-9]/g, '/').replace(/\/+/g, '/');
+    const dateMs = Date.parse(dateStr) || now;
+    const yearsAgo = Math.max(0, (now - dateMs) / (365.25 * 24 * 3600000));
+    // 지수 감쇠: 반감기 ~1.4년 (λ=0.5 → 1년 전 61%, 2년 전 37%, 4년 전 14%)
+    const weight = Math.exp(-0.5 * yearsAgo);
+    out.push({ s, t1, b, t2, rn, tot, weight, raw: r });
   });
   return out;
 }
@@ -629,8 +636,12 @@ function bestSeg(samples, key) {
   return vs.length ? Math.min(...vs) : null;
 }
 function avgSeg(samples, key) {
-  const vs = samples.map(x => x[key]).filter(v => v != null);
-  return vs.length ? vs.reduce((a,b)=>a+b,0)/vs.length : null;
+  // 가중 평균 (최근 기록 우선)
+  const pairs = samples.filter(x => x[key] != null).map(x => [x[key], x.weight]);
+  if (!pairs.length) return null;
+  const wSum = pairs.reduce((a,[v,w]) => a + v * w, 0);
+  const wTot = pairs.reduce((a,[_,w]) => a + w, 0);
+  return wTot > 0 ? wSum / wTot : null;
 }
 
 function clearInputs() {
@@ -758,10 +769,13 @@ function calc() {
     return;
   }
 
-  // 개인 평균 (절대 시간) — 모든 계산의 기준
+  // 개인 가중 평균 (최근 기록일수록 높은 가중치) — 모든 계산의 기준
   const mean = (key) => {
-    const vs = samples.map(x => x[key]).filter(v => v != null);
-    return vs.length ? vs.reduce((a,b)=>a+b,0)/vs.length : null;
+    const pairs = samples.filter(x => x[key] != null).map(x => [x[key], x.weight]);
+    if (!pairs.length) return null;
+    const wSum = pairs.reduce((a,[v,w]) => a + v * w, 0);
+    const wTot = pairs.reduce((a,[_,w]) => a + w, 0);
+    return wTot > 0 ? wSum / wTot : null;
   };
   const personalAvg = {
     s: mean('s'), t1: mean('t1'), b: mean('b'), t2: mean('t2'), rn: mean('rn'),
@@ -982,8 +996,8 @@ function calc() {
         ${totCard}
       </div>
       <div class="compare">
-        과거 ${samples.length}개 기록 평균: 수영 ${fmtSec(pa.s)} · T1 ${fmtSec(pa.t1)} · 사이클 ${fmtSec(pa.b)} · T2 ${fmtSec(pa.t2)} · 런 ${fmtSec(pa.rn)} → 총 ${fmtSec(avgTotal)}
-        <br><span class="muted">● 표시 = 사용자 입력값 · 노란 배경 = 입력값 · 빨간 배경 = 베스트보다 5%+ 빠름</span>
+        과거 ${samples.length}개 기록 가중 평균: 수영 ${fmtSec(pa.s)} · T1 ${fmtSec(pa.t1)} · 사이클 ${fmtSec(pa.b)} · T2 ${fmtSec(pa.t2)} · 런 ${fmtSec(pa.rn)} → 총 ${fmtSec(avgTotal)}
+        <br><span class="muted">● = 사용자 입력 · 최근 기록에 높은 가중치 적용 (1년 전 61%, 2년 전 37%, 4년 전 14%)</span>
       </div>
     </div>` + diffHtml + recurHtml;
 }
