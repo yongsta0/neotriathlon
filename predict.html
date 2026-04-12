@@ -81,6 +81,21 @@
 
   .compare { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
   .hint { font-size: 12px; color: var(--subtle); margin-top: 6px; line-height: 1.5; }
+  .ac-wrap{position:relative}
+  .ac-dropdown{display:none;position:absolute;top:100%;left:0;right:0;z-index:100;background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;box-shadow:0 4px 12px rgba(0,0,0,.1);max-height:220px;overflow-y:auto}
+  .ac-dropdown.open{display:block}
+  .ac-item{padding:10px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--border-soft)}
+  .ac-item:last-child{border-bottom:none}
+  .ac-item:hover{background:var(--accent-soft)}
+  .ac-item .ac-sub{color:var(--subtle);font-size:11px;margin-left:6px}
+  .diff-card{margin-top:12px;padding:14px 16px;border-radius:10px;font-size:13px;line-height:1.6}
+  .diff-card.hard{background:#fdf2f0;border:1px solid #f5d5d0;color:var(--danger)}
+  .diff-card.easy{background:#f0f7f1;border:1px solid #c9e3cd;color:var(--success)}
+  .diff-card.normal{background:var(--accent-soft);border:1px solid #d9e0e9;color:var(--accent)}
+  .diff-card b{font-weight:700}
+  .diff-segs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;font-size:11px}
+  .diff-seg{text-align:center;padding:6px;background:rgba(255,255,255,.6);border-radius:6px}
+  .diff-seg .val{font-size:15px;font-weight:700;margin-top:2px}
   .muted { color: var(--subtle); }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .chip { font-size: 11px; padding: 4px 10px; background: var(--bg); color: var(--muted); border: 1px solid var(--border); border-radius: 10px; font-weight: 500; }
@@ -158,6 +173,16 @@
   </div>
   <div class="hint">이름만 입력 → 개인 예상 / 이름 없이 소속만 → 팀 내 거리별 랭킹</div>
   <div class="chips" id="profileSummary"></div>
+</div>
+
+<div class="card">
+  <h2>1.5단계 · 목표 대회 (선택)</h2>
+  <div class="hint" style="margin-bottom:8px">대회를 선택하면 코스 난이도를 반영한 보정 예상기록을 보여줍니다.</div>
+  <div class="ac-wrap">
+    <input id="targetTour" type="text" placeholder="대회명 검색 (예: 충주, 삼척, 대구)" autocomplete="off">
+    <div id="tourAc" class="ac-dropdown"></div>
+  </div>
+  <div id="diffInfo"></div>
 </div>
 
 <div class="card">
@@ -294,6 +319,42 @@ function distChipCls(cat) {
 function distInfo(r) { return DISTANCES[r.tour + '||' + r.part] || null; }
 function distCat(r) { return classifyDistance(distInfo(r)) || 'other'; }
 
+let DIFFICULTY = {};
+let TOUR_LIST = [];
+let selectedDiff = null; // 선택된 대회의 난이도 계수
+
+function fmtSec(s) {
+  if (s==null) return '-';
+  s=Math.round(s);
+  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;
+  return (h>0?String(h).padStart(2,'0')+':':'')+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+
+function showDiffInfo(tourName) {
+  const info = document.getElementById('diffInfo');
+  const d = DIFFICULTY[tourName];
+  if (!d) { info.innerHTML = ''; selectedDiff = null; calc(); return; }
+  selectedDiff = d;
+  const f = d.total.factor;
+  const pct = ((f - 1) * 100).toFixed(1);
+  const cls = f > 1.03 ? 'hard' : (f < 0.97 ? 'easy' : 'normal');
+  const label = f > 1.03 ? '어려움' : (f < 0.97 ? '쉬움' : '보통');
+  const sign = f >= 1 ? '+' : '';
+
+  const segHtml = ['swim','bike','run','total'].map(k => {
+    const sf = d[k].factor;
+    const sp = ((sf-1)*100).toFixed(1);
+    const segName = {swim:'수영',bike:'사이클',run:'런',total:'총'}[k];
+    return `<div class="diff-seg"><div>${segName}</div><div class="val">${sf>=1?'+':''}${sp}%</div><div>중앙 ${fmtSec(d[k].median)}</div></div>`;
+  }).join('');
+
+  info.innerHTML = `<div class="diff-card ${cls}">
+    <b>${escapeHtml(tourName)}</b> · 코스 난이도: <b>${label} (${sign}${pct}%)</b> · 참가자 ${d.n}명 기준
+    <div class="diff-segs">${segHtml}</div>
+  </div>`;
+  calc();
+}
+
 async function load() {
   try {
     const ts = Date.now();
@@ -349,6 +410,46 @@ async function load() {
   const topNames = Object.keys(nameCnt).sort((a,b) => nameCnt[b]-nameCnt[a]).slice(0, 2000);
   document.getElementById('nameList').innerHTML =
     topNames.map(n => `<option value="${escapeAttr(n)}">`).join('');
+
+  // 대회 난이도 + 대회 목록 로드
+  try {
+    const [diffRes, tourRes] = await Promise.all([
+      fetch('difficulty.json?ts=' + Date.now()).catch(()=>null),
+      fetch('tours.json?ts=' + Date.now()).catch(()=>null),
+    ]);
+    if (diffRes && diffRes.ok) DIFFICULTY = await diffRes.json();
+    if (tourRes && tourRes.ok) TOUR_LIST = await tourRes.json();
+  } catch(e){}
+
+  // 대회 자동완성
+  const tourIn = document.getElementById('targetTour');
+  const tourDd = document.getElementById('tourAc');
+  if (tourIn && tourDd) {
+    tourIn.addEventListener('input', () => {
+      const q = tourIn.value.trim();
+      if (!q) { tourDd.classList.remove('open'); tourDd.innerHTML=''; showDiffInfo(''); return; }
+      const ql = q.toLowerCase();
+      const m = TOUR_LIST.filter(([n])=>n.toLowerCase().includes(ql)).slice(0,8);
+      if (!m.length) { tourDd.classList.remove('open'); return; }
+      tourDd.innerHTML = m.map(([n,dt])=>
+        `<div class="ac-item" data-val="${escapeAttr(n)}">${escapeHtml(n)}<span class="ac-sub">${escapeHtml(dt)}</span></div>`
+      ).join('');
+      tourDd.classList.add('open');
+    });
+    tourDd.addEventListener('click', e => {
+      const it=e.target.closest('.ac-item'); if(!it) return;
+      tourIn.value = it.dataset.val;
+      tourDd.classList.remove('open');
+      showDiffInfo(it.dataset.val);
+    });
+    tourIn.addEventListener('blur',()=>setTimeout(()=>tourDd.classList.remove('open'),150));
+    tourIn.addEventListener('keydown', e => {
+      if (e.key==='Enter') {
+        const first=tourDd.querySelector('.ac-item');
+        if (first) { first.click(); e.preventDefault(); }
+      }
+    });
+  }
 
   const p = new URLSearchParams(location.search);
   if (p.get('name')) document.getElementById('name').value = p.get('name');
@@ -776,6 +877,48 @@ function calc() {
     <div class="sub">평균 ${fmtSec(avgT)} · 베스트 ${fmtSec(bestT)}</div>
   </div>`;
 
+  // 난이도 보정 결과
+  let diffHtml = '';
+  if (selectedDiff && out.tot != null) {
+    const adj = {};
+    const keyMap = {s:'swim', t1:null, b:'bike', t2:null, rn:'run'};
+    for (const k of ['s','t1','b','t2','rn']) {
+      const dk = keyMap[k];
+      const factor = dk && selectedDiff[dk] ? selectedDiff[dk].factor : 1;
+      adj[k] = out[k] != null ? out[k] * factor : null;
+    }
+    adj.tot = ['s','t1','b','t2','rn'].reduce((a,k) => a + (adj[k]||0), 0);
+    const diff = adj.tot - out.tot;
+    const diffSign = diff >= 0 ? '+' : '−';
+    const tourName = document.getElementById('targetTour').value;
+    const cls = selectedDiff.total.factor > 1.03 ? 'hard' : (selectedDiff.total.factor < 0.97 ? 'easy' : 'normal');
+
+    const adjCard = (k, label) => {
+      const v = adj[k];
+      if (v == null || v === 0) return `<div class="rcard"><div class="label">${label}</div><div class="val muted">—</div></div>`;
+      const orig = out[k];
+      const d = v - orig;
+      const ds = d >= 0 ? '+' : '−';
+      return `<div class="rcard">
+        <div class="label">${label}</div>
+        <div class="val">${fmtSec(v)}</div>
+        <div class="sub">${ds}${fmtSec(Math.abs(d))}</div>
+      </div>`;
+    };
+    diffHtml = `<div class="card">
+      <h2>코스 난이도 보정 <span class="badge-mode ${cls}">${escapeHtml(tourName.slice(0,30))}</span></h2>
+      <div class="hint" style="margin-bottom:10px">위 시뮬레이션 결과에 대회별 코스 난이도(${(selectedDiff.total.factor >= 1?'+':'') + ((selectedDiff.total.factor-1)*100).toFixed(1)}%)를 적용한 보정 예상기록입니다.</div>
+      <div class="result-grid">
+        ${adjCard('s','수영')}
+        ${adjCard('t1','T1')}
+        ${adjCard('b','사이클')}
+        ${adjCard('t2','T2')}
+        ${adjCard('rn','런')}
+        <div class="rcard total"><div class="label">보정 총기록</div><div class="val">${fmtSec(adj.tot)}</div><div class="sub">원본 대비 ${diffSign}${fmtSec(Math.abs(diff))}</div></div>
+      </div>
+    </div>`;
+  }
+
   resDiv.innerHTML = topAlert +
     `<div class="card">
       <h2>시뮬레이션 결과 <span class="badge-mode">${escapeHtml(mode)}</span></h2>
@@ -791,7 +934,7 @@ function calc() {
         과거 ${samples.length}개 기록 평균: 수영 ${fmtSec(pa.s)} · T1 ${fmtSec(pa.t1)} · 사이클 ${fmtSec(pa.b)} · T2 ${fmtSec(pa.t2)} · 런 ${fmtSec(pa.rn)} → 총 ${fmtSec(avgTotal)}
         <br><span class="muted">● 표시 = 사용자 입력값 · 노란 배경 = 입력값 · 빨간 배경 = 베스트보다 5%+ 빠름</span>
       </div>
-    </div>`;
+    </div>` + diffHtml;
 }
 
 const SEG_NAME = { s:'수영', t1:'T1', b:'사이클', t2:'T2', rn:'런' };
