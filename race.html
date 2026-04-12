@@ -92,22 +92,22 @@
   <a href="race.html" class="active">대회 결과</a>
 </nav>
 <h1>대회 · 소속별 결과</h1>
-<div class="sub" id="datasub">대회를 선택하면 소속별로 선수 기록을 보여줍니다.</div>
+<div class="sub" id="datasub">소속과 대회를 선택하면 해당 클럽 선수들의 기록을 보여줍니다.</div>
 
 <div class="card">
   <div class="row2">
     <div>
-      <label>대회 검색</label>
+      <label>소속 / 클럽</label>
       <div class="ac-wrap">
-        <input id="tour" type="text" placeholder="대회명 (예: 충주 탄금호)" autocomplete="off">
-        <div id="tourAc" class="ac-dropdown"></div>
+        <input id="clubFilter" type="text" placeholder="소속명 입력 (예: NEO)" autocomplete="off" autofocus>
+        <div id="clubAc" class="ac-dropdown"></div>
       </div>
     </div>
     <div>
-      <label>소속 필터 (선택)</label>
+      <label>대회 (선택 — 비우면 전체 대회)</label>
       <div class="ac-wrap">
-        <input id="clubFilter" type="text" placeholder="전체 소속" autocomplete="off">
-        <div id="clubAc" class="ac-dropdown"></div>
+        <input id="tour" type="text" placeholder="대회명 (예: 충주 탄금호)" autocomplete="off">
+        <div id="tourAc" class="ac-dropdown"></div>
       </div>
     </div>
   </div>
@@ -182,38 +182,42 @@ async function ensureData() {
 }
 
 let selectedTour = '';
-let tourClubs = [];
 
 async function selectTour(tourName) {
   selectedTour = tourName;
   document.getElementById('tour').value = tourName;
   document.getElementById('tourAc').classList.remove('open');
-  document.getElementById('clubFilter').value = '';
-  const ok = await ensureData();
-  if (!ok) return;
+  await triggerSearch();
+}
 
-  const rows = DATA.filter(r => r.tour === tourName);
-  if (!rows.length) {
-    document.getElementById('result').innerHTML = '<div class="empty">해당 대회 기록이 없습니다.</div>';
+async function triggerSearch() {
+  const clubF = document.getElementById('clubFilter').value.trim();
+  if (!clubF) {
+    document.getElementById('result').innerHTML = '<div class="empty">소속명을 입력하세요.</div>';
     return;
   }
-
-  // 소속 목록 (자동완성용)
-  const cc = {};
-  rows.forEach(r => { if (r.club) cc[r.club] = (cc[r.club]||0)+1; });
-  tourClubs = Object.keys(cc).sort((a,b) => cc[b]-cc[a]);
-
-  document.getElementById('partTabs').innerHTML = '';
-
+  const ok = await ensureData();
+  if (!ok) return;
   renderRace();
+}
+
+// 대소문자 무시 소속 매칭 (NEO, neo, Neo 모두 동일)
+function matchClub(rClub, query) {
+  if (!query) return false;
+  return (rClub || '').toLowerCase() === query.toLowerCase();
 }
 
 function renderRace() {
   const clubF = document.getElementById('clubFilter').value.trim();
-  let rows = DATA.filter(r => r.tour === selectedTour);
-  if (clubF) rows = rows.filter(r => (r.club || '') === clubF);
+  if (!clubF) {
+    document.getElementById('stats').innerHTML = '';
+    document.getElementById('result').innerHTML = '<div class="empty">소속명을 입력하세요.</div>';
+    return;
+  }
+  let rows = DATA.filter(r => matchClub(r.club, clubF));
+  if (selectedTour) rows = rows.filter(r => r.tour === selectedTour);
   if (!rows.length) {
-    document.getElementById('result').innerHTML = '<div class="empty">해당 부문 기록이 없습니다.</div>';
+    document.getElementById('result').innerHTML = `<div class="empty">${selectedTour ? '해당 대회에 ' : ''}"${escapeHtml(clubF)}" 소속 기록이 없습니다.</div>`;
     document.getElementById('stats').innerHTML = '';
     return;
   }
@@ -234,22 +238,20 @@ function renderRace() {
       <div class="stat-card"><div class="stat-label">날짜</div><div class="stat-value" style="font-size:13px">${escapeHtml((info.date||'').slice(0,10))}</div></div>
     </div>`;
 
-  // 소속별 그룹
-  const byClub = {};
+  // 대회별 그룹 (소속은 이미 필터됨)
+  const byTour = {};
   rows.forEach(r => {
-    const c = r.club || '(소속없음)';
-    if (!byClub[c]) byClub[c] = [];
-    byClub[c].push(r);
+    const key = r.tour + '||' + (r.date||'');
+    if (!byTour[key]) byTour[key] = { tour: r.tour, date: r.date, members: [] };
+    byTour[key].members.push(r);
   });
 
-  // 소속별 베스트 기준 정렬
-  const clubEntries = Object.entries(byClub).map(([club, members]) => {
-    const bestSec = Math.min(...members.map(r => toSec(r.total) || Infinity));
-    return { club, members, bestSec };
-  }).sort((a,b) => a.bestSec - b.bestSec);
+  // 최신 대회순 정렬
+  const tourEntries = Object.values(byTour).sort((a,b) => (b.date||'').localeCompare(a.date||''));
 
   let html = '';
-  for (const { club, members } of clubEntries) {
+  for (const { tour, date, members } of tourEntries) {
+    members.sort((a,b) => (a.rank||9999) - (b.rank||9999));
     const memberRows = members.map(r => {
       const href = `./?q=${encodeURIComponent(r.name)}&club=${encodeURIComponent(r.club||'')}`;
       return `<tr>
@@ -267,8 +269,8 @@ function renderRace() {
 
     html += `<div class="club-group">
       <div class="club-header">
-        <span class="club-name">${escapeHtml(club)}</span>
-        <span class="club-count">${members.length}명</span>
+        <span class="club-name">${escapeHtml(tour)}</span>
+        <span class="club-count">${escapeHtml((date||'').slice(0,10))} · ${members.length}명</span>
       </div>
       <div class="table-wrap"><table>
         <thead><tr><th>#</th><th>이름</th><th>부문</th><th>수영</th><th>T1</th><th>사이클</th><th>T2</th><th>런</th><th>총기록</th></tr></thead>
@@ -306,18 +308,33 @@ async function load() {
     if (e.key==='Enter') {
       const first = dd.querySelector('.ac-item');
       if (first) { first.click(); e.preventDefault(); }
-      else if (input.value.trim()) { selectTour(input.value.trim()); e.preventDefault(); }
+      else { selectedTour = input.value.trim(); dd.classList.remove('open'); triggerSearch(); e.preventDefault(); }
     }
   });
 
-  // 소속 필터 자동완성
+  // 소속 자동완성 — 전체 데이터에서 소속 목록 구축 (데이터 로드 후)
+  let allClubs = [];
   const clubIn = document.getElementById('clubFilter');
   const clubDd = document.getElementById('clubAc');
-  clubIn.addEventListener('input', () => {
+
+  async function buildClubList() {
+    if (allClubs.length) return;
+    await ensureData();
+    const cc = {};
+    DATA.forEach(r => { if (r.club) cc[r.club] = (cc[r.club]||0)+1; });
+    allClubs = Object.keys(cc).sort((a,b) => cc[b]-cc[a]);
+  }
+
+  clubIn.addEventListener('input', async () => {
     const q = clubIn.value.trim();
-    if (!q) { clubDd.classList.remove('open'); clubDd.innerHTML=''; if(selectedTour) renderRace(); return; }
-    const m = tourClubs.filter(c => c.includes(q)).slice(0,8);
-    if (!m.length || (m.length===1 && m[0]===q)) { clubDd.classList.remove('open'); if(selectedTour) renderRace(); return; }
+    if (q.length < 1) { clubDd.classList.remove('open'); clubDd.innerHTML=''; return; }
+    await buildClubList();
+    // 대소문자 무시 검색
+    const ql = q.toLowerCase();
+    const m = allClubs.filter(c => c.toLowerCase().includes(ql)).slice(0,8);
+    if (!m.length || (m.length===1 && m[0].toLowerCase()===ql)) {
+      clubDd.classList.remove('open'); return;
+    }
     clubDd.innerHTML = m.map(c => `<div class="ac-item" data-val="${escapeAttr(c)}">${escapeHtml(c)}</div>`).join('');
     clubDd.classList.add('open');
   });
@@ -325,19 +342,18 @@ async function load() {
     const it=e.target.closest('.ac-item'); if(!it) return;
     clubIn.value = it.dataset.val;
     clubDd.classList.remove('open');
-    if(selectedTour) renderRace();
+    triggerSearch();
   });
   clubIn.addEventListener('blur', ()=>setTimeout(()=>clubDd.classList.remove('open'),150));
   clubIn.addEventListener('keydown', e => {
-    if (e.key==='Enter') { clubDd.classList.remove('open'); if(selectedTour) renderRace(); e.preventDefault(); }
+    if (e.key==='Enter') { clubDd.classList.remove('open'); triggerSearch(); e.preventDefault(); }
   });
 
   // URL 파라미터
   const p = new URLSearchParams(location.search);
-  if (p.get('tour')) {
-    if (p.get('club')) document.getElementById('clubFilter').value = p.get('club');
-    selectTour(p.get('tour'));
-  }
+  if (p.get('club')) document.getElementById('clubFilter').value = p.get('club');
+  if (p.get('tour')) { selectedTour = p.get('tour'); document.getElementById('tour').value = selectedTour; }
+  if (p.get('club')) triggerSearch();
 }
 
 load();
