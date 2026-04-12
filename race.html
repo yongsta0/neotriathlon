@@ -203,10 +203,26 @@ async function selectTour(tourName) {
   rows.forEach(r => { if (r.club) cc[r.club] = (cc[r.club]||0)+1; });
   tourClubs = Object.keys(cc).sort((a,b) => cc[b]-cc[a]);
 
-  // 부문 탭
+  // 부문 탭 — 표준(올림픽) 거리 우선 정렬
   const partCounts = {};
   rows.forEach(r => { partCounts[r.part] = (partCounts[r.part]||0)+1; });
-  const parts = Object.keys(partCounts).sort((a,b) => partCounts[b]-partCounts[a]);
+  function partPriority(p) {
+    const l = p.toLowerCase();
+    if (/스탠다드|표준|올림픽|standard|olympic/.test(l)) return 0;
+    if (/동호인부/.test(l)) return 1;
+    if (/상위그룹/.test(l)) return 2;
+    if (/하프|half|70\.3/.test(l)) return 3;
+    if (/스프린트|sprint/.test(l)) return 4;
+    if (/엘리트/.test(l)) return 5;
+    if (/릴레이|relay/.test(l)) return 6;
+    if (/아쿠아|aqua/.test(l)) return 8;
+    return 7;
+  }
+  const parts = Object.keys(partCounts).sort((a,b) => {
+    const pa = partPriority(a), pb = partPriority(b);
+    if (pa !== pb) return pa - pb;
+    return partCounts[b] - partCounts[a]; // 같은 우선순위면 참가자 많은 순
+  });
   selectedPart = parts[0];
 
   document.getElementById('partTabs').innerHTML = parts.map(p =>
