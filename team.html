@@ -153,7 +153,7 @@
   <a href="race.html">대회 결과</a>
 </nav>
 <h1>소속 · 팀 랭킹</h1>
-<div class="sub">클럽/소속 이름을 선택하면 멤버들의 거리별 베스트 기록과 랭킹을 보여줍니다. <b>표준(올림픽) 거리는 순수 1.5km·40km·10km 코스만</b> 비교에 반영 — 수영 단축·듀애슬론 등은 제외하여 객관성을 확보합니다.</div>
+<div class="sub">클럽/소속 이름을 선택하면 멤버들의 거리별 베스트 기록과 랭킹을 보여줍니다. <b>동호인 부문 · 순수 표준 코스(1.5/40/10km)</b> 기준 — 엘리트·상위그룹·릴레이·듀애슬론 제외.</div>
 
 <div id="leaderboard"></div>
 
@@ -274,6 +274,13 @@ function isPureStandard(r) {
 function isAquathlon(r) {
   const d = distInfo(r);
   return !!(d && d.sport_type === 'aquathlon');
+}
+// 동호인 부문만 (엘리트/상위그룹/선발전/U23/주니어/릴레이/단체전 제외)
+function isAmateur(r) {
+  const p = r.part || '';
+  if (/동호인/.test(p)) return true;
+  if (/엘리트|상위그룹|선발전|U23|U15|주니어|릴레이|단체전|혼성/.test(p)) return false;
+  return true; // 기본은 포함 (표준거리, 올림픽코스 등)
 }
 function distSummary(r) {
   const d = distInfo(r);
@@ -430,8 +437,8 @@ function onClubChange() {
   const catCounts = {};
   teamRows.forEach(r => {
     if (isAquathlon(r)) return;
+    if (!isAmateur(r)) return; // 동호인만
     const c = distCat(r);
-    // 표준 대회는 순수 표준만 카운트 (랭킹과 일관성 유지)
     if (c === 'standard' && !isPureStandard(r)) return;
     catCounts[c] = (catCounts[c] || 0) + 1;
   });
@@ -464,9 +471,9 @@ function renderLeaderboard() {
   for (const r of DATA) {
     if (!r.club) continue;
     if (isAquathlon(r)) continue;
+    if (!isAmateur(r)) continue; // 동호인 부문만
     const cat = distCat(r);
     if (!cat || cat === 'other' || cat.startsWith('custom:')) continue;
-    // 표준 대회는 순수 표준(단축/듀애슬론 제외)만 랭킹에 반영
     if (cat === 'standard' && !isPureStandard(r)) continue;
     const tot  = cleanSec(r.total, 'total');
     const swim = cleanSec(r.swim, 'swim');
@@ -533,7 +540,7 @@ function render() {
     if ((r.club || '') !== club) return false;
     if (distCat(r) !== selCat) return false;
     if (isAquathlon(r)) return false;
-    // 표준은 순수 표준만
+    if (!isAmateur(r)) return false; // 동호인만
     if (selCat === 'standard' && !isPureStandard(r)) return false;
     return true;
   });
@@ -593,7 +600,7 @@ function render() {
   }
   const SEG_NAME = { swim: '수영', bike: '사이클', run: '런' };
   function computeStrength(name) {
-    const mine = (IDX_BY_NAME_CLUB[name + '||' + club] || []).filter(r => distCat(r) === selCat);
+    const mine = (IDX_BY_NAME_CLUB[name + '||' + club] || []).filter(r => distCat(r) === selCat && isAmateur(r));
     const pcts = { swim: [], bike: [], run: [] };
     for (const rec of mine) {
       const idx = raceIdx[rec.tour + '||' + rec.part];
