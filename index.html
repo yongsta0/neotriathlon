@@ -810,7 +810,6 @@ async function load() {
 
   // URL 파라미터로 자동 검색 (?q=이름&club=소속)
   const p = new URLSearchParams(location.search);
-  const p = new URLSearchParams(location.search);
   if (p.get('q')) {
     document.getElementById('q').value = p.get('q');
     if (p.get('vs')) document.getElementById('vs').value = p.get('vs');
