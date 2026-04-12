@@ -77,6 +77,13 @@ function ensureChartJs() {
   }
 
   /* 검색바 */
+  .ac-wrap { position: relative; }
+  .ac-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); box-shadow: 0 4px 12px rgba(0,0,0,.1); max-height: 220px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .ac-dropdown.open { display: block; }
+  .ac-item { padding: 10px 14px; font-size: 14px; cursor: pointer; border-bottom: 1px solid var(--border-soft); }
+  .ac-item:last-child { border-bottom: none; }
+  .ac-item:hover, .ac-item.active { background: var(--accent-soft); }
+  .ac-item b { font-weight: 700; }
   .controls { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr 1.3fr; gap: 10px; margin-bottom: 8px; }
   @media (max-width: 720px) { .controls { grid-template-columns: 1fr 1fr; } .controls input[type=text] { grid-column: 1 / -1; } }
   input, select { font-family: inherit; font-size: 14px; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); outline: none; transition: border-color .15s; width: 100%; }
@@ -309,12 +316,17 @@ function ensureChartJs() {
 </header>
 
 <div class="controls">
-  <input id="q" type="text" placeholder="이름을 입력하세요 (예: 김철수)" list="nameList" autofocus>
+  <div class="ac-wrap">
+    <input id="q" type="text" placeholder="이름을 입력하세요" autocomplete="off" autofocus>
+    <div id="qAc" class="ac-dropdown"></div>
+  </div>
   <select id="club"><option value="">소속 전체</option></select>
   <select id="dist"><option value="">거리 전체</option></select>
   <select id="part"><option value="">부문 전체</option></select>
-  <input id="vs" type="text" placeholder="맞대결 상대 (선택)" list="nameList">
-  <datalist id="nameList"></datalist>
+  <div class="ac-wrap">
+    <input id="vs" type="text" placeholder="맞대결 상대" autocomplete="off">
+    <div id="vsAc" class="ac-dropdown"></div>
+  </div>
 </div>
 
 <div id="candidates"></div>
@@ -651,13 +663,54 @@ function getPopStats() {
   return POP_STATS;
 }
 
+let ALL_NAMES = [];
 function updateNameList() {
+  if (DATA.length === 0) return;
   const nameCounts = {};
   for (const r of DATA) nameCounts[r.name] = (nameCounts[r.name] || 0) + 1;
-  const topNames = Object.keys(nameCounts)
-    .sort((a,b) => nameCounts[b] - nameCounts[a]).slice(0, 1500);
-  const dl = document.getElementById('nameList');
-  if (dl) dl.innerHTML = topNames.map(n => `<option value="${escapeAttr(n)}">`).join('');
+  ALL_NAMES = Object.keys(nameCounts).sort((a,b) => nameCounts[b] - nameCounts[a]);
+}
+
+// 커스텀 자동완성 (datalist 5000개 → 모바일 프리즈 원인 제거)
+function setupAutocomplete(inputId, dropdownId) {
+  const input = document.getElementById(inputId);
+  const dd = document.getElementById(dropdownId);
+  if (!input || !dd) return;
+  let selIdx = -1;
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    if (q.length < 1) { dd.classList.remove('open'); dd.innerHTML = ''; return; }
+    const matches = ALL_NAMES.filter(n => n.includes(q)).slice(0, 8);
+    if (matches.length === 0 || (matches.length === 1 && matches[0] === q)) {
+      dd.classList.remove('open'); dd.innerHTML = ''; return;
+    }
+    selIdx = -1;
+    dd.innerHTML = matches.map((n, i) =>
+      `<div class="ac-item" data-val="${escapeAttr(n)}">${escapeHtml(n).replace(new RegExp(escapeHtml(q),'g'), '<b>$&</b>')}</div>`
+    ).join('');
+    dd.classList.add('open');
+  });
+
+  dd.addEventListener('click', e => {
+    const item = e.target.closest('.ac-item');
+    if (!item) return;
+    input.value = item.dataset.val;
+    dd.classList.remove('open'); dd.innerHTML = '';
+    render();
+  });
+
+  input.addEventListener('keydown', e => {
+    const items = dd.querySelectorAll('.ac-item');
+    if (!items.length) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); selIdx = Math.min(selIdx + 1, items.length - 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); selIdx = Math.max(selIdx - 1, 0); }
+    else if (e.key === 'Enter' && selIdx >= 0) { e.preventDefault(); items[selIdx].click(); return; }
+    else return;
+    items.forEach((it, i) => it.classList.toggle('active', i === selIdx));
+  });
+
+  input.addEventListener('blur', () => { setTimeout(() => { dd.classList.remove('open'); }, 150); });
 }
 
 async function expandCompact(compact, startIdx) {
@@ -730,14 +783,13 @@ async function ensureData() {
 }
 
 async function load() {
-  // 초기 로드: 이름 자동완성 목록만 (~61KB) — 즉시 완료
+  // 초기 로드: 이름 목록만 (~24KB gzip) → 즉시 완료
   try {
-    const names = await (await fetch('names.json?ts=' + Date.now())).json();
-    document.getElementById('nameList').innerHTML =
-      names.map(n => `<option value="${escapeAttr(n)}">`).join('');
+    ALL_NAMES = await (await fetch('names.json?ts=' + Date.now())).json();
     document.getElementById('datasub').textContent = '이름을 입력하면 기록을 불러옵니다.';
   } catch (e) {}
-  // 이전 세션 캐시 정리
+  setupAutocomplete('q', 'qAc');
+  setupAutocomplete('vs', 'vsAc');
   try { ['tri_data_min_v1','tri_dist_v1','tri_arc_min_v1'].forEach(k => sessionStorage.removeItem(k)); } catch(e){}
   const debounce = (fn, ms) => {
     let t;

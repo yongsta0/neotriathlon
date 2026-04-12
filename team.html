@@ -54,6 +54,12 @@
   input, select { font-family: inherit; font-size: 14px; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius); width: 100%; background: var(--surface); color: var(--text); outline: none; transition: border-color .15s; }
   input::placeholder { color: var(--subtle); }
   input:focus, select:focus { border-color: var(--accent); }
+  .ac-wrap { position: relative; }
+  .ac-dropdown { display:none; position:absolute; top:100%; left:0; right:0; z-index:100; background:var(--surface); border:1px solid var(--border); border-top:none; border-radius:0 0 var(--radius) var(--radius); box-shadow:0 4px 12px rgba(0,0,0,.1); max-height:220px; overflow-y:auto; }
+  .ac-dropdown.open { display:block; }
+  .ac-item { padding:10px 14px; font-size:14px; cursor:pointer; border-bottom:1px solid var(--border-soft); }
+  .ac-item:last-child { border-bottom:none; }
+  .ac-item:hover { background:var(--accent-soft); }
   .row { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
   @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
 
@@ -155,8 +161,10 @@
   <div class="row">
     <div>
       <label>소속 / 클럽 이름</label>
-      <input id="club" type="text" placeholder="예: 강남철인클럽" list="clubList" autofocus>
-      <datalist id="clubList"></datalist>
+      <div class="ac-wrap">
+        <input id="club" type="text" placeholder="예: 강남철인클럽" autocomplete="off" autofocus>
+        <div id="clubAc" class="ac-dropdown"></div>
+      </div>
     </div>
     <div>
       <label>거리</label>
@@ -343,12 +351,27 @@ async function load() {
     return;
   }
 
-  // 소속 datalist (상위 500개)
+  // 소속 자동완성 (커스텀 드롭다운, datalist 제거)
   const counts = {};
   for (const r of DATA) { if (r.club) counts[r.club] = (counts[r.club] || 0) + 1; }
-  const topClubs = Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, 500);
-  document.getElementById('clubList').innerHTML =
-    topClubs.map(c => `<option value="${escapeAttr(c)}">`).join('');
+  const topClubs = Object.keys(counts).sort((a,b) => counts[b] - counts[a]);
+  const clubInput = document.getElementById('club');
+  const clubDd = document.getElementById('clubAc');
+  clubInput.addEventListener('input', () => {
+    const q = clubInput.value.trim();
+    if (!q) { clubDd.classList.remove('open'); clubDd.innerHTML = ''; return; }
+    const m = topClubs.filter(c => c.includes(q)).slice(0,8);
+    if (!m.length || (m.length===1 && m[0]===q)) { clubDd.classList.remove('open'); return; }
+    clubDd.innerHTML = m.map(c => `<div class="ac-item" data-val="${escapeAttr(c)}">${escapeHtml(c)}</div>`).join('');
+    clubDd.classList.add('open');
+  });
+  clubDd.addEventListener('click', e => {
+    const it = e.target.closest('.ac-item'); if (!it) return;
+    clubInput.value = it.dataset.val;
+    clubDd.classList.remove('open');
+    onClubChange();
+  });
+  clubInput.addEventListener('blur', () => setTimeout(() => clubDd.classList.remove('open'), 150));
 
   // 리더보드는 유휴 시간에 빌드 (메인 UI 블로킹 방지)
   const defer = window.requestIdleCallback || (fn => setTimeout(fn, 50));
