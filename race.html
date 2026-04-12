@@ -62,6 +62,7 @@
   tr:hover td{background:var(--accent-soft)}
   td.r{text-align:right;font-variant-numeric:tabular-nums}
   td.rank{font-weight:700;color:var(--accent);width:36px}
+  td.part-cell{font-size:11px;color:var(--muted);white-space:normal;max-width:160px}
   td.name a{color:var(--text);font-weight:600}
   td.name a:hover{color:var(--accent)}
   .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
@@ -203,7 +204,7 @@ async function selectTour(tourName) {
   rows.forEach(r => { if (r.club) cc[r.club] = (cc[r.club]||0)+1; });
   tourClubs = Object.keys(cc).sort((a,b) => cc[b]-cc[a]);
 
-  // 부문 탭 — 표준(올림픽) 거리 우선 정렬
+  // 부문 탭 — "전체" 기본 + 표준 거리 우선 정렬
   const partCounts = {};
   rows.forEach(r => { partCounts[r.part] = (partCounts[r.part]||0)+1; });
   function partPriority(p) {
@@ -221,26 +222,34 @@ async function selectTour(tourName) {
   const parts = Object.keys(partCounts).sort((a,b) => {
     const pa = partPriority(a), pb = partPriority(b);
     if (pa !== pb) return pa - pb;
-    return partCounts[b] - partCounts[a]; // 같은 우선순위면 참가자 많은 순
+    return partCounts[b] - partCounts[a];
   });
-  selectedPart = parts[0];
+  selectedPart = ''; // 기본: 전체 부문
 
-  document.getElementById('partTabs').innerHTML = parts.map(p =>
-    `<span class="tab${p===selectedPart?' active':''}" onclick="pickPart(${JSON.stringify(p).replace(/"/g,'&quot;')})">${escapeHtml(p)} · ${partCounts[p]}</span>`
-  ).join('');
+  document.getElementById('partTabs').innerHTML =
+    `<span class="tab active" onclick="pickPart('')">전체 · ${rows.length}</span>` +
+    parts.map(p =>
+      `<span class="tab" onclick="pickPart(${JSON.stringify(p).replace(/"/g,'&quot;')})">${escapeHtml(p)} · ${partCounts[p]}</span>`
+    ).join('');
 
   renderRace();
 }
 
 function pickPart(p) {
   selectedPart = p;
-  document.querySelectorAll('#partTabs .tab').forEach(t => t.classList.toggle('active', t.textContent.startsWith(p)));
+  const tabs = document.querySelectorAll('#partTabs .tab');
+  tabs.forEach(t => {
+    const isAll = !p && t.textContent.startsWith('전체');
+    const isMatch = p && t.textContent.startsWith(p);
+    t.classList.toggle('active', isAll || isMatch);
+  });
   renderRace();
 }
 
 function renderRace() {
   const clubF = document.getElementById('clubFilter').value.trim();
-  let rows = DATA.filter(r => r.tour === selectedTour && r.part === selectedPart);
+  let rows = DATA.filter(r => r.tour === selectedTour);
+  if (selectedPart) rows = rows.filter(r => r.part === selectedPart);
   if (clubF) rows = rows.filter(r => (r.club || '') === clubF);
   if (!rows.length) {
     document.getElementById('result').innerHTML = '<div class="empty">해당 부문 기록이 없습니다.</div>';
@@ -280,11 +289,13 @@ function renderRace() {
 
   let html = '';
   for (const { club, members } of clubEntries) {
+    const showPart = !selectedPart; // 전체 부문일 때 부문 칼럼 표시
     const memberRows = members.map(r => {
       const href = `./?q=${encodeURIComponent(r.name)}&club=${encodeURIComponent(r.club||'')}`;
       return `<tr>
         <td class="rank">${r.rank||'-'}</td>
         <td class="name"><a href="${href}">${escapeHtml(r.name)}</a></td>
+        ${showPart ? `<td class="part-cell">${escapeHtml(r.part)}</td>` : ''}
         <td class="r">${escapeHtml(r.swim||'-')}</td>
         <td class="r">${escapeHtml(r.t1||'-')}</td>
         <td class="r">${escapeHtml(r.bike||'-')}</td>
@@ -300,7 +311,7 @@ function renderRace() {
         <span class="club-count">${members.length}명</span>
       </div>
       <div class="table-wrap"><table>
-        <thead><tr><th>#</th><th>이름</th><th>수영</th><th>T1</th><th>사이클</th><th>T2</th><th>런</th><th>총기록</th></tr></thead>
+        <thead><tr><th>#</th><th>이름</th>${showPart?'<th>부문</th>':''}<th>수영</th><th>T1</th><th>사이클</th><th>T2</th><th>런</th><th>총기록</th></tr></thead>
         <tbody>${memberRows}</tbody>
       </table></div>
     </div>`;
