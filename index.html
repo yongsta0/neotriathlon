@@ -1476,11 +1476,11 @@ function renderProfile(name, clubF, filtered, div, vsName) {
     let vsClub = urlVsClub;
     if (vsClubs.length > 1 && !vsClub) {
       // 자동 선택: 본인(name)과 같이 뛴 대회가 가장 많은 소속을 기본값으로
-      const myKeys = new Set(all.map(r => r.tour + '||' + r.part));
+      const myKeys = new Set(all.map(r => r.tour + '||' + distCat(r)));
       const clubOverlap = {};
       for (const vr of vsAll) {
         const ck = vr.club || '(소속없음)';
-        if (myKeys.has(vr.tour + '||' + vr.part)) {
+        if (myKeys.has(vr.tour + '||' + distCat(vr))) {
           clubOverlap[ck] = (clubOverlap[ck] || 0) + 1;
         }
       }
@@ -1502,17 +1502,23 @@ function renderProfile(name, clubF, filtered, div, vsName) {
     const vsRecs = vsClub
       ? vsAll.filter(r => (r.club || '(소속없음)') === vsClub)
       : vsAll;
-    // 같은 (tour, part)에서 둘 다 참가한 경기 매칭
+    // 같은 대회 + 같은 거리(코스)면 나이대 달라도 맞대결 인정
     const myKeyMap = {};
     for (const r of all) {
-      const k = r.tour + '||' + r.part;
+      const k = r.tour + '||' + distCat(r);
       if (!myKeyMap[k]) myKeyMap[k] = r;
       else if (cleanSec(r.total,'total') < cleanSec(myKeyMap[k].total,'total')) myKeyMap[k] = r;
     }
     const matches = [];
+    const seen = new Set();
     for (const vr of vsRecs) {
-      const k = vr.tour + '||' + vr.part;
-      if (myKeyMap[k]) matches.push({ me: myKeyMap[k], them: vr });
+      const k = vr.tour + '||' + distCat(vr);
+      if (myKeyMap[k]) {
+        const uid = k + '||' + vr.date;
+        if (seen.has(uid)) continue; // 중복 방지
+        seen.add(uid);
+        matches.push({ me: myKeyMap[k], them: vr });
+      }
     }
     if (matches.length === 0) {
       h2hHtml = `<div class="pf-card h2h-card">
