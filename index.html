@@ -84,7 +84,7 @@ function ensureChartJs() {
   .ac-item:last-child { border-bottom: none; }
   .ac-item:hover, .ac-item.active { background: var(--accent-soft); }
   .ac-item b { font-weight: 700; }
-  .controls { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr 1.3fr; gap: 10px; margin-bottom: 8px; }
+  .controls { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1.3fr; gap: 10px; margin-bottom: 8px; }
   @media (max-width: 720px) { .controls { grid-template-columns: 1fr 1fr; } .controls input[type=text] { grid-column: 1 / -1; } }
   input, select { font-family: inherit; font-size: 14px; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); outline: none; transition: border-color .15s; width: 100%; }
   input::placeholder { color: var(--subtle); }
@@ -323,7 +323,6 @@ function ensureChartJs() {
   </div>
   <select id="club"><option value="">소속 전체</option></select>
   <select id="dist"><option value="">거리 전체</option></select>
-  <select id="part"><option value="">부문 전체</option></select>
   <div class="ac-wrap">
     <input id="vs" type="text" placeholder="맞대결 상대" autocomplete="off">
     <div id="vsAc" class="ac-dropdown"></div>
@@ -800,7 +799,6 @@ async function load() {
   document.getElementById('q').addEventListener('input', renderDebounced);
   document.getElementById('club').addEventListener('change', render);
   document.getElementById('dist').addEventListener('change', render);
-  document.getElementById('part').addEventListener('change', render);
   document.getElementById('vs').addEventListener('input', () => {
     const u = new URL(location.href);
     u.searchParams.delete('vsclub');
@@ -846,7 +844,6 @@ async function render() {
   const rawClubF = document.getElementById('club').value;
   let clubF = _dataLoaded ? resolveClub(rawClubF) : rawClubF;
   const distF = document.getElementById('dist').value;
-  const partF = document.getElementById('part').value;
   const candDiv = document.getElementById('candidates');
   const sumDiv = document.getElementById('summary');
   const statsDiv = document.getElementById('stats');
@@ -907,17 +904,6 @@ async function render() {
     document.getElementById('dist').value = '';
   }
 
-  // 거리 적용한 뒤 부문 후보
-  const distFiltered = effectiveDistF
-    ? partsSource.filter(r => distCat(r) === effectiveDistF)
-    : partsSource;
-  const parts = uniq(distFiltered.map(r => r.part));
-  let effectivePartF = partF;
-  if (partF && !parts.includes(partF)) {
-    effectivePartF = '';
-    document.getElementById('part').value = '';
-  }
-
   // URL에서 club 파라미터가 왔으면 첫 render 시 적용
   if (window._urlClub && !clubF) {
     const resolved = resolveClub(window._urlClub);
@@ -931,7 +917,6 @@ async function render() {
   }
   fillSelect('club', clubs, clubF);
   fillDistSelect(distCats, distCounts, effectiveDistF);
-  fillSelect('part', parts, effectivePartF);
 
   if (clubs.length > 1) {
     candDiv.innerHTML =
@@ -948,7 +933,6 @@ async function render() {
   let filtered = nameMatches;
   if (clubF) filtered = filtered.filter(r => (r.club || '(소속없음)') === clubF);
   if (effectiveDistF) filtered = filtered.filter(r => distCat(r) === effectiveDistF);
-  if (effectivePartF) filtered = filtered.filter(r => r.part === effectivePartF);
   filtered.sort((a, b) => (a.date > b.date ? 1 : -1));
 
   // 예상기록 링크: 현재 선택된 이름/소속/거리를 파라미터로 전달
