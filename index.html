@@ -810,10 +810,12 @@ async function load() {
 
   // URL 파라미터로 자동 검색 (?q=이름&club=소속)
   const p = new URLSearchParams(location.search);
+  const p = new URLSearchParams(location.search);
   if (p.get('q')) {
     document.getElementById('q').value = p.get('q');
-    if (p.get('club')) document.getElementById('club').value = p.get('club');
     if (p.get('vs')) document.getElementById('vs').value = p.get('vs');
+    // club은 render() 내에서 fillSelect 후에 세팅해야 option이 존재 — _urlClub에 임시 저장
+    window._urlClub = p.get('club') || '';
     render();
   }
 }
@@ -843,7 +845,7 @@ async function render() {
   }
   if (_dataLoaded) ensureIndexes();
   const rawClubF = document.getElementById('club').value;
-  const clubF = _dataLoaded ? resolveClub(rawClubF) : rawClubF;
+  let clubF = _dataLoaded ? resolveClub(rawClubF) : rawClubF;
   const distF = document.getElementById('dist').value;
   const partF = document.getElementById('part').value;
   const candDiv = document.getElementById('candidates');
@@ -917,6 +919,17 @@ async function render() {
     document.getElementById('part').value = '';
   }
 
+  // URL에서 club 파라미터가 왔으면 첫 render 시 적용
+  if (window._urlClub && !clubF) {
+    const resolved = resolveClub(window._urlClub);
+    if (clubs.includes(resolved)) {
+      clubF = resolved;
+    }
+    window._urlClub = '';
+    // clubF 변경으로 재필터 필요 — 재귀 방지를 위해 select에 세팅 후 return하고 재호출
+    document.getElementById('club').value = clubF;
+    return render();
+  }
   fillSelect('club', clubs, clubF);
   fillDistSelect(distCats, distCounts, effectiveDistF);
   fillSelect('part', parts, effectivePartF);
