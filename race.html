@@ -45,6 +45,8 @@
   .ac-item:last-child{border-bottom:none}
   .ac-item:hover,.ac-item.active{background:var(--accent-soft)}
   .ac-item .ac-date{color:var(--subtle);font-size:11px;margin-left:8px}
+  .row2{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+  @media(max-width:640px){.row2{grid-template-columns:1fr}}
   .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
   .tab{font-size:11px;padding:5px 12px;background:var(--bg);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-weight:500;cursor:pointer}
   .tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -92,10 +94,21 @@
 <div class="sub" id="datasub">대회를 선택하면 소속별로 선수 기록을 보여줍니다.</div>
 
 <div class="card">
-  <label>대회 검색</label>
-  <div class="ac-wrap">
-    <input id="tour" type="text" placeholder="대회명을 입력하세요 (예: 충주 탄금호)" autocomplete="off">
-    <div id="tourAc" class="ac-dropdown"></div>
+  <div class="row2">
+    <div>
+      <label>대회 검색</label>
+      <div class="ac-wrap">
+        <input id="tour" type="text" placeholder="대회명 (예: 충주 탄금호)" autocomplete="off">
+        <div id="tourAc" class="ac-dropdown"></div>
+      </div>
+    </div>
+    <div>
+      <label>소속 필터 (선택)</label>
+      <div class="ac-wrap">
+        <input id="clubFilter" type="text" placeholder="전체 소속" autocomplete="off">
+        <div id="clubAc" class="ac-dropdown"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -169,11 +182,13 @@ async function ensureData() {
 
 let selectedTour = '';
 let selectedPart = '';
+let tourClubs = []; // 현재 대회의 소속 목록
 
 async function selectTour(tourName) {
   selectedTour = tourName;
   document.getElementById('tour').value = tourName;
   document.getElementById('tourAc').classList.remove('open');
+  document.getElementById('clubFilter').value = '';
   const ok = await ensureData();
   if (!ok) return;
 
@@ -182,6 +197,11 @@ async function selectTour(tourName) {
     document.getElementById('result').innerHTML = '<div class="empty">해당 대회 기록이 없습니다.</div>';
     return;
   }
+
+  // 소속 목록 (자동완성용)
+  const cc = {};
+  rows.forEach(r => { if (r.club) cc[r.club] = (cc[r.club]||0)+1; });
+  tourClubs = Object.keys(cc).sort((a,b) => cc[b]-cc[a]);
 
   // 부문 탭
   const partCounts = {};
@@ -203,7 +223,9 @@ function pickPart(p) {
 }
 
 function renderRace() {
-  const rows = DATA.filter(r => r.tour === selectedTour && r.part === selectedPart);
+  const clubF = document.getElementById('clubFilter').value.trim();
+  let rows = DATA.filter(r => r.tour === selectedTour && r.part === selectedPart);
+  if (clubF) rows = rows.filter(r => (r.club || '') === clubF);
   if (!rows.length) {
     document.getElementById('result').innerHTML = '<div class="empty">해당 부문 기록이 없습니다.</div>';
     document.getElementById('stats').innerHTML = '';
@@ -301,9 +323,34 @@ async function load() {
     }
   });
 
+  // 소속 필터 자동완성
+  const clubIn = document.getElementById('clubFilter');
+  const clubDd = document.getElementById('clubAc');
+  clubIn.addEventListener('input', () => {
+    const q = clubIn.value.trim();
+    if (!q) { clubDd.classList.remove('open'); clubDd.innerHTML=''; if(selectedTour) renderRace(); return; }
+    const m = tourClubs.filter(c => c.includes(q)).slice(0,8);
+    if (!m.length || (m.length===1 && m[0]===q)) { clubDd.classList.remove('open'); if(selectedTour) renderRace(); return; }
+    clubDd.innerHTML = m.map(c => `<div class="ac-item" data-val="${escapeAttr(c)}">${escapeHtml(c)}</div>`).join('');
+    clubDd.classList.add('open');
+  });
+  clubDd.addEventListener('click', e => {
+    const it=e.target.closest('.ac-item'); if(!it) return;
+    clubIn.value = it.dataset.val;
+    clubDd.classList.remove('open');
+    if(selectedTour) renderRace();
+  });
+  clubIn.addEventListener('blur', ()=>setTimeout(()=>clubDd.classList.remove('open'),150));
+  clubIn.addEventListener('keydown', e => {
+    if (e.key==='Enter') { clubDd.classList.remove('open'); if(selectedTour) renderRace(); e.preventDefault(); }
+  });
+
   // URL 파라미터
   const p = new URLSearchParams(location.search);
-  if (p.get('tour')) selectTour(p.get('tour'));
+  if (p.get('tour')) {
+    if (p.get('club')) document.getElementById('clubFilter').value = p.get('club');
+    selectTour(p.get('tour'));
+  }
 }
 
 load();
