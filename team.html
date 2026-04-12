@@ -487,8 +487,8 @@ function renderLeaderboard() {
   }
 
   const MIN_MEMBERS = 3;
-  const TOP_N = 5;
-  const ORDER = ['sprint', 'standard', 'half', 'full', 'super_sprint'];
+  const TOP_N = 10;
+  const ORDER = ['standard', 'half', 'full'];  // 스프린트/슈퍼스프린트 제외
   const catsPresent = ORDER.filter(c => byCat[c]);
 
   if (catsPresent.length === 0) { div.innerHTML = ''; return; }
